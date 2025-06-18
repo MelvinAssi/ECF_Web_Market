@@ -1,0 +1,660 @@
+Trello Board Setup for TechReuse Market (Final)
+Liste 1 : Analyse et Conception
+
+Charte Graphique (4 points)
+
+Description : Définir la charte graphique complète (logo, couleurs, typographie, etc.).
+Priorité : Haute
+Échéance : 22 juin 2025
+Checklist :
+Créer un logo (couleur, noir/blanc, icône)
+Définir 2-3 couleurs principales (HEX, RGB, CMJN)
+Définir couleurs secondaires
+Sélectionner 1-2 polices (titres, corps)
+Définir styles et tailles de texte (H1, H2, etc.)
+Choisir un style d’icônes cohérent
+Lister les icônes et leur signification
+Définir le style des images (photos, filtres)
+Définir styles pour graphiques/infographies
+Créer une grille de mise en page
+Définir marges et espacements
+Définir styles de boutons (normal, survol, clic)
+Définir styles de formulaires (focus, erreur)
+Définir style du menu principal et sous-menus
+Définir transitions et animations
+Définir breakpoints pour responsive design
+Créer un guide de style documenté
+Fournir des exemples visuels
+
+
+Étiquette : Conception
+
+
+Maquette (6 points)
+
+Description : Créer 3 wireframes et 3 mockups via Figma (desktop et mobile).
+Priorité : Haute
+Échéance : 24 juin 2025
+Checklist :
+3 wireframes desktop (accueil, catalogue, produit)
+3 wireframes mobile
+3 mockups/prototypes desktop
+3 mockups/prototypes mobile
+
+
+Étiquette : Conception
+
+
+Cahier des Charges (2 points)
+
+Description : Finaliser le document d’analyse et préparer un résumé pour la présentation.
+Priorité : Haute
+Échéance : 20 juin 2025
+Checklist :
+Rédiger les besoins fonctionnels
+Détailler les exigences de sécurité
+Valider avec l’équipe
+Préparer un résumé pour la présentation
+
+
+Étiquette : Documentation
+
+
+Modélisation Merise (6 points)
+
+Description : Créer dictionnaire, MCD, MLD, et MPD.
+Priorité : Moyenne
+Échéance : 26 juin 2025
+Checklist :
+Dictionnaire de données
+MCD (Modèle Conceptuel de Données)
+MLD (Modèle Logique de Données)
+MPD (Modèle Physique de Données)
+
+
+Étiquette : Base de données
+
+
+Diagrammes UML (4 points)
+
+Description : Élaborer un diagramme de séquence et un de cas d’utilisation.
+Priorité : Moyenne
+Échéance : 26 juin 2025
+Checklist :
+Diagramme de séquence (achat)
+Diagramme de cas d’utilisation (utilisateurs)
+
+
+Étiquette : Conception
+
+
+
+Liste 2 : Initialisation du Projet
+
+Mise en Place de l’Environnement (4 points)
+
+Description : Configurer et documenter l’environnement (React, Node.js, PostgreSQL, Firebase).
+Priorité : Haute
+Échéance : 28 juin 2025
+Checklist :
+Installer Node.js et npm
+Configurer React avec Create React App
+Configurer Express pour le back-end
+Installer PostgreSQL
+Configurer Firebase
+Documenter les outils pour la présentation
+
+
+Étiquette : Développement
+
+
+Initialiser le Front-end (React.js)
+
+Description : Configurer le projet React.
+Priorité : Haute
+Échéance : 28 juin 2025
+Checklist :
+Installer dépendances React
+Configurer Tailwind CSS
+Tester le rendu initial
+
+
+Étiquette : Développement
+
+
+Faire une Architecture MVC (4 points)
+
+Description : Mettre en place une architecture MVC.
+Priorité : Haute
+Échéance : 30 juin 2025
+Checklist :
+Configurer Express
+Définir les modèles
+Créer les contrôleurs
+Structurer les vues
+
+
+Étiquette : Développement
+
+
+Arborescence Propre (5 points)
+
+Description : Structurer les dossiers de l’application.
+Priorité : Moyenne
+Échéance : 30 juin 2025
+Checklist :
+Créer une structure de dossiers claire
+Séparer front-end et back-end
+Organiser les assets (images, styles)
+
+
+Étiquette : Développement
+
+
+Repository GitHub (5 points)
+
+Description : Créer un repository avec branches DEV et TEST, et un README.
+Priorité : Haute
+Échéance : 28 juin 2025
+Checklist :
+Créer un repository GitHub
+Créer une branche DEV
+Créer une branche TEST
+Rédiger un README (instructions, installation)
+
+
+Étiquette : Versioning
+
+
+
+Liste 3 : Développement Back-end
+
+Base de Données (PostgreSQL) (8 points)
+
+Description : Configurer PostgreSQL avec connexions sécurisées.
+Priorité : Haute
+Échéance : 5 juillet 2025
+Checklist :
+Installer PostgreSQL
+Créer les tables (utilisateurs, produits, transactions, avis)
+Configurer les relations
+Utiliser SSL/TLS pour les connexions
+Mettre en place des sauvegardes régulières
+
+
+Étiquette : Base de données
+
+
+Base de Données NoSQL (Firebase/Firestore) (5 points)
+
+Description : Configurer Firestore pour avis et données secondaires.
+Priorité : Haute
+Échéance : 7 juillet 2025
+Checklist :
+Configurer Firestore
+Stocker les avis clients
+Stocker les données utilisateur secondaires
+
+
+Étiquette : Base de données
+
+
+Authentification et Administration (5 points)
+
+Description : Mettre en place l’authentification avec Firebase.
+Priorité : Haute
+Échéance : 7 juillet 2025
+Checklist :
+Configurer Firebase Authentication
+Créer un formulaire de connexion
+Créer un formulaire d’inscription
+Implémenter JWT pour sessions sécurisées
+Valider les entrées avec REGEX
+
+
+Étiquette : Sécurité
+
+
+Page Administrateur (4 points)
+
+Description : Développer l’espace administrateur.
+Priorité : Moyenne
+Échéance : 10 juillet 2025
+Checklist :
+Créer un tableau de bord (statistiques ventes, utilisateurs)
+Permettre la modification/suppression des annonces
+Gérer les transactions
+Valider/supprimer les avis
+
+
+Étiquette : Fonctionnalité
+
+
+Développement du CRUD (7 points)
+
+Description : Mettre en place les routes CRUD.
+Priorité : Haute
+Échéance : 10 juillet 2025
+Checklist :
+POST /users
+PUT /user/{id}
+DELETE /user/{id}
+GET /user/{id}
+GET /users
+POST /login
+GET /me
+
+
+Étiquette : Développement
+
+
+CRUD Fonctionnel (5 points)
+
+Description : S’assurer que le CRUD est fonctionnel.
+Priorité : Haute
+Échéance : 12 juillet 2025
+Checklist :
+Tester la création d’utilisateur
+Tester la mise à jour d’utilisateur
+Tester la suppression d’utilisateur
+Tester la récupération des données
+
+
+Étiquette : Développement
+
+
+Tests avec Postman (5 points)
+
+Description : Tester les routes CRUD avec Postman.
+Priorité : Moyenne
+Échéance : 12 juillet 2025
+Checklist :
+Tester POST /users
+Tester PUT /user/{id}
+Tester DELETE /user/{id}
+Tester GET /user/{id}
+Tester GET /users
+Tester POST /login
+Tester GET /me
+
+
+Étiquette : Tests
+
+
+
+Liste 4 : Développement Front-end
+
+Page d’Accueil
+
+Description : Développer la page d’accueil.
+Priorité : Haute
+Échéance : 10 juillet 2025
+Checklist :
+Afficher les produits phares
+Lister les catégories
+Afficher les promotions
+Intégrer les avis clients
+
+
+Étiquette : Interface
+
+
+Menu de l’Application
+
+Description : Créer un menu responsive.
+Priorité : Moyenne
+Échéance : 8 juillet 2025
+Checklist :
+Lien vers la page d’accueil
+Lien vers le catalogue
+Lien pour connexion/inscription
+Lien vers la page de contact
+
+
+Étiquette : Interface
+
+
+Catalogue des Produits
+
+Description : Développer l’interface du catalogue.
+Priorité : Haute
+Échéance : 12 juillet 2025
+Checklist :
+Afficher les produits
+Implémenter les filtres par catégorie
+Ajouter une barre de recherche
+
+
+Étiquette : Interface
+
+
+Page de Détails du Produit
+
+Description : Créer une page détaillée pour chaque produit.
+Priorité : Moyenne
+Échéance : 14 juillet 2025
+Checklist :
+Afficher nom, images, description
+Afficher spécifications techniques
+Afficher avis clients
+Ajouter bouton d’achat
+
+
+Étiquette : Interface
+
+
+Achat et Vente de Produits
+
+Description : Implémenter achat et publication d’annonces.
+Priorité : Haute
+Échéance : 15 juillet 2025
+Checklist :
+Créer un panier
+Implémenter le processus de commande
+Permettre la publication d’annonces
+Envoyer des emails de confirmation
+
+
+Étiquette : Fonctionnalité
+
+
+
+Liste 5 : Sécurité et Conformité
+
+Sécurité Front-end (5 points)
+
+Description : Mettre en place la sécurité front-end.
+Priorité : Haute
+Échéance : 16 juillet 2025
+Checklist :
+Utiliser HTTPS
+Implémenter DOMPurify contre XSS
+Configurer une politique CSP
+Vérifier les dépendances avec npm audit
+Utiliser JWT pour routes protégées
+Configurer cookies (HttpOnly, Secure, SameSite)
+
+
+Étiquette : Sécurité
+
+
+Sécurité Back-end (6 points)
+
+Description : Sécuriser le back-end et les API.
+Priorité : Haute
+Échéance : 16 juillet 2025
+Checklist :
+Utiliser HTTPS
+Valider les entrées utilisateur
+Utiliser Sequelize pour requêtes paramétrées
+Implémenter Passport.js pour authentification
+Utiliser csurf contre CSRF
+Implémenter express-rate-limit
+Utiliser Helmet pour en-têtes HTTP
+Configurer express-session
+Implémenter des logs avec Winston
+
+
+Étiquette : Sécurité
+
+
+RGPD et CNIL
+
+Description : Assurer la conformité RGPD.
+Priorité : Moyenne
+Échéance : 17 juillet 2025
+Checklist :
+Ajouter une politique de confidentialité
+Gérer le consentement des cookies
+Documenter le traitement des données
+
+
+Étiquette : Conformité
+
+
+reCAPTCHA (3 points)
+
+Description : Intégrer reCAPTCHA.
+Priorité : Moyenne
+Échéance : 17 juillet 2025
+Checklist :
+Intégrer reCAPTCHA dans le formulaire de contact
+Intégrer reCAPTCHA dans l’inscription
+
+
+Étiquette : Sécurité
+
+
+REGEX (3 points)
+
+Description : Valider les entrées avec REGEX.
+Priorité : Moyenne
+Échéance : 17 juillet 2025
+Checklist :
+Valider les emails (connexion, contact)
+Valider les mots de passe
+Valider les champs de texte
+
+
+Étiquette : Sécurité
+
+
+API et .env (4 points)
+
+Description : Intégrer des API et sécuriser les clés.
+Priorité : Moyenne
+Échéance : 15 juillet 2025
+Checklist :
+Utiliser Firebase API
+Configurer Postman pour tests
+Stocker les clés dans .env
+
+
+Étiquette : Développement
+
+
+
+Liste 6 : Optimisation et Tests
+
+Responsive des Écrans (5 points)
+
+Description : Assurer un design responsive.
+Priorité : Haute
+Échéance : 18 juillet 2025
+Checklist :
+Implémenter media queries pour mobile
+Implémenter media queries pour tablette
+Implémenter media queries pour desktop
+Tester sur différents appareils
+
+
+Étiquette : Interface
+
+
+Référencement SEO (Lighthouse) (4 points)
+
+Description : Optimiser le SEO et inclure les résultats Lighthouse.
+Priorité : Moyenne
+Échéance : 18 juillet 2025
+Checklist :
+Ajouter balises méta
+Utiliser balises sémantiques
+Ajouter attributs alt aux images
+Vérifier le score Lighthouse
+Inclure résultats dans la présentation
+
+
+Étiquette : Optimisation
+
+
+Accessibilité (Lighthouse) (3 points)
+
+Description : Optimiser l’accessibilité.
+Priorité : Moyenne
+Échéance : 18 juillet 2025
+Checklist :
+Ajouter attributs ARIA
+Vérifier le contraste des couleurs
+Tester avec un lecteur d’écran
+Vérifier le score Lighthouse
+
+
+Étiquette : Accessibilité
+
+
+
+Liste 7 : Finalisation et Déploiement
+
+Gestion des Cookies (3 points)
+
+Description : Implémenter un bandeau de consentement.
+Priorité : Moyenne
+Échéance : 19 juillet 2025
+Checklist :
+Afficher un bandeau de consentement
+Gérer les préférences des cookies
+Documenter dans la politique RGPD
+
+
+Étiquette : Conformité
+
+
+Déploiement Docker (10 points)
+
+Description : Conteneuriser et documenter le déploiement.
+Priorité : Haute
+Échéance : 19 juillet 2025
+Checklist :
+Créer un Dockerfile
+Configurer Docker Compose
+Tester localement
+Documenter les commandes :
+docker build -t techreuse-market .
+docker-compose up
+docker push <image>
+
+
+
+
+Étiquette : Déploiement
+
+
+Mise en Ligne sur Netlify (6 points, conseillé)
+
+Description : Déployer sur Netlify (optionnel).
+Priorité : Basse
+Échéance : 20 juillet 2025
+Checklist :
+Créer un compte Netlify
+Connecter le repository GitHub
+Configurer le build (React)
+Tester le déploiement
+
+
+Étiquette : Déploiement
+
+
+Installation Claire (5 points)
+
+Description : Documenter l’installation dans le README.
+Priorité : Moyenne
+Échéance : 19 juillet 2025
+Checklist :
+Rédiger les instructions d’installation
+Inclure les dépendances
+Tester les instructions
+
+
+Étiquette : Documentation
+
+
+Présentation (6 points)
+
+Description : Préparer une présentation Canva/PowerPoint (40 slides minimum).
+Priorité : Haute
+Échéance : 20 juillet 2025
+Checklist :
+Créer 40 slides minimum
+Inclure résumé du cahier des charges
+Inclure résultats Lighthouse (SEO, accessibilité)
+Inclure mesures de sécurité
+Inclure méthodologie agile
+Préparer une démo fonctionnelle
+
+
+Étiquette : Documentation
+
+
+Présentation Orale (5 points)
+
+Description : Préparer éloquence, posture, et tenue.
+Priorité : Haute
+Échéance : 20 juillet 2025
+Checklist :
+Répéter la présentation
+Préparer une tenue professionnelle
+S’entraîner à l’éloquence
+
+
+Étiquette : Présentation
+
+
+Mentions Obligatoires (4 points)
+
+Description : Inclure les définitions dans la présentation.
+Priorité : Moyenne
+Échéance : 20 juillet 2025
+Checklist :
+Définir HTTPS, XSS, CSRF
+Définir SEO et balises sémantiques
+Définir accessibilité
+
+
+Étiquette : Documentation
+
+
+Explication du Code (5 points)
+
+Description : Préparer une explication générale du code.
+Priorité : Moyenne
+Échéance : 20 juillet 2025
+Checklist :
+Résumer l’architecture MVC
+Expliquer les routes CRUD
+Expliquer les mesures de sécurité
+
+
+Étiquette : Présentation
+
+
+Méthodologie Agile (4 points)
+
+Description : Documenter l’utilisation de Kanban/Scrum.
+Priorité : Moyenne
+Échéance : 20 juillet 2025
+Checklist :
+Définir les sprints
+Documenter les daily standups
+Inclure captures Trello dans la présentation
+
+
+Étiquette : Gestion de projet
+
+
+
+Liste 8 : À Faire, En Cours, Terminé
+
+À Faire : Contient les cartes non commencées.
+En Cours : Contient les cartes en cours.
+Terminé : Contient les cartes terminées et validées.
+
+
+Planification par Sprints
+
+Sprint 1 (18-24 juin 2025) : Analyse et conception (charte graphique, maquettes, cahier des charges, début Merise/UML).
+Sprint 2 (25 juin-1er juillet 2025) : Initialisation (environnement, React, MVC, GitHub, arborescence, fin Merise/UML).
+Sprint 3 (2-8 juillet 2025) : Développement back-end (PostgreSQL, Firestore, authentification, début CRUD, menu).
+Sprint 4 (9-15 juillet 2025) : Développement front-end/back-end (page d’accueil, catalogue, produit, achat/vente, fin CRUD, admin).
+Demi-Sprint 5 (16-20 juillet 2025) : Sécurité, optimisation, déploiement, présentation.
+
+
