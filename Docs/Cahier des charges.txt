@@ -1,0 +1,182 @@
+Cahier des Charges - TechReuse Market
+1. Introduction
+TechReuse Market est une marketplace web dédiée à la vente et l’achat de matériel informatique d’occasion. L’objectif est de fournir une plateforme sécurisée, intuitive et fonctionnelle pour les acheteurs, vendeurs et administrateurs, tout en respectant les normes de sécurité (RGPD, HTTPS) et en optimisant l’expérience utilisateur.
+
+2. Besoins Fonctionnels
+2.1 Page d’Accueil (US 1)
+
+Objectif : Présenter la marketplace et inciter les visiteurs à explorer.
+Fonctionnalités :
+Afficher une présentation visuelle avec des images de produits phares.
+Lister les catégories de produits (ordinateurs, smartphones, accessoires, etc.).
+Mettre en avant les promotions en cours.
+Afficher les avis clients récents.
+
+
+
+2.2 Menu de l’Application (US 2)
+
+Objectif : Faciliter la navigation pour tous les utilisateurs.
+Fonctionnalités :
+Lien vers la page d’accueil.
+Accès au catalogue complet des produits.
+Options de connexion/inscription pour acheteurs et vendeurs.
+Page de contact accessible.
+
+
+
+2.3 Catalogue des Produits (US 3)
+
+Objectif : Permettre aux utilisateurs de parcourir les produits disponibles.
+Fonctionnalités :
+Afficher une vue globale des produits avec filtres (catégorie, prix, état).
+Chaque produit inclut :
+Nom
+Description
+Image
+Prix
+État (neuf, bon, usagé)
+Catégorie
+
+
+Interface de gestion des annonces pour les vendeurs.
+
+
+
+2.4 Page de Détails du Produit (US 4)
+
+Objectif : Fournir des informations détaillées sur un produit.
+Fonctionnalités :
+Afficher nom, images, description complète, spécifications techniques.
+Indiquer le prix et les options d’achat (ajout au panier).
+Afficher les avis clients.
+Montrer les informations du vendeur (nom, note).
+
+
+
+2.5 Achat et Vente de Produits (US 5)
+
+Objectif : Permettre les transactions entre acheteurs et vendeurs.
+Fonctionnalités :
+Acheteur : Ajouter des produits au panier, passer une commande.
+Vendeur : Publier une annonce avec nom, description, images, prix, état, contact.
+Envoyer des emails de confirmation pour les commandes et publications.
+
+
+
+2.6 Espace Administrateur (US 7)
+
+Objectif : Gérer les comptes, annonces et transactions.
+Fonctionnalités :
+Tableau de bord avec statistiques (ventes, utilisateurs).
+Modifier/supprimer les annonces inappropriées.
+Gérer les transactions (consultation, validation).
+Valider/supprimer les avis clients.
+
+
+
+2.7 Connexion et Gestion de Compte (US 8)
+
+Objectif : Permettre aux utilisateurs de se connecter et gérer leur profil.
+Fonctionnalités :
+Connexion via email et mot de passe.
+Inscription avec validation des données.
+Gestion des informations personnelles et annonces.
+
+
+
+2.8 Contact (US 9)
+
+Objectif : Offrir un canal de communication avec le support.
+Fonctionnalités :
+Formulaire de contact (titre, description, email).
+Envoi de la demande par email au support.
+Réponse possible par email.
+
+
+
+2.9 Statistiques et Rapports (US 10)
+
+Objectif : Fournir des données analytiques à l’administrateur.
+Fonctionnalités :
+Nombre de produits vendus par catégorie.
+Chiffre d’affaires généré.
+Avis et évaluations des clients.
+
+
+
+
+3. Exigences de Sécurité (US 6)
+3.1 Sécurité Front-end
+
+HTTPS : Toutes les communications utilisent HTTPS pour chiffrer les données.
+Protection XSS : Utilisation de DOMPurify pour nettoyer les entrées utilisateur, éviter dangerouslySetInnerHTML.
+CSP : Configurer une Content Security Policy pour limiter les sources de scripts/styles.
+Cookies : Configurer avec HttpOnly, Secure, SameSite pour protéger contre les attaques.
+Dépendances : Vérifier les vulnérabilités avec npm audit, maintenir les dépendances à jour.
+Authentification : Utiliser JWT pour sécuriser les routes protégées.
+
+3.2 Sécurité Back-end
+
+Validation des entrées : Nettoyer toutes les entrées pour éviter les injections.
+Protection SQL : Utiliser Sequelize avec requêtes paramétrées.
+Authentification : Implémenter Passport.js pour une authentification sécurisée.
+Protection CSRF : Utiliser le middleware csurf.
+Rate Limiting : Implémenter express-rate-limit contre les attaques par force brute.
+En-têtes HTTP : Utiliser helmet pour sécuriser les en-têtes.
+Sessions : Gérer les sessions avec express-session, stockage côté serveur.
+Logs : Utiliser Winston pour surveiller les activités suspectes.
+
+3.3 Sécurité Base de Données
+
+PostgreSQL :
+Utiliser des rôles/permissions pour limiter l’accès.
+Chiffrer les données sensibles avec pgcrypto.
+Configurer SSL/TLS pour les connexions.
+Effectuer des sauvegardes régulières.
+
+
+Firestore :
+Configurer des règles d’accès strictes.
+Chiffrer les données sensibles.
+
+
+
+3.4 Bonnes Pratiques Générales
+
+Clés API : Stocker dans un fichier .env.
+Tests : Effectuer des tests de sécurité (XSS, CSRF, SQL injection).
+RGPD : Mettre en place une politique de confidentialité, gérer le consentement des cookies.
+reCAPTCHA : Intégrer pour les formulaires (connexion, contact).
+REGEX : Valider les entrées (emails, mots de passe, texte).
+
+
+
+
+
+
+
+
+4. Résumé pour la Présentation
+TechReuse Market est une plateforme sécurisée pour la vente et l’achat de matériel informatique d’occasion. Elle propose :
+
+Une interface intuitive avec page d’accueil, catalogue, détails des produits, et espace administrateur.
+Des fonctionnalités pour les acheteurs (panier, commande), vendeurs (publication d’annonces), et administrateurs (gestion des comptes, transactions, avis).
+Une sécurité robuste : HTTPS, protection XSS/CSRF, JWT, rate limiting, RGPD.
+Une architecture full-stack avec React, Node.js/Express, PostgreSQL, et Firestore.
+
+
+
+Diapositive  pour la présentation :
+
+Titre : Cahier des Charges - TechReuse Market
+Contenu :
+Objectif : Marketplace sécurisée pour matériel informatique d’occasion.
+Fonctionnalités clés : Catalogue, achat/vente, espace admin, contact.
+Sécurité : HTTPS, XSS/CSRF, JWT, RGPD, reCAPTCHA.
+Technologies : React, Node.js, PostgreSQL, Firestore.
+
+
+
+
+

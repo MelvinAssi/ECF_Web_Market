@@ -1,0 +1,132 @@
+Carte Trello : Charte Graphique
+Description : Définir la charte graphique complète, incluant la palette de couleurs (#FFFFFF, #34374C, #EE2B47 principales ; #F6F6F6, #2C2E3E secondaires), les polices (Merriweather, Noto Sans principales ; Cormorant secondaire), les styles de boutons, les breakpoints (768px, 1024px), les icônes Font Awesome (Solid), les styles d’images (carrées, radius 6px), la grille (12 colonnes), les marges/paddings (10px/8px), les styles de formulaires, le menu, les animations (grossissement hover), et le logo (textuel, divisé, #EE2B47/#F6F6F6).
+Checklist :
+
+ Créer un logo :
+Type : Textuel (« TechReuse Market »)
+Division : Horizontale (« TechReuse » fond #EE2B47, texte #F6F6F6 ; « Market » fond #F6F6F6, texte #EE2B47)
+Variante : Verticale (optionnelle)
+Police : Montserrat Bold, 22px (desktop), 18px (mobile)
+Border-radius : 6px
+Noir/Blanc : Fond #000000/#FFFFFF, texte #FFFFFF/#000000
+Alt : « Logo TechReuse Market »
+
+
+ Définir 3 couleurs principales :
+#FFFFFF (blanc) : arrière-plans principaux (~40-50 %)
+#34374C (bleu-gris foncé) : navigation, texte (~15-20 %)
+#EE2B47 (rouge vif) : boutons, accents (~5-10 %)
+
+
+ Définir 2 couleurs secondaires :
+#F6F6F6 (gris très clair) : fonds secondaires (~15-25 %)
+#2C2E3E (bleu-gris très foncé) : ombres, bordures (~5-15 %)
+
+
+ Fournir codes HEX, RGB, CMJN pour chaque couleur
+ Sélectionner 2 polices principales :
+Merriweather : titres (H1, H2)
+Noto Sans : paragraphes, boutons
+
+
+ Définir 1 police secondaire :
+Cormorant : sous-titres (H3, H4), citations
+
+
+ Définir styles et tailles de texte :
+H1 : Merriweather Bold, 36px (desktop), 28px (mobile)
+H2 : Merriweather Regular, 28px (desktop), 22px (mobile)
+H3 : Cormorant Regular, 22px (desktop), 18px (mobile)
+Paragraphe : Noto Sans Regular, 16px (desktop), 14px (mobile)
+Bouton : Noto Sans Bold, 20px (desktop), 18px (mobile)
+Menu : Noto Sans Medium, 16px (desktop), 14px (mobile)
+
+
+ Définir styles de boutons :
+Bouton Principal : Background #EE2B47, texte #FFFFFF, contour #D81A36, 10px radius, hover scale(1.05), click #FFFFFF/#EE2B47, désactivé opacité 50%
+Bouton Secondaire : Background #2C2E3E, texte #F6F6F6, contour #D5D5D5, 10px radius, hover scale(1.05), click #F6F6F6/#2C2E3E, désactivé opacité 50%
+Bouton Tertiaire (fond clair) : Background transparent, texte #EE2B47, contour #EE2B47, 10px radius, hover #F6F6F6, click #EE2B47/#FFFFFF, désactivé opacité 50%
+Bouton Tertiaire (fond sombre) : Background transparent, texte #FFFFFF, contour #FFFFFF, 10px radius, hover #F6F6F6/#2C2E3E, click #EE2B47/#FFFFFF, désactivé opacité 50%
+
+
+ Définir breakpoints pour responsive design :
+Mobile : max-width 767px
+Tablette : min-width 768px, max-width 1023px
+Desktop : min-width 1024px
+
+
+ Choisir un style d’icônes cohérent :
+Font Awesome, style Solid
+Taille : 24px (desktop), 20px (mobile)
+Couleurs : #34374C (défaut), #EE2B47 (action), #2C2E3E (secondaire)
+Espacement : 8px margin
+
+
+ Lister les icônes et leur signification :
+fa-home : Page d’accueil (#34374C)
+fa-search : Rechercher (#34374C)
+fa-shopping-cart : Panier (#EE2B47)
+fa-user : Compte (#34374C)
+fa-heart : Favoris (#EE2B47)
+fa-trash : Supprimer (#2C2E3E)
+fa-filter : Filtrer (#34374C)
+fa-envelope : Contact (#34374C)
+fa-star : Noter (#EE2B47)
+fa-sign-out-alt : Déconnexion (#2C2E3E)
+fa-bars : Menu hamburger (#F6F6F6)
+
+
+ Définir le style des images :
+Format : Carré (1:1, ex. : 300x300px desktop, 150x150px mobile)
+Border-radius : 6px
+Bordure : 1px solid #D5D5D5
+Hover : Scale(1.02), box-shadow
+Alt : Descriptif pour accessibilité
+
+
+ Définir styles pour graphiques/infographies :
+Si utilisé : Barres/lignes/camemberts
+Couleurs : #EE2B47, #34374C, #2C2E3E, #F6F6F6
+Polices : Noto Sans (14px étiquettes), Merriweather (18px titres)
+Radius : 4px pour barres
+
+
+ Créer une grille de mise en page :
+12 colonnes
+Catalogue : 4 colonnes (desktop), 3 (tablette), 2 (mobile)
+Gutter : 16px (desktop), 12px (mobile)
+Marges extérieures : 24px (desktop), 16px (mobile)
+
+
+ Définir marges et espacements :
+Desktop : Marge/padding 10px (éléments), 24px (sections)
+Mobile : Marge/padding 8px (éléments), 16px (sections)
+
+
+ Définir styles de formulaires :
+Fond : #34374C
+Labels : #F6F6F6, Noto Sans, 16px (desktop), 14px (mobile)
+Inputs : Fond #F6F6F6, texte #2C2E3E, border #D5D5D5, 6px radius, 16px/14px
+Focus : Border/outline #EE2B47
+Erreur : Border/message #EE2B47, 14px/12px
+Désactivé : Opacité 50%
+Padding : 10px (desktop), 8px (mobile)
+
+
+ Définir style du menu principal et sous-menus :
+Header : Fond #34374C, hauteur 60px/48px
+Menu : Texte #F6F6F6, Noto Sans Medium, 16px/14px, fond transparent
+Actif/Focus : Bordure inférieure #EE2B47
+Hover : Scale(1.05)
+Sous-menus : Fond #2C2E3E, texte #F6F6F6, radius 6px, hover #34374C
+Mobile : Hamburger fa-bars (#F6F6F6), menu vertical
+
+
+
+ Définir transitions et animations :
+Hover : Scale(1.05) pour boutons, menu, images
+Sous-menus : Fade-in (opacity 0 à 1)
+Transitions : 0.2s pour fluidité
+
+
+
