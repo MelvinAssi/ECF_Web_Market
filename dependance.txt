@@ -1,0 +1,32 @@
+npm create vite@latest my-app-frontend -- --template react
+cd my my-app-frontend
+npm install
+
+
+npm install --save-dev eslint prettier eslint-plugin-react eslint-plugin-react-hooks eslint-config-prettier eslint-plugin-jsx-a11y eslint-plugin-import @typescript-eslint/parser @typescript-eslint/eslint-plugin
+
+
+npm install axios
+npm install styled-components
+npm install --save-dev @types/styled-components
+npm install react-router-dom
+npm install --save-dev @types/react-router-dom
+
+
+cd src
+mkdir assets components contexts hooks pages services styles
+
+cd ..
+npm run dev
+
+
+backend:
+à la racine
+
+mkdir my-backend-express    
+cd  my-backend-express   
+npm init -y
+npm install express argon2 cookie-parser cors csrf dotenv express express-rate-limit express-validator helmet jsonwebtoken pg
+mkdir config controllers models routes middleware 
+
+
