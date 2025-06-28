@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Header from "../components/Header";
 
 
 const PageContainer = styled.main`
@@ -6,7 +7,6 @@ const PageContainer = styled.main`
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
     background-color :var(--color2);
 `;
 
@@ -14,9 +14,12 @@ const PageContainer = styled.main`
 
 const HomePage = () => {
     return (      
-      <PageContainer>
-        <h1>Home</h1>
-      </PageContainer>
+      <>
+        <Header/>
+        <PageContainer>          
+          <h1>Home</h1>
+        </PageContainer>      
+      </>
     );
   };
 

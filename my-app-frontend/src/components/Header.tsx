@@ -4,13 +4,13 @@ import Logo from "./Logo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
 
+interface HeaderProps {
+  reduce?: boolean;
+}
 
 
-
-
-const Header = () => {
-    const [search,setSearch] =useState()
-  
+const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
+    const [search,setSearch] =useState('')
     const HeaderContainer = styled.div`
       width:100%;
       display:flex;
@@ -101,30 +101,40 @@ const Header = () => {
 
     return (    
       <HeaderContainer> 
-        <Header1>
-            <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
-                <FontAwesomeIcon size="2x" icon="bars" color="#F6F6F6" />
-                <Logo/>
-            </div>
-            <SearchBarContainer>
-                <SearchBar type="text" value={search} onChange={()=>setSearch}/>
-                <FontAwesomeIcon size="1x" icon="search" color="#34374C" />
-            </SearchBarContainer>
-            <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
-                <IconBackground>
-                    <FontAwesomeIcon size="1x" icon="shopping-cart" color="#34374C" />
-                </IconBackground>
-                <IconBackground>
-                    <FontAwesomeIcon size="1x" icon="user" color="#34374C" />
-                </IconBackground>                 
-            </div>            
-        </Header1>       
-        <Header2>
-        
-        </Header2>
-        <Header3>
-            <OfferText>Livraison gratuite Dès 40€ sur tous les articles</OfferText>
-        </Header3>
+        {reduce?(
+            <Header1 style={{justifyContent:'center'}}>
+                <Logo/>       
+            </Header1>      
+        ):(
+            <>
+                <Header1>
+                    <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
+                        <FontAwesomeIcon size="2x" icon="bars" color="#F6F6F6" />
+                        <Logo/>
+                    </div>
+
+                    <SearchBarContainer>
+                        <SearchBar type="text" value={search} onChange={()=>setSearch}/>
+                        <FontAwesomeIcon size="1x" icon="search" color="#34374C" />
+                    </SearchBarContainer>
+                    <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
+                        <IconBackground>
+                            <FontAwesomeIcon size="1x" icon="shopping-cart" color="#34374C" />
+                        </IconBackground>
+                        <IconBackground>
+                            <FontAwesomeIcon size="1x" icon="user" color="#34374C" />
+                        </IconBackground>                 
+                    </div>            
+                </Header1>       
+                <Header2>
+                
+                </Header2>
+                <Header3>
+                    <OfferText>Livraison gratuite Dès 40€ sur tous les articles</OfferText>
+                </Header3>
+            </>
+        )}
+
       </HeaderContainer> 
 
     );

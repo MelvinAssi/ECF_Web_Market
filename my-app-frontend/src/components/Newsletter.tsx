@@ -69,7 +69,7 @@ const Newsletter = () => {
                 <div>
                     <Label htmlFor="email">Email</Label>
                     <Field
-                        id="email"
+                        id="email-newletter"
                         name="email"
                         type="email"
                         as={Input}
