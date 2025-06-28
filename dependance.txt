@@ -11,7 +11,8 @@ npm install styled-components
 npm install --save-dev @types/styled-components
 npm install react-router-dom
 npm install --save-dev @types/react-router-dom
-
+npm install @fortawesome/react-fontawesome @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
+npm install @fortawesome/free-brands-svg-icons
 
 cd src
 mkdir assets components contexts hooks pages services styles

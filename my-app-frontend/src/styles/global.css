@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --color1: #34374C;
+    --color2: #FFFFFF;
+    --color3: #EE2B47;
+    --color4: #2C2E3E;
+    --color5: #F6F6F6;
+}
+*,body {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans", sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;  
+}
+
+
+
+h1 {
+    font-family: 'Merriweather', sans-serif; 
+    font-size: 36px;
+    font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 28px;
+    }
+}
+  
+h2 {
+    font-family: 'Merriweather', sans-serif;
+    font-weight:normal;
+    font-size: 28px;
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
+}
+h3{
+    font-family: 'Cormorant', sans-serif;
+    font-weight:normal;
+    font-size: 22px;
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+}
+
+
+p {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight:normal;
+    font-size: 16px;
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+label{
+    font-family: 'Noto Sans', sans-serif;
+    font-weight:normal;
+    font-size: 16px;
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+}
