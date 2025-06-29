@@ -224,8 +224,8 @@ CREATE TYPE order_status_type AS ENUM ('PENDING', 'VALIDATED', 'DELIVERED');
 CREATE TYPE transaction_status_type AS ENUM ('PENDING', 'VALIDATED', 'CANCELLED');
 CREATE TYPE contact_status_type AS ENUM ('PENDING', 'READ', 'RESPONDED');
 
--- Table User
-CREATE TABLE user (
+-- Table Users
+CREATE TABLE users (
     id_user UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(100) NOT NULL UNIQUE,
     password TEXT NOT NULL,
@@ -262,18 +262,18 @@ CREATE TABLE listing (
     status listing_status_type NOT NULL,
     seller_id UUID NOT NULL,
     product_id UUID NOT NULL,
-    FOREIGN KEY (seller_id) REFERENCES user(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (seller_id) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id_product) ON DELETE CASCADE
 );
 
--- Table Order
-CREATE TABLE order (
+-- Table Orders (renommée de "order" à "orders")
+CREATE TABLE orders (
     id_order UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_date TIMESTAMP DEFAULT NOW(),
     total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
     status order_status_type NOT NULL,
     buyer_id UUID NOT NULL,
-    FOREIGN KEY (buyer_id) REFERENCES user(id_user) ON DELETE CASCADE
+    FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
 -- Table Cart
@@ -281,7 +281,7 @@ CREATE TABLE cart (
     id_cart UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     buyer_id UUID NOT NULL,
     creation_date TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (buyer_id) REFERENCES user(id_user) ON DELETE CASCADE
+    FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
 -- Table Cart_Product (association)
@@ -294,6 +294,20 @@ CREATE TABLE cart_product (
     FOREIGN KEY (id_product) REFERENCES product(id_product) ON DELETE CASCADE
 );
 
+-- Table Transactions (renommée de "transaction" à "transactions")
+CREATE TABLE transactions (
+    id_transaction UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    transaction_date TIMESTAMP DEFAULT NOW(),
+    amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
+    status transaction_status_type NOT NULL,
+    buyer_id UUID NOT NULL,
+    seller_id UUID NOT NULL,
+    order_id UUID NOT NULL,
+    FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (seller_id) REFERENCES users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(id_order) ON DELETE CASCADE
+);
+
 -- Table Review
 CREATE TABLE review (
     id_review UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -303,23 +317,9 @@ CREATE TABLE review (
     buyer_id UUID NOT NULL,
     product_id UUID,
     seller_id UUID,
-    FOREIGN KEY (buyer_id) REFERENCES user(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id_product) ON DELETE SET NULL,
-    FOREIGN KEY (seller_id) REFERENCES user(id_user) ON DELETE SET NULL
-);
-
--- Table Transaction
-CREATE TABLE transaction (
-    id_transaction UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    transaction_date TIMESTAMP DEFAULT NOW(),
-    amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
-    status transaction_status_type NOT NULL,
-    buyer_id UUID NOT NULL,
-    seller_id UUID NOT NULL,
-    order_id UUID NOT NULL,
-    FOREIGN KEY (buyer_id) REFERENCES user(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (seller_id) REFERENCES user(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (order_id) REFERENCES order(id_order) ON DELETE CASCADE
+    FOREIGN KEY (seller_id) REFERENCES users(id_user) ON DELETE SET NULL
 );
 
 -- Table Contact
@@ -331,7 +331,7 @@ CREATE TABLE contact (
     sent_date TIMESTAMP DEFAULT NOW(),
     status contact_status_type NOT NULL,
     admin_id UUID,
-    FOREIGN KEY (admin_id) REFERENCES user(id_user) ON DELETE SET NULL
+    FOREIGN KEY (admin_id) REFERENCES users(id_user) ON DELETE SET NULL
 );
 
 -- Table Statistic

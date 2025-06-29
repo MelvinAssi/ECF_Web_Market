@@ -13,6 +13,8 @@ npm install react-router-dom
 npm install --save-dev @types/react-router-dom
 npm install @fortawesome/react-fontawesome @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
 npm install @fortawesome/free-brands-svg-icons
+npm install formik yup
+npm install --save-dev @types/yup
 
 cd src
 mkdir assets components contexts hooks pages services styles
@@ -28,6 +30,7 @@ mkdir my-backend-express
 cd  my-backend-express   
 npm init -y
 npm install express argon2 cookie-parser cors csrf dotenv express express-rate-limit express-validator helmet jsonwebtoken pg
+npm install sequelize
 mkdir config controllers models routes middleware 
 
 
