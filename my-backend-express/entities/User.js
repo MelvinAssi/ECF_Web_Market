@@ -20,7 +20,7 @@ const User = sequelize.define('User', {
     type: DataTypes.TEXT,
     allowNull: false,
     validate: {
-      len: [12, 64],
+      len: [12, 100],
       is: /[A-Z]/,
       is: /[a-z]/,
       is: /\d/,
@@ -30,10 +30,38 @@ const User = sequelize.define('User', {
   name: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    validate: {
+      len: [2, 64],
+    },
+  },
+  firstname: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    validate: {
+      len: [2, 64],
+    },
+  },
+  adress: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    validate: {
+      len: [2, 64],
+    },
+  },
+  phone: {
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    validate: {
+      matches: {
+        args: /^[0-9]{10}$/,
+        msg: 'Numéro invalide',
+      },
+    },
   },
   role: {
     type: DataTypes.ENUM('BUYER', 'SELLER', 'ADMIN'),
     allowNull: false,
+    defaultValue: 'BUYER',
   },
   created_at: {
     type: DataTypes.DATE,

@@ -14,10 +14,11 @@
 1. Un **User** est identifié par un identifiant unique (`id_user`) dans la base de données.
 2. Chaque User possède une adresse e-mail unique, valide et obligatoire dans la table `user`.
 3. Le mot de passe est obligatoire, haché avec bcrypt ou Argon2id, et stocké dans la table `user`.
-4. La date de création d’un compte est enregistrée automatiquement dans la table `user`.
-5. Les comptes peuvent être désactivés par un Admin via le champ `is_active` dans la table `user`.
-6. Les sessions sont gérées avec un champ `last_activity` pour suivre l’inactivité (expiration après 30 minutes).
-7. Le rôle d’un User est défini comme `BUYER`, `SELLER` ou `ADMIN` dans la table `user`.
+4. Chaque User doit fournir un nom (name), un prénom (firstname), une adresse (adress), et un numéro de téléphone (phone) obligatoires lors de l’inscription.
+5. La date de création d’un compte est enregistrée automatiquement dans la table `user`.
+6. Les comptes peuvent être désactivés par un Admin via le champ `is_active` dans la table `user`.
+7. Les sessions sont gérées avec un champ `last_activity` pour suivre l’inactivité (expiration après 30 minutes).
+8. Le rôle d’un User est défini comme `BUYER`, `SELLER` ou `ADMIN` dans la table `user`.
 
 ### 🛒 Gestion des Produits et Annonces
 8. Un **Product** est identifié par un identifiant unique (`id_product`) et lié à une **Category**.
@@ -56,6 +57,9 @@
 | email | VARCHAR(100) | unique, non nul, format email | Adresse e-mail de l’utilisateur |
 | password | TEXT | non nul, haché (bcrypt/Argon2id) | Mot de passe haché |
 | name | VARCHAR(100) | non nul | Nom de l’utilisateur |
+| firstname | VARCHAR(100) | non nul | Prénom de l’utilisateur |
+| adress | VARCHAR(100) | non nul | Adresse de l’utilisateur |
+| phone | VARCHAR(20) | non nul format téléphone (10 chiffres)| Numéro de téléphone de l’utilisateur |
 | role | ENUM | valeurs : 'BUYER', 'SELLER', 'ADMIN' | Rôle de l’utilisateur |
 | created_at | TIMESTAMP | auto-généré | Date de création du compte |
 | is_active | BOOLEAN | défaut true | Statut actif ou désactivé |
@@ -158,7 +162,7 @@
 Le MCD représente les entités et leurs relations avec les cardinalités. Voici une description textuelle (une image réelle nécessiterait un outil comme Mocodo ou Draw.io) :
 
 ### Entités et Relations
-- **User** (id_user, email, password, name, role, created_at, is_active, last_activity)
+- **User** (id_user, email, password, name, firstname, adress, phone, role, created_at, is_active, last_activity)
   - **Publishes** (0,N) -> **Listing** (1,1): Un Seller peut publier plusieurs Listings, une Listing est publiée par un seul Seller.
   - **Places** (0,N) -> **Order** (1,1): Un Buyer peut passer plusieurs Orders, une Order est passée par un seul Buyer.
   - **Owns** (0,N) -> **Cart** (1,1): Un Buyer peut posséder un Cart, un Cart appartient à un seul Buyer.
@@ -190,7 +194,7 @@ Le MCD représente les entités et leurs relations avec les cardinalités. Voici
 ## MLD (Modèle Logique de Données)
 Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et les relations.
 
-1. **User** (id_user: UUID PK, email: VARCHAR(100) UNIQUE, password: TEXT, name: VARCHAR(100), role: ENUM('BUYER', 'SELLER', 'ADMIN'), created_at: TIMESTAMP, is_active: BOOLEAN, last_activity: TIMESTAMP)
+1. **User** (id_user: UUID PK, email: VARCHAR(100) UNIQUE, password: TEXT, name: VARCHAR(100), firstname: VARCHAR(100), adress: VARCHAR(100), phone: VARCHAR(20), role: ENUM('BUYER', 'SELLER', 'ADMIN') DEFAULT 'BUYER', created_at: TIMESTAMP, is_active: BOOLEAN, last_activity: TIMESTAMP)
 2. **Product** (id_product: UUID PK, name: VARCHAR(100), description: TEXT, price: DECIMAL(10,2), condition: ENUM('NEW', 'GOOD', 'USED'), verification_status: ENUM('UNDER_VERIFICATION', 'RECONDITIONED', 'READY_TO_SELL', 'REJECTED'), images: TEXT[], category_id: UUID FK -> Category)
 3. **Listing** (id_listing: UUID PK, publication_date: TIMESTAMP, status: ENUM('PENDING', 'ONLINE', 'DELETED'), seller_id: UUID FK -> User, product_id: UUID FK -> Product)
 4. **Category** (id_category: UUID PK, name_category: VARCHAR(100) UNIQUE)
@@ -230,7 +234,10 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password TEXT NOT NULL,
     name VARCHAR(100) NOT NULL,
-    role role_type NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    adress VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL CHECK (phone ~ '^[0-9]{10}$'),
+    role role_type NOT NULL DEFAULT 'BUYER',
     created_at TIMESTAMP DEFAULT NOW(),
     is_active BOOLEAN DEFAULT TRUE,
     last_activity TIMESTAMP
@@ -344,3 +351,4 @@ CREATE TABLE statistic (
     FOREIGN KEY (category_id) REFERENCES category(id_category) ON DELETE SET NULL
 );
 ```
+

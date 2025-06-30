@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import CustomInput from "../components/CustomInput";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 interface FormValues1 {
   email: string;
@@ -117,22 +118,41 @@ const DividerWithText = styled.div`
     margin-left: 10px;
   }
   `;
+  const StyledError = styled.div`
+    color: var(--color3);
+    font-size: 14px;
+    margin-top: 4px;
+`;
 
 
 const SignInPage = () => {
-  const [emailVerified,setEmailVerified] = useState(false);
+  const {checkEmailExistence,signIn} = useAuthContext()
+  const [checkedEmail,setCheckedEmail] = useState(false);
+  const [formData, setFormData] = useState({ email: ''});
   const navigate = useNavigate()
-  const handleSubmitEmail = async (values: FormValues1) => {
-    console.log("Formulaire soumis !", values.email);
+  const [error, setError] = useState('');
 
-    //pour le test//
-    setEmailVerified(true)
+  const handleEmailCheck = async (values: FormValues1) => {
+    try {
+      const isAvailable = await checkEmailExistence(values.email);
+      if (isAvailable) {
+        alert('Cet email est enregistré, passez à l\'étape suivante');
+        setFormData({ email: values.email});
+        setCheckedEmail(true)
+      } else {
+        setError('Cet email n\'est pas enregistré');
+      }
+    } catch (err) {
+      setError('Erreur lors de la vérification de l\'email');
+    }
   };
-  const handleSubmitPassword = async (values: FormValues2) => {
-    console.log("Formulaire soumis !", values.password);
-
-    //pour le test//
-    setEmailVerified(true)
+  const handleSignIn = async (values: FormValues2) => {
+    try {
+      await signIn(formData.email, values.password);
+      alert('Connexion réussie !');
+    } catch (err) {
+      setError('Erreur lors de la connexion');
+    }
   };
     return (
       <>
@@ -140,27 +160,28 @@ const SignInPage = () => {
         <PageContainer>
           
           <IndicatorContainer>
-            <StyledIndicator isActive={!emailVerified}></StyledIndicator>
-            <StyledIndicator isActive={emailVerified}></StyledIndicator>
+            <StyledIndicator isActive={!checkedEmail}></StyledIndicator>
+            <StyledIndicator isActive={checkedEmail}></StyledIndicator>
           </IndicatorContainer>
           <FormContainer>
             <TitleContainer>
               <h1>Connexion</h1>
             </TitleContainer>
-            {!emailVerified?(
+            {!checkedEmail?(
               <>
                 <p>Saisissez votre e-mail pour vous connecter.</p>
                 <Formik
                   key="email-step" 
                   initialValues={{ email: '' }}
                   validationSchema={validationSchema1}
-                  onSubmit={handleSubmitEmail}
+                  onSubmit={handleEmailCheck}
                 >
                   {() => (
                     <FormikForm>
                       <StyledForm>  
                         <CustomInput name="email" label="Email" type="email" ariaLabel="Entrez votre email"/>  
                         <Button  text="Continuer" variant="type1" width="300px" type="submit" />
+                        <StyledError>{error}</StyledError>
                       </StyledForm>
                     </FormikForm>
                   )}
@@ -176,13 +197,14 @@ const SignInPage = () => {
                   key="password-step" 
                   initialValues={{ password: '' }}
                   validationSchema={validationSchema2}
-                  onSubmit={handleSubmitPassword}
+                  onSubmit={handleSignIn}
                 >
                   {() => (
                     <FormikForm>
                       <StyledForm>    
                           <CustomInput name="password" label="Mot de passe" type="password" ariaLabel="Entrez votre mot de passe"/>                
                           <Button text="Se connecter" variant="type1" width="300px" type="submit" />
+                          <StyledError>{error}</StyledError>
                       </StyledForm>
                     </FormikForm>
                   )}
@@ -192,7 +214,7 @@ const SignInPage = () => {
                     variant="type2"
                     width="300px"
                     type="button" 
-                    onClick={()=>(setEmailVerified(false))}
+                    onClick={()=>(setCheckedEmail(false))}
                   />
               </>
             )}

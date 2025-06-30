@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import CustomInput from "../components/CustomInput";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 interface FormValues1 {
   email: string;
@@ -139,44 +140,64 @@ const DividerWithText = styled.div`
     margin-left: 10px;
   }
   `;
+  const StyledError = styled.div`
+    color: var(--color3);
+    font-size: 14px;
+    margin-top: 4px;
+`;
 
 
 const SignUpPage = () => {
-  const [emailVerified,setEmailVerified] = useState(false);
+  const {checkEmailAvailability,signUp} = useAuthContext()
+  const [checkedEmail,setCheckedEmail] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+
   const navigate = useNavigate()
-  const handleSubmitEmail = async (values: FormValues1) => {
-    console.log("Formulaire soumis !", values.email);
 
-    //pour le test//
-    setEmailVerified(true)
+  const handleEmailCheck = async (values: FormValues1) => {
+    try {
+      const isAvailable = await checkEmailAvailability(values.email);
+      if (isAvailable) {
+        alert('Email disponible, passez à l\'étape suivante');
+        setFormData({ email: values.email, password: values.password });
+        setCheckedEmail(true)
+      } else {
+        setError('Cet email est déjà utilisé');
+      }
+    } catch (err) {
+      setError('Erreur lors de la vérification de l\'email');
+    }
   };
-  const handleSubmitPassword = async (values: FormValues2) => {
-    console.log("Formulaire soumis !", values.name);
 
-    //pour le test//
-    setEmailVerified(true)
+  const handleSignUp = async (values: FormValues2) => {
+    try {
+      await signUp(formData.email, formData.password, values.name, values.firstname, values.adress, values.phone);
+      alert('Inscription réussie !');
+    } catch (err) {
+      setError('Erreur lors de l\'inscription');
+    }
   };
-
     return (      
       <>
         <Header reduce={true}/>  
         <PageContainer>
           <IndicatorContainer>
-            <StyledIndicator isActive={!emailVerified}></StyledIndicator>
-            <StyledIndicator isActive={emailVerified}></StyledIndicator>
+            <StyledIndicator isActive={!checkedEmail}></StyledIndicator>
+            <StyledIndicator isActive={checkedEmail}></StyledIndicator>
           </IndicatorContainer>
           <FormContainer>
             <TitleContainer>
               <h1>Inscription</h1>
             </TitleContainer>
-            {!emailVerified?(
+            {!checkedEmail?(
               <>
                 <p>Créez votre compte pour commencer..</p>
                 <Formik
                   key="email-step" 
                   initialValues={{ email: '',password: '',confirmPassword: '' }}
                   validationSchema={validationSchema1}
-                  onSubmit={handleSubmitEmail}
+                  onSubmit={handleEmailCheck}
                 >
                   {() => (
                     <FormikForm>
@@ -193,6 +214,7 @@ const SignUpPage = () => {
                             width="300px"
                             type="submit" 
                           />
+                          <StyledError>{error}</StyledError>
                       </StyledForm>
 
                     </FormikForm>
@@ -209,7 +231,7 @@ const SignUpPage = () => {
                   key="informations-step" 
                   initialValues={{ name: '',firstname: '',adress: '',phone: '' }}
                   validationSchema={validationSchema2}
-                  onSubmit={handleSubmitPassword}
+                  onSubmit={handleSignUp}
                 >
                   {() => (
                     <FormikForm>
@@ -227,6 +249,7 @@ const SignUpPage = () => {
                             width="300px"
                             type="submit" 
                           />
+                          <StyledError>{error}</StyledError>
                       </StyledForm>
 
                     </FormikForm>
@@ -237,7 +260,7 @@ const SignUpPage = () => {
                     variant="type2"
                     width="300px"
                     type="button" 
-                    onClick={()=>(setEmailVerified(false))}
+                    onClick={()=>(setCheckedEmail(false))}
                   />
               </>
             )}

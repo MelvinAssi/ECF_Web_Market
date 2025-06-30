@@ -5,7 +5,7 @@ const authModels = require('../models/authModels');
 
 
 
-exports.emailVerified = async(req,res)=>{
+exports.checkEmailExistence = async(req,res)=>{
     try{
         
         const errors = validationResult(req);
@@ -33,7 +33,7 @@ exports.emailVerified = async(req,res)=>{
 }
 
 
-exports.signinUser =async (req, res) => {
+exports.signInUser =async (req, res) => {
     try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -82,3 +82,74 @@ exports.signinUser =async (req, res) => {
     res.status(500).json({ error: 'Erreur serveur' });
     }
 }
+
+exports.checkEmailAvailability = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
+    const { email } = req.body;
+    const user = await authModels.findUserByEmail(email);
+    if (user) {
+      return res.status(400).json({ error: 'Email already in use' });
+    }
+    res.status(200).json({ message: 'Email available' });
+  } catch (err) {
+    console.error('Erreur dans checkEmailAvailability :', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
+
+exports.signUpUser = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
+    const { email, password, name, firstname, adress, phone } = req.body;
+    const user = await authModels.findUserByEmail(email);
+    if (user) {
+      return res.status(400).json({ error: 'Email already in use' });
+    }
+    const hash = await argon2.hash(password);
+    const newUser = await authModels.createUser(email, hash, name, firstname, adress, phone);
+    const token = jwt.sign(
+      {
+        id: newUser.id_user,
+        email: newUser.email,
+        role: newUser.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      maxAge: 60 * 60 * 1000,
+    });
+    res.status(201).json({
+      message: 'Inscription réussie',
+      user: { email: newUser.email },
+    });
+  } catch (err) {
+    console.error('Erreur dans signUpUser :', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
+
+
+exports.signOutUser = async (req, res) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+    });
+    res.json({ message: 'Disconnect with success' });
+  } catch (err) {
+    console.error('Erreur dans signOutUser :', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};

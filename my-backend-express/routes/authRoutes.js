@@ -6,9 +6,9 @@ const authControllers = require('../controllers/authControllers');
 
 
 
-router.post('/emailVerified', [
+router.post('/check-email-existence', [
     body('email').isEmail().withMessage('Invalid email'),
-], authControllers.emailVerified);
+], authControllers.checkEmailExistence);
 
 router.post('/signin', [
   body('email').isEmail().withMessage('Invalid email'),
@@ -18,27 +18,27 @@ router.post('/signin', [
     .matches(/[a-z]/).withMessage('Must contain at least one lowercase letter')
     .matches(/\d/).withMessage('Must contain at least one number')
     .matches(/[!@#$%^&*]/).withMessage('Must contain at least one special character'),
-], authControllers.signinUser);
+], authControllers.signInUser);
 
+
+router.post('/check-email-availability', [
+  body('email').isEmail().withMessage('Invalid email'),
+], authControllers.checkEmailAvailability);
 
 router.post('/signup', [
-    body('email').isEmail().withMessage('Invalid email'),
-    body('password')
-        .isLength({ min: 12,max:64 }).withMessage('Password must be between 12 and 64 characters')
-        .matches(/[A-Z]/).withMessage('Must contain at least one uppercase letter')
-        .matches(/[a-z]/).withMessage('Must contain at least one lowercase letter')
-        .matches(/\d/).withMessage('Must contain at least one number')
-        .matches(/[!@#$%^&*]/).withMessage('Must contain at least one special character'),
-    body('name')
-        .isLength({ min: 12,max:64 }).withMessage('Name must be between 12 and 64 characters'),
-    body('firstname')
-        .isLength({ min: 12,max:64 }).withMessage('Firstname must be between 12 and 64 characters'),
-    body('adress')
-        .isLength({ min: 12,max:64 }).withMessage('Adress must be between 12 and 64 characters'),
-    body('phone')
-        .isLength({ min: 10,max:64 }).withMessage('Phone must be between 12 and 64 characters'),
-], authControllers.signinUser);
+  body('email').isEmail().withMessage('Invalid email'),
+  body('password')
+    .isLength({ min: 12, max: 64 }).withMessage('Password must be between 12 and 64 characters')
+    .matches(/[A-Z]/).withMessage('Must contain at least one uppercase letter')
+    .matches(/[a-z]/).withMessage('Must contain at least one lowercase letter')
+    .matches(/\d/).withMessage('Must contain at least one number')
+    .matches(/[!@#$%^&*]/).withMessage('Must contain at least one special character'),
+  body('name').isLength({ min: 2, max: 64 }).withMessage('Name must be between 2 and 64 characters'),
+  body('firstname').isLength({ min: 2, max: 64 }).withMessage('Firstname must be between 2 and 64 characters'),
+  body('adress').isLength({ min: 2, max: 64 }).withMessage('Adress must be between 2 and 64 characters'),
+  body('phone').matches(/^[0-9]{10}$/).withMessage('Phone must be a valid 10-digit number'),
+], authControllers.signUpUser);
 
-
+router.post('/signout', authControllers.signOutUser);
 
 module.exports = router;
