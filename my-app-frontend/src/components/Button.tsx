@@ -15,7 +15,7 @@ interface ButtonProps {
 interface StyledButtonProps {
   width?: string;
   height?: string;
-  variant?: ButtonVariant;
+  $variant?: ButtonVariant;
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
@@ -30,24 +30,24 @@ const StyledButton = styled.button<StyledButtonProps>`
     width: ${({ width }) => width || '300px'};
     height: ${({ height }) => height || 'auto'};
 
-    background-color: ${({ variant }) =>
-        variant === 'type1'
+    background-color: ${({ $variant }) =>
+        $variant === 'type1'
         ? 'var(--color3)'
-        : variant === 'type2'
+        : $variant === 'type2'
         ? 'var(--color4)'
         : 'var(--color5)'
     };
-    color: ${({ variant }) =>
-        variant === 'type1'
+    color: ${({ $variant }) =>
+        $variant === 'type1'
         ? 'var(--color5)'
-        : variant === 'type2'
+        : $variant === 'type2'
         ? 'var(--color5)'
         : 'var(--color3)'
     };
-    border-color: ${({ variant }) =>
-        variant === 'type1'
+    border-color: ${({ $variant }) =>
+        $variant === 'type1'
         ? 'var(--color5)'
-        : variant === 'type2'
+        : $variant === 'type2'
         ? 'var(--color5)'
         : 'var(--color3)'
     };
@@ -58,24 +58,24 @@ const StyledButton = styled.button<StyledButtonProps>`
   }
 
   &:active {
-    background-color: ${({ variant }) =>
-        variant === 'type1'
+    background-color: ${({ $variant }) =>
+        $variant === 'type1'
         ? 'var(--color5)'
-        : variant === 'type2'
+        : $variant === 'type2'
         ? 'var(--color5)'
         : 'var(--color3)'
     };
-    color: ${({ variant }) =>
-        variant === 'type1'
+    color: ${({ $variant }) =>
+        $variant === 'type1'
         ? 'var(--color3)'
-        : variant === 'type2'
+        : $variant === 'type2'
         ? 'var(--color4)'
         : 'var(--color5)'
     };
-    border-color: ${({ variant }) =>
-        variant === 'type1'
+    border-color: ${({ $variant }) =>
+        $variant === 'type1'
         ? 'var(--color3)'
-        : variant === 'type2'
+        : $variant === 'type2'
         ? 'var(--color4)'
         : 'var(--color5)'
     };
@@ -87,9 +87,9 @@ const StyledButton = styled.button<StyledButtonProps>`
   }
 `;
 
-const Button: React.FC<ButtonProps> = ({ text, width, height, onClick,type,variant = 'type1', }) => {
+const Button: React.FC<ButtonProps> = ({ text, width, height, onClick,type,variant = 'type1' }) => {
   return (
-    <StyledButton onClick={onClick} width={width} height={height} type={type} variant={variant}>
+    <StyledButton onClick={onClick} width={width} height={height} type={type} $variant={variant}>
       {text}
     </StyledButton>
   );

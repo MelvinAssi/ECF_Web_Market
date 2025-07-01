@@ -14,6 +14,7 @@ interface FormValues1 {
 interface FormValues2 {
   password: string;
 }
+
 const validationSchema1 = Yup.object({
   email: Yup.string()
       .required('L\'email est obligatoire')
@@ -88,13 +89,13 @@ const IndicatorContainer = styled.div`
 `;
 
 interface StyledIndicatorProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 const StyledIndicator = styled.div<StyledIndicatorProps>`
   width : 12px;
   height: 12px;
   border-radius: 6px;
-  background-color:${({ isActive }) => (isActive ? 'var(--color3)' : 'var(--color4)')};
+  background-color:${({ $isActive }) => ($isActive ? 'var(--color3)' : 'var(--color4)')};
 `;
 const DividerWithText = styled.div`
   display: flex;
@@ -129,8 +130,13 @@ const SignInPage = () => {
   const {checkEmailExistence,signIn} = useAuthContext()
   const [checkedEmail,setCheckedEmail] = useState(false);
   const [formData, setFormData] = useState({ email: ''});
-  const navigate = useNavigate()
+  
   const [error, setError] = useState('');
+
+  const navigate = useNavigate()
+
+
+
 
   const handleEmailCheck = async (values: FormValues1) => {
     try {
@@ -149,7 +155,7 @@ const SignInPage = () => {
   const handleSignIn = async (values: FormValues2) => {
     try {
       await signIn(formData.email, values.password);
-      alert('Connexion réussie !');
+      //alert('Connexion réussie !');
     } catch (err) {
       setError('Erreur lors de la connexion');
     }
@@ -160,8 +166,8 @@ const SignInPage = () => {
         <PageContainer>
           
           <IndicatorContainer>
-            <StyledIndicator isActive={!checkedEmail}></StyledIndicator>
-            <StyledIndicator isActive={checkedEmail}></StyledIndicator>
+            <StyledIndicator $isActive={!checkedEmail}></StyledIndicator>
+            <StyledIndicator $isActive={checkedEmail}></StyledIndicator>
           </IndicatorContainer>
           <FormContainer>
             <TitleContainer>

@@ -5,68 +5,68 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import Newsletter from "./Newsletter";
 
-
+const FooterContainer = styled.div`
+    width:100%;
+    display:flex;
+    flex-direction: column; 
+    align-items: center; 
+    background-color:var(--color1);
+    color:var(--color5);
+`;
+const Footer1 = styled.div`
+    width:100%;
+    display:flex;
+    flex-direction: row; 
+    align-items: center; 
+    padding: 30px;
+    gap:30px;
+`;
+const Footer2 = styled.div`
+    width:100%;
+    padding: 20px;
+    display:flex;
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: space-evenly;
+    ul{
+        gap:15px;
+        list-style: none;
+    }
+    a{
+        text-decoration: none;
+        color: var(--color5);
+    }
+`;
+const IconWrapper = styled.div`
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color3);
+    border-radius: 50%;
+    svg {
+        width: 70%;
+        height: 70%;
+    }
+`;
+const Footer3 = styled.div`
+    width:100%;
+    display:flex;
+    align-items: center; 
+    justify-content: center;
+    padding: 10px;
+`;
+const H3Styled = styled.h3`
+    font-weight:bold;
+`;
 
 
 
 
 
 const Footer = () => {
-    const FooterContainer = styled.div`
-      width:100%;
-      display:flex;
-      flex-direction: column; 
-      align-items: center; 
-      background-color:var(--color1);
-      color:var(--color5);
-    `;
-    const Footer1 = styled.div`
-      width:100%;
-      display:flex;
-      flex-direction: row; 
-      align-items: center; 
-      padding: 30px;
-      gap:30px;
-    `;
-    const Footer2 = styled.div`
-      width:100%;
-      padding: 20px;
-      display:flex;
-      flex-direction: row; 
-      align-items: center; 
-      justify-content: space-evenly;
-        ul{
-            gap:15px;
-            list-style: none;
-        }
-        a{
-            text-decoration: none;
-            color: var(--color5);
-        }
-    `;
-    const IconWrapper = styled.div`
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--color3);
-        border-radius: 50%;
-        svg {
-            width: 70%;
-            height: 70%;
-        }
-    `;
-    const Footer3 = styled.div`
-      width:100%;
-      display:flex;
-      align-items: center; 
-      justify-content: center;
-      padding: 10px;
-    `;
-    const H3Styled = styled.h3`
-      font-weight:bold;
-    `;
+
 
 
     return (    

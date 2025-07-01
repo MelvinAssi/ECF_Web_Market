@@ -110,13 +110,13 @@ const IndicatorContainer = styled.div`
 `;
 
 interface StyledIndicatorProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 const StyledIndicator = styled.div<StyledIndicatorProps>`
   width : 12px;
   height: 12px;
   border-radius: 6px;
-  background-color:${({ isActive }) => (isActive ? 'var(--color3)' : 'var(--color4)')};
+  background-color:${({ $isActive }) => ($isActive ? 'var(--color3)' : 'var(--color4)')};
 `;
 const DividerWithText = styled.div`
   display: flex;
@@ -149,7 +149,7 @@ const DividerWithText = styled.div`
 
 const SignUpPage = () => {
   const {checkEmailAvailability,signUp} = useAuthContext()
-  const [checkedEmail,setCheckedEmail] = useState(false);
+  const [checkedEmail,setCheckedEmail] = useState<boolean>(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -183,8 +183,8 @@ const SignUpPage = () => {
         <Header reduce={true}/>  
         <PageContainer>
           <IndicatorContainer>
-            <StyledIndicator isActive={!checkedEmail}></StyledIndicator>
-            <StyledIndicator isActive={checkedEmail}></StyledIndicator>
+            <StyledIndicator $isActive={!checkedEmail}></StyledIndicator>
+            <StyledIndicator $isActive={checkedEmail}></StyledIndicator>
           </IndicatorContainer>
           <FormContainer>
             <TitleContainer>
@@ -222,7 +222,7 @@ const SignUpPage = () => {
                 </Formik>
                 <DividerWithText><h3>Déjà client ?</h3></DividerWithText>
                 
-                <Button text="Créer un compte" variant="type3" onClick={()=>(navigate('/signin'))}></Button>
+                <Button text="Connecter vous" variant="type3" onClick={()=>(navigate('/signin'))}></Button>
               </>
             ):(
               <>

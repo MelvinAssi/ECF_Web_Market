@@ -8,13 +8,19 @@ app.use(cookieParser());
 
 const PORT =  3000;
 
-/*
 app.use(cors({
     origin: ['http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-}));*/
+}));
+/*
 
+
+app.options('*', cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
+*/
 const authRoutes = require('./routes/authRoutes');
 
 

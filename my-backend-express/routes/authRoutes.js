@@ -3,7 +3,7 @@ const router = express.Router();;
 
 const { body } = require('express-validator');
 const authControllers = require('../controllers/authControllers');
-
+const authMiddleware = require('../middleware/auth')
 
 
 router.post('/check-email-existence', [
@@ -41,4 +41,10 @@ router.post('/signup', [
 
 router.post('/signout', authControllers.signOutUser);
 
+router.get('/me', authMiddleware, (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ user: null });
+  }
+  res.status(200).json({ user: req.user });
+});
 module.exports = router;

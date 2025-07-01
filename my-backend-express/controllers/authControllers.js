@@ -15,16 +15,9 @@ exports.checkEmailExistence = async(req,res)=>{
         const {email}=req.body
         
         const user = await authModels.findUserByEmail(email)
-        if(! user){
-            return res.status(400).json({ error: 'Account not found' });
-        }
 
-        res.status(201).json({
-            message: "Account found" ,
-            user: {
-              email: user.email
-            }          
-        });
+
+        return res.status(200).json({ exists: !!user });
 
     } catch (err) {
         console.log(err)
@@ -69,12 +62,9 @@ exports.signInUser =async (req, res) => {
         maxAge: 60 * 60 * 1000,
     });
     
-    res.status(201).json({
-        message: "Connexion succes" ,
-        user: {
-        email: user.email,
-        }
-    });
+    const safeUser = sanitizeUser(user.dataValues); 
+    console.log(safeUser)
+    res.status(200).json({ success: true, user: safeUser });
 
 
     } catch (err) {
@@ -91,10 +81,8 @@ exports.checkEmailAvailability = async (req, res) => {
     }
     const { email } = req.body;
     const user = await authModels.findUserByEmail(email);
-    if (user) {
-      return res.status(400).json({ error: 'Email already in use' });
-    }
-    res.status(200).json({ message: 'Email available' });
+    res.status(200).json({ available: !user });
+
   } catch (err) {
     console.error('Erreur dans checkEmailAvailability :', err);
     res.status(500).json({ error: 'Erreur serveur' });
@@ -129,10 +117,11 @@ exports.signUpUser = async (req, res) => {
       sameSite: 'None',
       maxAge: 60 * 60 * 1000,
     });
-    res.status(201).json({
-      message: 'Inscription réussie',
-      user: { email: newUser.email },
-    });
+
+    
+    const safeUser = sanitizeUser(newUser.dataValues); 
+    console.log(safeUser)
+    res.status(201).json(	{ success: true, user: safeUser });
   } catch (err) {
     console.error('Erreur dans signUpUser :', err);
     res.status(500).json({ error: 'Erreur serveur' });
@@ -153,3 +142,14 @@ exports.signOutUser = async (req, res) => {
     res.status(500).json({ error: 'Erreur serveur' });
   }
 };
+
+
+function sanitizeUser(userData) {
+  const {
+    id_user,
+    email,
+    role
+  } = userData;
+
+  return { id_user, email, role };
+}

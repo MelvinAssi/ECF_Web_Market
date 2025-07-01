@@ -1,96 +1,144 @@
 import { createContext, useState, useEffect, type ReactNode, type ReactElement } from 'react';
 import axios from "../services/axios";
 
+// Typage du User
 type User = {
-    id_user: string;
-    email: string;
-    role: 'BUYER' | 'SELLER' | 'ADMIN';
+  id_user: string;
+  email: string;
+  role: 'BUYER' | 'SELLER' | 'ADMIN';
 } | null;
 
-type AuthContextType = {
-    user: User;
-    isLoading: boolean;
-    signIn: (email: string, password: string) => Promise<void>;
-    signUp: (email: string, password: string,name:string,firstname:string,adress:string,phone:string) => Promise<void>;
-    signOut: () => Promise<void>;
-    checkEmailExistence: (email: string) => Promise<boolean>;
-    checkEmailAvailability: (email: string) => Promise<boolean>;
-};
-export const AuthContext = createContext<AuthContextType| undefined>(undefined);
+// Typage des réponses attendues
 
+type SignInResponse = {
+  user: User;
+};
+
+type SignUpResponse = {
+  user: User;
+};
+
+type checkEmailExistenceResponse = {
+  exists: boolean;
+};
+
+type CheckEmailAvailabilityResponse = {
+  available: boolean;
+};
+
+
+type AuthContextType = {
+  user: User;
+  isLoading: boolean;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string, firstname: string, adress: string, phone: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  checkEmailExistence: (email: string) => Promise<boolean>;
+  checkEmailAvailability: (email: string) => Promise<boolean>;
+};
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider = (props: { children: ReactNode }): ReactElement => {
-    const [user, setUser] = useState<User>(null);
-    const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        setIsLoading(false);
-    }, []);
-    const signIn = async (email:string,password:string) => {
+  useEffect(() => {
+    const fetchUser = async () => {
       try {
-        const response = await axios.post('/auth/signin', {
-            email,
-            password           
-        });
+        console.log("test") 
+        const response = await axios.get('/auth/me');
+        
         setUser(response.data.user);
-        console.log(response.data.user)
-        console.log(user)
-      } catch (error:any) {
-        console.error('signIn error:', error.response?.data?.message || error.message);
-        throw error;
-      }
-    };
-
-    const signUp = async (email:string,password:string, name:string,firstname:string,adress:string,phone:string) => {
-      try {
-        const response = await axios.post('/auth/signup', {
-            email,password, name,firstname,adress,phone                      
-        });
-        setUser(response.data.user);
-        console.log(response.data.user)
-      } catch (error:any) {
-        console.error('signUp error:', error.response?.data?.message || error.message);
-        throw error;
-      }
-    };
-
-
-    const signOut = async () => {
-      try {
-        await axios.post('/signout');
-        setUser(null);
       } catch (err) {
-        console.error('Logout failed', err);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     };
-    const checkEmailAvailability = async (email:string)=>{
-        try {
-            const response = await axios.post('/auth/check-email-availability', {
-                email          
-            });
-            return response;
-        } catch (err) {
-            console.error('checkEmailAvailability failed', err);
-            return false;
-        }
+
+    fetchUser();
+  }, []);
+
+  const signIn = async (email: string, password: string): Promise<void> => {
+    try {
+      const response = await axios.post<SignInResponse>('/auth/signin', {
+        email,
+        password,
+      });
+      setUser(response.data.user);
+    } catch (error: any) {
+      console.error('signIn error:', error.response?.data?.message || error.message);
+      throw error;
     }
+  };
 
-    const checkEmailExistence = async (email:string)=>{
-        try {
-            const response = await axios.post('/auth/check-email-existence', {
-                email          
-            });
-            return response;
-        } catch (err) {
-            console.error('checkEmailExistence failed', err);
-            return false;
-        }
+  const signUp = async (
+    email: string,
+    password: string,
+    name: string,
+    firstname: string,
+    adress: string,
+    phone: string
+  ): Promise<void> => {
+    try {
+      const response = await axios.post<SignUpResponse>('/auth/signup', {
+        email,
+        password,
+        name,
+        firstname,
+        adress,
+        phone,
+      });
+      setUser(response.data.user);
+    } catch (error: any) {
+      console.error('signUp error:', error.response?.data?.message || error.message);
+      throw error;
     }
-    
+  };
 
+  const signOut = async (): Promise<void> => {
+    try {
+      await axios.post('/auth/signout');
+      setUser(null);
+    } catch (err) {
+      console.error('signOut failed', err);
+    }
+  };
 
-    return (
-    <AuthContext.Provider value={{ user, isLoading, signIn, signUp, signOut,checkEmailExistence,checkEmailAvailability }}>
+  const checkEmailExistence = async (email: string): Promise<boolean> => {
+    try {
+      const response = await axios.post<checkEmailExistenceResponse>('/auth/check-email-existence', { email });      
+      return response.data.exists;
+    } catch (err) {
+      console.error('checkEmailExistence failed', err);
+      return false;
+    }
+  };
+
+  const checkEmailAvailability = async (email: string): Promise<boolean> => {
+    try {
+      const response = await axios.post<CheckEmailAvailabilityResponse>('/auth/check-email-availability', { email });
+      console.log(response)
+      return response.data.available;
+    } catch (err) {
+      console.error('checkEmailAvailability failed', err);
+      return false;
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        signIn,
+        signUp,
+        signOut,
+        checkEmailExistence,
+        checkEmailAvailability,
+      }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

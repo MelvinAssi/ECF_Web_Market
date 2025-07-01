@@ -11,7 +11,9 @@ import {
   faEnvelope,
   faStar,
   faSignOutAlt,
-  faBars
+  faBars,
+  faCaretUp,
+  
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -40,5 +42,7 @@ library.add(
   faInstagram,
   faTwitter,
   faXTwitter,
-  faFacebookF
+  faFacebookF,
+  faCaretUp,
+  
 );
