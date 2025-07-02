@@ -7,6 +7,9 @@ import ContactPage from '../pages/ContactPage';
 import AuthRoute from './AuthRoute';
 import DashboardPage from '../pages/DashboardPage';
 import PrivateRoute from './PrivateRoute';
+import ProfilePage from '../pages/ProfilePage';
+import CartPage from '../pages/CartPage';
+import CatalogPage from '../pages/CatalogPage';
 
 const AppRoutes = () => {
 
@@ -16,8 +19,11 @@ const AppRoutes = () => {
             <Route path="/" element={<HomePage/>} />
             <Route path="/signin" element={<AuthRoute><SignInPage/></AuthRoute> } />
             <Route path="/signup" element={<AuthRoute><SignUpPage/></AuthRoute> } />
-            <Route path="/contact" element={<ContactPage/>} />
+            <Route path="/contact" element={<ContactPage/>}/>
+            <Route path="/cart" element={<CartPage/>}/>
+            <Route path="/catalog" element={<CatalogPage/>}/>
             <Route path="/dashbord" element={<PrivateRoute><DashboardPage/></PrivateRoute> } />
+            <Route path="/profile" element={<PrivateRoute><ProfilePage/></PrivateRoute> } />
         </Routes>
         </>
     )

@@ -35,12 +35,26 @@ const Header2 = styled.div`
     height:60px;
     width:100%;
     display:flex;
-    flex-direction: column; 
+    flex-direction: row; 
     align-items: center; 
     background-color: var(--color1);  
     @media (max-width: 768px) {
         height:48px;
     }
+
+`;
+const ListLink=styled.ul`
+    display:flex;
+    flex-direction:row;
+    gap:10px;
+    padding:10px;           
+`;
+const LinkStyled = styled.li`
+    color:var(--color5); 
+    cursor: pointer;   
+    &:hover{
+        color:var(--color3); 
+    }       
 `;
 const Header3 = styled.div`
     height:40px;
@@ -132,13 +146,13 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                             <DropdownMenu
                                 trigger={
                                     <IconBackground>
-                                        <FontAwesomeIcon size="1x" icon="user" color="#34374C" />
+                                        <FontAwesomeIcon size="1x" icon="user" color="#34374C"  />
                                     </IconBackground>
                                 }
  
                                 items={[
                                     
-                                    { label: "Profile", onClick: () => navigate("/profile") },
+                                    { label: "Profil", onClick: () => navigate("/profile") },
                                     { label: "Se deconnecter", onClick: () => signOut() },
                                 ]}
                             />  
@@ -163,14 +177,21 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                         )}
 
 
-                        <IconBackground>
+                        <IconBackground onClick={() => navigate("/cart")}>
                             <FontAwesomeIcon size="1x" icon="shopping-cart" color="#34374C" />
                         </IconBackground>
                                 
                     </div>            
                 </Header1>       
                 <Header2>
-                
+                    <ListLink>
+                        <LinkStyled onClick={() => navigate("/catalog")}>Catalogue</LinkStyled>
+                        <LinkStyled>Offres</LinkStyled>
+                        <LinkStyled>Ordinateurs de bureau</LinkStyled>
+                        <LinkStyled>PC Portable</LinkStyled>
+                        <LinkStyled>Accessoires</LinkStyled>
+                        <LinkStyled>Composants</LinkStyled>
+                    </ListLink>
                 </Header2>
                 <Header3>
                     <OfferText>Livraison gratuite Dès 40€ sur tous les articles</OfferText>

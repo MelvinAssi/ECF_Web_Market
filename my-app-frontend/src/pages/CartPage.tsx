@@ -11,17 +11,17 @@ const PageContainer = styled.main`
 
 
 
-const HomePage = () => {
+const CartPage = () => {
     
     return (      
       <>
         <Header/>
         <PageContainer>          
-          <h1>Home</h1>
+          <h1>CartPage</h1>
 
         </PageContainer>      
       </>
     );
   };
 
-  export default HomePage;
+  export default CartPage;
