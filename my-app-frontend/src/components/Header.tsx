@@ -152,7 +152,7 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
  
                                 items={[
                                     
-                                    { label: "Profil", onClick: () => navigate("/profile") },
+                                    { label: "Mon compte", onClick: () => navigate("/account") },
                                     { label: "Se deconnecter", onClick: () => signOut() },
                                 ]}
                             />  

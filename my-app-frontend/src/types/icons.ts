@@ -13,6 +13,9 @@ import {
   faSignOutAlt,
   faBars,
   faCaretUp,
+  faLeaf,
+  faShield,
+  faEuroSign,
   
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -44,5 +47,7 @@ library.add(
   faXTwitter,
   faFacebookF,
   faCaretUp,
-  
+  faLeaf,
+  faShield,
+  faEuroSign
 );

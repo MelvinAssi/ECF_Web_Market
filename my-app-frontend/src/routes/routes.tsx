@@ -7,7 +7,7 @@ import ContactPage from '../pages/ContactPage';
 import AuthRoute from './AuthRoute';
 import DashboardPage from '../pages/DashboardPage';
 import PrivateRoute from './PrivateRoute';
-import ProfilePage from '../pages/ProfilePage';
+import AccountPage from '../pages/AccountPage';
 import CartPage from '../pages/CartPage';
 import CatalogPage from '../pages/CatalogPage';
 
@@ -23,7 +23,7 @@ const AppRoutes = () => {
             <Route path="/cart" element={<CartPage/>}/>
             <Route path="/catalog" element={<CatalogPage/>}/>
             <Route path="/dashbord" element={<PrivateRoute><DashboardPage/></PrivateRoute> } />
-            <Route path="/profile" element={<PrivateRoute><ProfilePage/></PrivateRoute> } />
+            <Route path="/account" element={<PrivateRoute><AccountPage/></PrivateRoute> } />
         </Routes>
         </>
     )

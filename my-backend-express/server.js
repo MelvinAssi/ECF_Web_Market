@@ -16,6 +16,9 @@ app.use(cors({
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API Express sécurisée !');
@@ -23,5 +26,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/cart', cartRoutes);
+app.use('/category',categoryRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

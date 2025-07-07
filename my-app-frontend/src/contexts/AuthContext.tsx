@@ -1,14 +1,13 @@
 import { createContext, useState, useEffect, type ReactNode, type ReactElement } from 'react';
 import axios from "../services/axios";
 
-// Typage du User
+
 type User = {
   id_user: string;
   email: string;
   role: 'BUYER' | 'SELLER' | 'ADMIN';
 } | null;
 
-// Typage des réponses attendues
 
 type SignInResponse = {
   user: User;
@@ -119,13 +118,14 @@ const AuthProvider = (props: { children: ReactNode }): ReactElement => {
   const checkEmailAvailability = async (email: string): Promise<boolean> => {
     try {
       const response = await axios.post<CheckEmailAvailabilityResponse>('/auth/check-email-availability', { email });
-      console.log(response)
       return response.data.available;
     } catch (err) {
       console.error('checkEmailAvailability failed', err);
       return false;
     }
   };
+
+  
 
   return (
     <AuthContext.Provider
