@@ -1,10 +1,12 @@
 const User = require('../entities/User');
 
 
-
-
-
-
+exports.findAllUsers = async () => {
+  return await User.findAll({
+    order: [['created_at', 'DESC']],
+    attributes: { exclude: ['password'] }
+  });
+};
 
 exports.findUserById = async (id) => {
   const user = await User.findOne({

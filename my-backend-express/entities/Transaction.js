@@ -26,6 +26,10 @@ const Transaction = sequelize.define('Transaction', {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  buyer_id: { 
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
 }, {
   tableName: 'transactions',
   timestamps: false,

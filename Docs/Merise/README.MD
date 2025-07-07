@@ -116,6 +116,13 @@
 | quantity | INTEGER | non nul, ≥ 1 | Quantité du produit dans le panier |
 | **Clé primaire** | (id_cart, id_product) | Combinaison unique | Clé composite |
 
+### 6. Order_Product
+| Nom du champ | Type | Contraintes | Description |
+|--------------|------|-------------|-------------|
+| order_id     | UUID | PK, FK vers Order(id_order) | Commande concernée |
+| product_id   | UUID | PK, FK vers Product(id_product) | Produit commandé |
+| quantity     | INTEGER | ≥ 1, non nul | Quantité achetée |
+| unit_price   | DECIMAL(10,2) | ≥ 0, non nul | Prix unitaire au moment de la commande |
 ### 8. Review
 | Nom du champ | Type | Contraintes | Description |
 |--------------|------|-------------|-------------|
@@ -185,9 +192,12 @@ Le MCD représente les entités et leurs relations avec les cardinalités. Voici
 
 - **Cart_Product** (id_cart, id_product, quantity)
 - **Review** (id_review, comment, rating, review_date, buyer_id, product_id, seller_id)
-- **Transaction** (id_transaction, transaction_date, amount, status, buyer_id, seller_id, order_id)
+- **Transaction** (id_transaction, transaction_date, amount, status, buyer_id, , order_id)
 - **Contact** (id_contact, title, description, email, sent_date, status, admin_id)
 - **Statistic** (id_statistic, products_sold, revenue, period, category_id)
+- **Order_Product** (order_id, product_id, quantity, unit_price)
+  - **Represents** (1,N) -> **Order** (1,1): Une Order contient plusieurs produits, chaque ligne d’Order_Product est liée à une seule commande.
+  - **Concerns** (1,N) -> **Product** (1,1): Un Product peut apparaître dans plusieurs commandes, chaque ligne d’Order_Product référence un seul produit.
 
 **Note** : Pour visualiser le MCD, un outil comme Mocodo peut être utilisé pour générer un diagramme graphique basé sur cette description.
 
@@ -202,10 +212,12 @@ Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et
 6. **Cart** (id_cart: UUID PK, buyer_id: UUID FK -> User, creation_date: TIMESTAMP)
 7. **Cart_Product** (id_cart: UUID FK -> Cart, id_product: UUID FK -> Product, quantity: INTEGER, PK(id_cart, id_product))
 8. **Review** (id_review: UUID PK, comment: TEXT, rating: INTEGER CHECK(1 <= rating <= 5), review_date: TIMESTAMP, buyer_id: UUID FK -> User, product_id: UUID FK -> Product NULL, seller_id: UUID FK -> User NULL)
-9. **Transaction** (id_transaction: UUID PK, transaction_date: TIMESTAMP, amount: DECIMAL(10,2), status: ENUM('PENDING', 'VALIDATED', 'CANCELLED'), buyer_id: UUID FK -> User, seller_id: UUID FK -> User, order_id: UUID FK -> Order)
+9. **Transaction** (id_transaction: UUID PK, transaction_date: TIMESTAMP, amount: DECIMAL(10,2), status: ENUM('PENDING', 'VALIDATED', 'CANCELLED'), buyer_id: UUID FK -> User, order_id: UUID FK -> Order)
 10. **Contact** (id_contact: UUID PK, title: VARCHAR(255), description: TEXT, email: VARCHAR(100), sent_date: TIMESTAMP, status: ENUM('PENDING', 'READ', 'RESPONDED'), admin_id: UUID FK -> User NULL)
 11. **Statistic** (id_statistic: UUID PK, products_sold: INTEGER, revenue: DECIMAL(12,2), period: DATE, category_id: UUID FK -> Category NULL)
-
+12. **Order_Product** (order_id: UUID FK → Order, product_id: UUID FK → Product,
+    quantity: INTEGER NOT NULL CHECK (quantity > 0),unit_price: DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),PK(order_id, product_id)
+)
 ## MPD (Modèle Physique de Données)
 Le MPD est une implémentation spécifique pour PostgreSQL, incluant les types de données, contraintes et index.
 
@@ -308,11 +320,21 @@ CREATE TABLE transactions (
     amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
     status transaction_status_type NOT NULL,
     buyer_id UUID NOT NULL,
-    seller_id UUID NOT NULL,
     order_id UUID NOT NULL,
     FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (seller_id) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (order_id) REFERENCES orders(id_order) ON DELETE CASCADE
+);
+-- Table Order_product
+CREATE TABLE order_product (
+  order_id UUID NOT NULL,
+  product_id UUID NOT NULL,
+  quantity INTEGER NOT NULL CHECK (quantity > 0),
+  unit_price DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),
+
+  PRIMARY KEY (order_id, product_id),
+
+  FOREIGN KEY (order_id) REFERENCES "order"(id_order) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES product(id_product) ON DELETE RESTRICT
 );
 
 -- Table Review

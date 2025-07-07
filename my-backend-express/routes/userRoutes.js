@@ -4,7 +4,9 @@ const router = express.Router();;
 const { body } = require('express-validator');
 const userControllers = require('../controllers/userControllers');
 const authMiddleware = require('../middleware/auth')
+const hasRoles = require('../middleware/hasRoles');
 
+router.get('/admin', authMiddleware, hasRoles('ADMIN'), userControllers.getAllUsers);
 
 router.get('/', authMiddleware, userControllers.fetchUserData);
 

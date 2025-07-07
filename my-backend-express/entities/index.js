@@ -6,16 +6,17 @@ const Listing = require('./Listing');
 const Cart = require('./Cart');
 const CartProduct = require('./CartProduct');
 const Transaction = require('./Transaction');
+const OrderProduct = require('./OrderProduct');
 
 // Relations
 User.hasMany(Order, { foreignKey: 'buyer_id', onDelete: 'CASCADE' });
 Order.belongsTo(User, { foreignKey: 'buyer_id' });
 
 User.hasMany(Listing, { foreignKey: 'seller_id', onDelete: 'CASCADE' });
-Listing.belongsTo(User, { foreignKey: 'seller_id' });
+Listing.belongsTo(User, { foreignKey: 'seller_id' , as: 'seller' });
 
 Product.hasMany(Listing, { foreignKey: 'product_id', onDelete: 'CASCADE' });
-Listing.belongsTo(Product, { foreignKey: 'product_id' });
+Listing.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
 
 Category.hasMany(Product, { foreignKey: 'category_id', onDelete: 'RESTRICT' });
 Product.belongsTo(Category, { foreignKey: 'category_id' });
@@ -29,4 +30,11 @@ Product.belongsToMany(Cart, { through: CartProduct, foreignKey: 'id_product', ot
 Order.hasOne(Transaction, { foreignKey: 'order_id', onDelete: 'CASCADE' });
 Transaction.belongsTo(Order, { foreignKey: 'order_id' });
 
-module.exports = { User, Product, Order, Category, Listing, Cart, CartProduct, Transaction };
+Order.belongsToMany(Product, {  through: OrderProduct,  foreignKey: 'order_id',  otherKey: 'product_id',  as: 'products'});
+
+Product.belongsToMany(Order, {  through: OrderProduct,  foreignKey: 'product_id',  otherKey: 'order_id',  as: 'orders'});
+
+Transaction.belongsTo(User, { foreignKey: 'buyer_id', as: 'buyer'});
+User.hasMany(Transaction, {  foreignKey: 'buyer_id',  as: 'transactions'});
+
+module.exports = { User, Product, Order, Category, Listing, Cart, CartProduct, Transaction,  OrderProduct  };

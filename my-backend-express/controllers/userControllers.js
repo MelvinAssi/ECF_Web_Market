@@ -3,6 +3,16 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const userModels = require('../models/userModels');
 
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await userModels.findAllUsers();
+    const safeUsers = users.map(u => sanitizeUser(u.dataValues));
+    res.json(safeUsers);
+  } catch (error) {
+    console.error('getAllUsers error:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
 
 exports.fetchUserData = async (req, res) => {
     try{
