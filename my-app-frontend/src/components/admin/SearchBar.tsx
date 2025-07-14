@@ -1,4 +1,4 @@
-// components/admin/SearchBar.tsx
+
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -6,7 +6,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 interface SearchBarProps<T> {
   search: string;
   onSearchChange: (value: string) => void;
-  fields: { key: keyof T; label: string }[];
+  fields: { key: string ; label: string }[];
   selectedField: keyof T;
   onFieldChange: (key: keyof T) => void;
 }

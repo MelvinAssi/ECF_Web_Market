@@ -18,13 +18,14 @@ interface ItemProps {
 }
 
 const Container = styled.div`
-  width: 200px;
+  width: 250px;
   height: auto;
   background-color: var(--color1);
   border-radius: 6px;
   border: 1px solid var(--color4);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
   transition: transform 0.3s ease;
   color: var(--color5);
@@ -37,7 +38,7 @@ const Container = styled.div`
 
 const ImgContainer = styled.div<{ $image: string }>`
   background-image: url(${props => props.$image});
-  background-size:200px 200px;
+  background-size:250px 200px;
   background-position:center;
   background-repeat: no-repeat;
   height: 200px;
@@ -48,6 +49,7 @@ const InfoContainer = styled.div`
   padding: 15px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   flex: 1;
   gap: 10px;
 `;

@@ -19,7 +19,7 @@ const AuthRoute = ({ children }:Props) => {
   if (isLoading) return <div>Loading...</div>;
 
   if (user) {
-    return <Navigate to={from || "/account"} replace />; 
+    return <Navigate to={from || "/user/info"} replace />; 
   }
 
   return children;

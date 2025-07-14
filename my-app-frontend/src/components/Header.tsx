@@ -150,7 +150,7 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
     ? [
         { label: "Mon compte", onClick: () => navigate("/user/info") },
         ...(user?.role === 'ADMIN'
-            ? [{ label: "Admin", onClick: () => navigate("/admin") }]
+            ? [{ label: "Admin", onClick: () => navigate("/admin/users") }]
             : []),
         { label: "Se deconnecter", onClick: () => signOut() },
         ]

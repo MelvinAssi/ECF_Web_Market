@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Header from "../components/Header";  
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../services/axios";
 import Button from "../components/Button";
@@ -86,7 +86,7 @@ const ProductPage = () => {
     };    
     const addToCart = async() =>{
         try {
-            const response = await axios.post(`/cart/add`,
+            await axios.post(`/cart/add`,
                 {
                     listingId:item.id_listing,
                     quantity:1,
@@ -98,7 +98,7 @@ const ProductPage = () => {
     }
     const buyItem = async() =>{
         try {
-            const response = await axios.post(`/cart/add`,
+            await axios.post(`/cart/add`,
                 {
                     listingId:item.id_listing,
                     quantity:1,

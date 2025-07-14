@@ -118,7 +118,6 @@ const StyledError = styled.div`
 
 const ContactPage = () => {
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (values: FormValues) => {
     console.log("Formulaire soumis !", values.email);
@@ -176,7 +175,7 @@ const ContactPage = () => {
 
                                                                                                            
                           </div>
-
+                            <StyledError >{error}</StyledError>
                           <Button
                             text="Envoyer"
                             variant="type1"

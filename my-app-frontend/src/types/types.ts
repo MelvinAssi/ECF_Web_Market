@@ -48,7 +48,7 @@ export type Order = {
     order_date:Date;
     total_amount:number;
     status:'PENDING'|'VALIDATED'| 'DELIVERED';
-    listings:Listing;
+    listings:Listing[];
     buyer_id:User;
 }
 export type Transaction ={

@@ -5,6 +5,7 @@ import AdminTable from "../../components/admin/AdminTable";
 import { useEffect, useState } from "react";
 import axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../../components/admin/SearchBar";
 
 interface Review {
   id: string;
@@ -23,6 +24,9 @@ const PageTitle = styled.h1`
 
 const ReviewsPage = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [filteredReviews, setFilteredReviews] = useState<Review[]>([]);
+  const [search, setSearch] = useState("");
+  const [selectedField, setSelectedField] = useState<keyof Review>("text");
   const navigate =useNavigate();
   useEffect(()=>{
       fetchReviews();
@@ -47,19 +51,34 @@ const ReviewsPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
+  useEffect(() => {
+    const result = reviews.filter((review) => {
+      const value = getNestedValue(review, selectedField as string);
+      return typeof value === "string" && value.toLowerCase().includes(search.toLowerCase())||
+          (typeof value === "number" && value.toString().includes(search));
+    });
+    setFilteredReviews(result);
+  }, [search, selectedField, reviews]);
+  
+  const getNestedValue = (obj: any, path: string) =>
+    path.split(".").reduce((acc, part) => acc?.[part], obj);
   return (
     <AdminLayout>
-        <>
-            <PageTitle>Gestion des Avis</PageTitle>
-            <AdminTable<Review>
-              data={reviews}
-              fields={reviewsFields}
-              rowIdKey="id"
-              onDeleteClick={(ids) => handleDelete(ids)}
-              onEditClick={(id) => navigate(`/admin/review/${id}`)}
-            />
-            
-        </>
+      <PageTitle>Gestion des Avis</PageTitle>
+      <SearchBar<Review>
+        search={search}
+        onSearchChange={setSearch}
+        fields={reviewsFields}
+        selectedField={selectedField}
+        onFieldChange={setSelectedField}
+      />
+      <AdminTable<Review>
+        data={filteredReviews}
+        fields={reviewsFields}
+        rowIdKey="id"
+        onDeleteClick={(ids) => handleDelete(ids)}
+        onEditClick={(id) => navigate(`/admin/review/${id}`)}
+      />
     </AdminLayout>
   );
 };

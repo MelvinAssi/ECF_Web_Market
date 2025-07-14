@@ -6,6 +6,7 @@ import type { Field } from "../../components/admin/AdminTable";
 import AdminTable from "../../components/admin/AdminTable";
 import { type Category } from "../../types/types";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../../components/admin/SearchBar";
 
 
 const PageTitle = styled.h1`
@@ -14,6 +15,9 @@ const PageTitle = styled.h1`
 `;
 const CategoriesPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+  const [search, setSearch] = useState("");
+  const [selectedField, setSelectedField] = useState<keyof Category>("name_category");
   const navigate =useNavigate();
   useEffect(()=>{
     fetchCategories();
@@ -35,12 +39,25 @@ const CategoriesPage = () => {
     { key: "id_category", label: "ID" },
     { key: "name_category", label: "Nom" },
   ];
-  
+  useEffect(() => {
+    const result = categories.filter((category) => {
+      const value = category[selectedField];
+      return typeof value === "string" && value.toLowerCase().includes(search.toLowerCase());
+    });
+    setFilteredCategories(result);
+  }, [search, selectedField, categories]);
   return (
     <AdminLayout>
       <PageTitle>Catégories</PageTitle>
+      <SearchBar<Category>
+        search={search}
+        onSearchChange={setSearch}
+        fields={categoryFields}
+        selectedField={selectedField}
+        onFieldChange={setSelectedField}
+      />
       <AdminTable<Category>
-        data={categories}
+        data={filteredCategories}
         fields={categoryFields}
         rowIdKey="id_category"
         onDeleteClick={(ids) => handleDelete(ids)}

@@ -5,6 +5,7 @@ import AdminTable from "../../components/admin/AdminTable";
 import { useEffect, useState } from "react";
 import axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../../components/admin/SearchBar";
 
 interface Contact {
   id: string;
@@ -24,6 +25,10 @@ const PageTitle = styled.h1`
 `;
 const ContactsPage = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [search, setSearch] = useState("");
+  const [selectedField, setSelectedField] = useState<keyof Contact>("email");
+ 
   const navigate =useNavigate();
   useEffect(()=>{
       axios.get("/contact").then((res)=>setContacts(res.data))
@@ -48,12 +53,27 @@ const ContactsPage = () => {
       { key: "phone", label: "Téléphone" },
       
   ];
+
+  useEffect(() => {
+    const result = contacts.filter((contact) => {
+      const value = contact[selectedField];
+      return typeof value === "string" && value.toLowerCase().includes(search.toLowerCase());
+    });
+    setFilteredContacts(result);
+  }, [search, selectedField, contacts]);
   return (
     <AdminLayout>
         <>
             <PageTitle>Gestion des Contacts</PageTitle>
-            <AdminTable<Contact>
-              data={contacts}
+              <SearchBar<Contact>
+                search={search}
+                onSearchChange={setSearch}
+                fields={contactsFields}
+                selectedField={selectedField}
+                onFieldChange={setSelectedField}
+              />
+              <AdminTable<Contact>
+              data={filteredContacts}
               fields={contactsFields}
               rowIdKey="id"
               onDeleteClick={(ids) => handleDelete(ids)}

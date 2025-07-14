@@ -188,10 +188,10 @@ const HomePage = () => {
           <PopularCategoryItem>
             <h2>Produits populaires</h2>
             <CategoryGrid>
-              <Item name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" state="Occasion" />
-              <Item name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" state="Occasion" />
-              <Item name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" state="Occasion" />
-              <Item name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" state="Occasion" />
+              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
+              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
+              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
+              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
             </CategoryGrid>
           </PopularCategoryItem>
           <ReviewSection>
