@@ -1,5 +1,6 @@
-const Cart = require('../entities/Cart');
-const CartProduct = require('../entities/CartProduct');
+
+const CartListing = require('../entities/CartListing')
+const { Cart, Listing, Product, User } = require('../entities');
 
 exports.getOrCreateCartByUserId = async (userId) => {
     let cart = await Cart.findOne({ where: { buyer_id: userId } });
@@ -9,28 +10,40 @@ exports.getOrCreateCartByUserId = async (userId) => {
     return cart;
 };
 
-exports.addProductToCart = async (cartId, productId, quantity) => {
-    const [cartProduct, created] = await CartProduct.findOrCreate({
-        where: { id_cart: cartId, id_product: productId },
+exports.addListingToCart = async (cartId, listingId, quantity) => {
+    const [cartListing, created] = await CartListing.findOrCreate({
+        where: { id_cart: cartId, id_listing: listingId },
         defaults: { quantity }
     });
 
     if (!created) {
-        cartProduct.quantity += quantity;
-        await cartProduct.save();
+        cartListing.quantity += quantity;
+        await cartListing.save();
     }
 
-    return cartProduct;
+    return cartListing;
 };
 
-exports.getCartWithProducts = async (cartId) => {
-    return await CartProduct.findAll({ where: { id_cart: cartId } });
+exports.getCartWithListings = async (cartId) => {
+  return await Cart.findByPk(cartId, {
+    include: [
+      {
+        model: Listing,
+        as: 'listings', 
+        include: [
+          { model: Product, as: 'product' },
+          { model: User, as: 'seller' }
+        ],
+        through: { attributes: ['quantity'] }
+      }
+    ]
+  });
 };
 
-exports.removeProductFromCart = async (cartId, productId) => {
-    await CartProduct.destroy({ where: { id_cart: cartId, id_product: productId } });
+exports.removeListingFromCart = async (cartId, listingId) => {
+    await CartListing.destroy({ where: { id_cart: cartId, id_listing: listingId } });
 };
 
 exports.clearCart = async (cartId) => {
-    await CartProduct.destroy({ where: { id_cart: cartId } });
+    await CartListing.destroy({ where: { id_cart: cartId } });
 };

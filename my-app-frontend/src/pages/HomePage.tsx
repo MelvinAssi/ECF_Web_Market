@@ -2,9 +2,13 @@ import styled from "styled-components";
 import Header from "../components/Header";  
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import aboutUs from "../assets/img/HomePage/about_us.jpg";
+import { category1, category2, category3, category4 } from '../assets/img/HomePage';
 import Review from "../components/Review";
 import CategoryItem from "../components/CategoryItem";
 import Item from "../components/Item";
+import { useEffect, useState } from "react";
+import axios from "../services/axios";
+
 const PageContainer = styled.main`
     min-height:100vh;
     display:flex;
@@ -114,6 +118,30 @@ const AboutUsLeft_img = styled.div<AboutUsLeft_imgProps>`
 
 
 const HomePage = () => {
+  const [categoryIds, setCategoryIds] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const fetchPopularCategories = async () => {
+      try {
+        const names = ["Ordinateurs portables", "Smartphones", "Accessoires", "Composants PC"];
+        const results = await Promise.all(names.map(name => 
+          axios.get(`/category/${encodeURIComponent(name)}`).then(res => ({ name, id: res.data.id_category }))
+        ));
+        
+        const mapped: Record<string, string> = {};
+        results.forEach(({ name, id }) => {
+          mapped[name] = id;
+        });
+
+        setCategoryIds(mapped);
+      } catch (error: any) {
+        console.error("Erreur lors du chargement des catégories populaires :", error.response?.data?.message || error.message);
+      }
+    };
+
+    fetchPopularCategories();
+  }, []);
+
     
     return (      
       <>
@@ -125,11 +153,36 @@ const HomePage = () => {
           <PopularCategorySection>
             <h2>Catégories populaires</h2>
             <CategoryGrid>
-              <CategoryItem text="Ordinateurs portables" img={aboutUs} />
-              <CategoryItem text="Smartphones" img={aboutUs} />
-              <CategoryItem text="Accessoires" img={aboutUs} />
-              <CategoryItem text="Composants internes" img={aboutUs} />
+              {categoryIds["Ordinateurs portables"] && (
+                <CategoryItem
+                  id_category={categoryIds["Ordinateurs portables"]}
+                  text="Ordinateurs portables"
+                  img={category1}
+                />
+              )}
+              {categoryIds["Smartphones"] && (
+                <CategoryItem
+                  id_category={categoryIds["Smartphones"]}
+                  text="Smartphones"
+                  img={category2}
+                />
+              )}
+              {categoryIds["Accessoires"] && (
+                <CategoryItem
+                  id_category={categoryIds["Accessoires"]}
+                  text="Accessoires"
+                  img={category3}
+                />
+              )}
+              {categoryIds["Composants PC"] && (
+                <CategoryItem
+                  id_category={categoryIds["Composants PC"]}
+                  text="Composants PC"
+                  img={category4}
+                />
+              )}
             </CategoryGrid>
+
           </PopularCategorySection>
 
           <PopularCategoryItem>

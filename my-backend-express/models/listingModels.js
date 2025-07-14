@@ -10,7 +10,12 @@ exports.getListingsByStatus = async (status) => {
       {
         model: Product,
         as: 'product',
-        include: [{ model: Category }]
+        include: [
+          {
+            model: Category,
+            as: 'category' 
+          }
+        ]
       },
       {
         model: User,
@@ -28,7 +33,12 @@ exports.getListingById = async (id) => {
       {
         model: Product,
         as: 'product',
-        include: [{ model: Category }]
+                include: [
+          {
+            model: Category,
+            as: 'category' 
+          }
+        ]
       },
       {
         model: User,
@@ -45,14 +55,17 @@ exports.getListingsBySeller = async (sellerId, filters = {}) => {
   return await Listing.findAll({
     where: {
       seller_id: sellerId,
-      ...(status ? { status } : {})
     },
     include: [
       {
         model: Product,
         as: 'product',
-        where: category_id ? { category_id } : {},
-        include: [{ model: Category }]
+        include: [
+          {
+            model: Category,
+            as: 'category' 
+          }
+        ]
       }
     ]
   });
@@ -69,9 +82,14 @@ exports.getListingsForAdmin = async ({ status, seller_id, category_id }) => {
     include: [
       {
         model: Product,
-        as: 'product',
+        as: 'product', 
         where: category_id ? { category_id } : {},
-        include: [{ model: Category }]
+        include: [
+          {
+            model: Category,
+            as: 'category' 
+          }
+        ]
       },
       {
         model: User,
@@ -81,3 +99,4 @@ exports.getListingsForAdmin = async ({ status, seller_id, category_id }) => {
     ]
   });
 };
+

@@ -1,13 +1,13 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const OrderProduct = sequelize.define('OrderProduct', {
+const OrderListing = sequelize.define('OrderListing', {
   order_id: {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
   },
-  product_id: {
+  listing_id: {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
@@ -27,8 +27,8 @@ const OrderProduct = sequelize.define('OrderProduct', {
     },
   },
 }, {
-  tableName: 'order_product',
+  tableName: 'order_listing',
   timestamps: false,
 });
 
-module.exports = OrderProduct;
+module.exports = OrderListing;

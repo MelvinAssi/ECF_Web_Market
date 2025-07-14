@@ -22,6 +22,9 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes')
 const listingRoutes = require('./routes/listingRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const transactionRoutes =require('./routes/transactionRoutes');
+const reviewRoutes =require('./routes/reviewRoutes');
+const contactRoutes =require('./routes/contactRoutes');
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API Express sécurisée !');
@@ -34,5 +37,8 @@ app.use('/category',categoryRoutes);
 app.use('/product',productRoutes);
 app.use('/listing', listingRoutes);
 app.use('/orders',orderRoutes);
+app.use('/transaction',transactionRoutes);
+app.use('/review',reviewRoutes);
+app.use('/contact',contactRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

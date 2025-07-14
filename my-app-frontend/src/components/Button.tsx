@@ -4,7 +4,7 @@ type ButtonVariant = 'type1' | 'type2' | 'type3';
 type ButtonType = 'button' | 'submit' | 'reset';
 
 interface ButtonProps {
-  text: string;
+  text: string | React.ReactNode;
   width?: string;
   height?: string;
   onClick?: () => void;
@@ -84,6 +84,9 @@ const StyledButton = styled.button<StyledButtonProps>`
   &:disabled {
     opacity: 50%;
     cursor: not-allowed;
+  }
+    @media (max-width: 767px) {
+     width:250px;
   }
 `;
 

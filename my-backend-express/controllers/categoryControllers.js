@@ -10,6 +10,19 @@ exports.getCategories = async (req, res) => {
     res.status(500).json({ error: 'Erreur serveur' });
   }
 };
+exports.getCategory = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
+    const { name } = req.params;
+    const category = await categoryModels.getCategoryByName(name);
+    res.json(category);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
 
 exports.createCategory = async (req, res) => {
   try {

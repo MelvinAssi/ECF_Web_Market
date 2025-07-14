@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface CategoryProps {
+  id_category:string;
   text:string;
-  img :string;
+  img :string;  
 }
 
 
@@ -26,6 +28,7 @@ const CategoryImg = styled.div<CategoryImgProps>`
   background-repeat: no-repeat;
   height: 300px;
   border-radius: 6px 6px 0 0;
+  cursor: pointer;
 `;
 
 const CategoryTextContainer = styled.div`
@@ -41,10 +44,10 @@ const CategoryText = styled.p`
 `;
 
 
-const CategoryItem : React.FC<CategoryProps> = ({ text, img}) =>{
-
+const CategoryItem : React.FC<CategoryProps> = ({ id_category,text, img}) =>{
+    const navigate = useNavigate();
     return(
-        <CategoryContainer>
+        <CategoryContainer onClick={() => navigate(`/catalog?category=${id_category}`||`/catalog}`)}>
             <CategoryImg image={img} />
             <CategoryTextContainer>
                 <CategoryText>{text}</CategoryText>

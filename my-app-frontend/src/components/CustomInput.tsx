@@ -30,7 +30,14 @@ const Input = styled.input`
   padding: 8px;
   background-color: var(--color5);
   color: var(--color4);
-  border: none;
+  border: 2px solid transparent;
+  &:focus {
+    border-color: var(--color3);
+    outline: none; 
+  }
+  @media  screen and (max-width: 768px) {
+    width: 250px;
+  }
 `;
 
 const CustomInput = ({

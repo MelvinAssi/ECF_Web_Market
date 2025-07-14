@@ -3,13 +3,13 @@ import * as Yup from "yup";
 import { Formik, Form as FormikForm } from "formik";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useUserContext } from "../hooks/useUserContext";
-import CustomInput from "../components/CustomInput";
-import Button from "../components/Button";
-import Modal from "../components/Modal";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useUserContext } from "../../hooks/useUserContext";
+import CustomInput from "../../components/CustomInput";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
 
-// Interface
+
 interface UserInfo {
   email: string;
   name: string;
@@ -19,7 +19,7 @@ interface UserInfo {
   newPassword?: string;
 }
 
-// Validation Schema
+
 const validationSchema = Yup.object({
   email: Yup.string()
     .required("L'email est obligatoire")
@@ -49,17 +49,17 @@ const validationSchema = Yup.object({
     .matches(/[!@#$%^&*]/, "Doit contenir au moins un caractère spécial"),
 });
 
-// Styled Components
+
 const FormContainer = styled.div`
   display: flex;
   min-width: 400px;
   flex-direction: column;
   align-items: center;
-  background-color: var(--color1); // #34374C
-  color: var(--color5); // #F6F6F6
+  background-color: var(--color1); 
+  color: var(--color5); 
   border-radius: 10px;
-  gap: 10px;
-  padding: 20px;
+  gap: 5px;
+  padding: 0 0 20px 0 ;
 
   @media (max-width: 767px) {
     min-width: 300px;
@@ -69,12 +69,12 @@ const FormContainer = styled.div`
 
 const TitleContainer = styled.div`
   display: flex;
-  height: 60px;
   width: 100%;
   align-items: center;
   justify-content: center;
-  background-color: var(--color4); // #2C2E3E
-  color: var(--color5); // #F6F6F6
+  background-color: var(--color4);
+  color: var(--color5); 
+  padding: 10px;
 `;
 
 const StyledForm = styled.div`
@@ -97,7 +97,7 @@ const StyledError = styled.div`
 
 const ProfileInfo = () => {
   const { user, signOut } = useAuthContext();
-  const { userData, fetchUserData, updateUserData, deleteUser } = useUserContext();
+  const { userData, fetchUserData, updateUserData, deleteUser,isLoading } = useUserContext();
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValues, setFormValues] = useState<UserInfo | null>(null);
@@ -115,10 +115,12 @@ const ProfileInfo = () => {
 
   // Charger les données utilisateur au montage
   useEffect(() => {
+    console.log("test fetch "+user + userData?.name+ isLoading )
     if (user && !userData) {
       fetchUserData();
+      
     }
-  }, [user, userData, fetchUserData]);
+  }, [user, userData, fetchUserData,isLoading]);
 
   // Gestion de la soumission du formulaire
   const handleSubmit = (values: UserInfo) => {
@@ -146,7 +148,7 @@ const ProfileInfo = () => {
     }
   };
 
-  // Gestion de la suppression du compte
+  
   const handleDelete = async () => {
     const password = prompt("Veuillez entrer votre mot de passe pour confirmer la suppression :");
     if (password) {

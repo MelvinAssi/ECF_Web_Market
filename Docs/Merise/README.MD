@@ -108,19 +108,19 @@
 | buyer_id | FOREIGN KEY | vers User(id_user), non nul | Acheteur associé au panier |
 | creation_date | TIMESTAMP | auto-généré | Date de création du panier |
 
-### 7. Cart_Product (Table d'association)
+### 7. Cart_Listing (Table d'association)
 | Nom du champ | Type | Contraintes | Description |
 |--------------|------|-------------|-------------|
 | id_cart | FOREIGN KEY | vers Cart(id_cart), non nul | Référence au panier |
-| id_product | FOREIGN KEY | vers Product(id_product), non nul | Référence au produit |
+| id_listing | FOREIGN KEY | vers Listing(id_listing), non nul | Référence au Listing |
 | quantity | INTEGER | non nul, ≥ 1 | Quantité du produit dans le panier |
 | **Clé primaire** | (id_cart, id_product) | Combinaison unique | Clé composite |
 
-### 6. Order_Product
+### 6. Order_Listing(Table d'association)
 | Nom du champ | Type | Contraintes | Description |
 |--------------|------|-------------|-------------|
 | order_id     | UUID | PK, FK vers Order(id_order) | Commande concernée |
-| product_id   | UUID | PK, FK vers Product(id_product) | Produit commandé |
+| listing_id   | UUID | PK, FK vers Listing(listing_id) | Listing commandé |
 | quantity     | INTEGER | ≥ 1, non nul | Quantité achetée |
 | unit_price   | DECIMAL(10,2) | ≥ 0, non nul | Prix unitaire au moment de la commande |
 ### 8. Review
@@ -179,25 +179,26 @@ Le MCD représente les entités et leurs relations avec les cardinalités. Voici
 - **Product** (id_product, name, description, price, condition, verification_status, images, category_id)
   - **Belongs to** (1,1) -> **Category** (0,N): Un Product appartient à une seule Category, une Category peut contenir plusieurs Products.
   - **Concerned by** (1,1) -> **Listing** (1,1): Une Listing concerne un seul Product, un Product est lié à une seule Listing.
-  - **Contained in** (0,N) -> **Cart_Product** (1,N): Un Product peut être dans plusieurs Carts, un Cart peut contenir plusieurs Products.
+
   - **Evaluated by** (0,N) -> **Review** (0,1): Un Product peut recevoir plusieurs Reviews, un Review peut concerner un Product.
 
 - **Listing** (id_listing, publication_date, status, seller_id, product_id)
+  - **Contained in** (0,N) -> **Cart_Listing** (1,N): Un Listing peut être dans plusieurs Carts, un Cart peut contenir plusieurs Listing.
 - **Category** (id_category, name_category)
 - **Order** (id_order, order_date, total_amount, status, buyer_id)
   - **Includes** (1,1) -> **Transaction** (1,N): Une Order est liée à une ou plusieurs Transactions.
 
 - **Cart** (id_cart, buyer_id, creation_date)
-  - **Contains** (1,1) -> **Cart_Product** (0,N): Un Cart peut contenir plusieurs Products via la table d’association.
+  - **Contains** (1,1) -> **Cart_Listing** (0,N): Un Cart peut contenir plusieurs Listings via la table d’association.
 
-- **Cart_Product** (id_cart, id_product, quantity)
+- **Cart_Listing** (id_cart, id_listing, quantity)
 - **Review** (id_review, comment, rating, review_date, buyer_id, product_id, seller_id)
 - **Transaction** (id_transaction, transaction_date, amount, status, buyer_id, , order_id)
 - **Contact** (id_contact, title, description, email, sent_date, status, admin_id)
 - **Statistic** (id_statistic, products_sold, revenue, period, category_id)
-- **Order_Product** (order_id, product_id, quantity, unit_price)
-  - **Represents** (1,N) -> **Order** (1,1): Une Order contient plusieurs produits, chaque ligne d’Order_Product est liée à une seule commande.
-  - **Concerns** (1,N) -> **Product** (1,1): Un Product peut apparaître dans plusieurs commandes, chaque ligne d’Order_Product référence un seul produit.
+- **Order_Listing** (order_id, listing_id, quantity, unit_price)
+  - **Represents** (1,N) -> **Order** (1,1): Une Order contient plusieurs listings, chaque ligne d’Order_Listing est liée à une seule commande.
+  - **Concerns** (1,N) -> **Listing** (1,1): Un Listing peut apparaître dans plusieurs commandes, chaque ligne de Order_Listing référence un seul Listing.
 
 **Note** : Pour visualiser le MCD, un outil comme Mocodo peut être utilisé pour générer un diagramme graphique basé sur cette description.
 
@@ -210,13 +211,13 @@ Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et
 4. **Category** (id_category: UUID PK, name_category: VARCHAR(100) UNIQUE)
 5. **Order** (id_order: UUID PK, order_date: TIMESTAMP, total_amount: DECIMAL(10,2), status: ENUM('PENDING', 'VALIDATED', 'DELIVERED'), buyer_id: UUID FK -> User)
 6. **Cart** (id_cart: UUID PK, buyer_id: UUID FK -> User, creation_date: TIMESTAMP)
-7. **Cart_Product** (id_cart: UUID FK -> Cart, id_product: UUID FK -> Product, quantity: INTEGER, PK(id_cart, id_product))
+7. **Cart_Listing** (id_cart: UUID FK -> Cart, id_listing: UUID FK -> Listing, quantity: INTEGER, PK(id_cart, id_listing))
 8. **Review** (id_review: UUID PK, comment: TEXT, rating: INTEGER CHECK(1 <= rating <= 5), review_date: TIMESTAMP, buyer_id: UUID FK -> User, product_id: UUID FK -> Product NULL, seller_id: UUID FK -> User NULL)
 9. **Transaction** (id_transaction: UUID PK, transaction_date: TIMESTAMP, amount: DECIMAL(10,2), status: ENUM('PENDING', 'VALIDATED', 'CANCELLED'), buyer_id: UUID FK -> User, order_id: UUID FK -> Order)
 10. **Contact** (id_contact: UUID PK, title: VARCHAR(255), description: TEXT, email: VARCHAR(100), sent_date: TIMESTAMP, status: ENUM('PENDING', 'READ', 'RESPONDED'), admin_id: UUID FK -> User NULL)
 11. **Statistic** (id_statistic: UUID PK, products_sold: INTEGER, revenue: DECIMAL(12,2), period: DATE, category_id: UUID FK -> Category NULL)
-12. **Order_Product** (order_id: UUID FK → Order, product_id: UUID FK → Product,
-    quantity: INTEGER NOT NULL CHECK (quantity > 0),unit_price: DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),PK(order_id, product_id)
+12. **Order_Listing** (order_id: UUID FK → Order, listing_id: UUID FK → Product,
+    quantity: INTEGER NOT NULL CHECK (quantity > 0),unit_price: DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),PK(order_id, listing_id)
 )
 ## MPD (Modèle Physique de Données)
 Le MPD est une implémentation spécifique pour PostgreSQL, incluant les types de données, contraintes et index.
@@ -303,14 +304,14 @@ CREATE TABLE cart (
     FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
--- Table Cart_Product (association)
-CREATE TABLE cart_product (
+-- Table Cart_Listing (association)
+CREATE TABLE cart_listing (
     id_cart UUID NOT NULL,
-    id_product UUID NOT NULL,
+    id_listing UUID NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity >= 1),
-    PRIMARY KEY (id_cart, id_product),
+    PRIMARY KEY (id_cart, id_listing),
     FOREIGN KEY (id_cart) REFERENCES cart(id_cart) ON DELETE CASCADE,
-    FOREIGN KEY (id_product) REFERENCES product(id_product) ON DELETE CASCADE
+    FOREIGN KEY (id_listing) REFERENCES listing(id_listing) ON DELETE CASCADE
 );
 
 -- Table Transactions (renommée de "transaction" à "transactions")
@@ -324,17 +325,17 @@ CREATE TABLE transactions (
     FOREIGN KEY (buyer_id) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (order_id) REFERENCES orders(id_order) ON DELETE CASCADE
 );
--- Table Order_product
-CREATE TABLE order_product (
+-- Table Order_Listing
+CREATE TABLE order_Listing (
   order_id UUID NOT NULL,
-  product_id UUID NOT NULL,
+  listing_id UUID NOT NULL,
   quantity INTEGER NOT NULL CHECK (quantity > 0),
   unit_price DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),
 
-  PRIMARY KEY (order_id, product_id),
+  PRIMARY KEY (order_id, listing_id),
 
-  FOREIGN KEY (order_id) REFERENCES "order"(id_order) ON DELETE CASCADE,
-  FOREIGN KEY (product_id) REFERENCES product(id_product) ON DELETE RESTRICT
+  FOREIGN KEY (order_id) REFERENCES "orders"(id_order) ON DELETE CASCADE,
+  FOREIGN KEY (listing_id) REFERENCES listing(id_listing) ON DELETE RESTRICT
 );
 
 -- Table Review

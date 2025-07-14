@@ -1,5 +1,6 @@
 const Product = require('../entities/Product');
 const Listing = require('../entities/Listing');
+const Category = require('../entities/Category');
 
 
 exports.createProduct = async (data) => {
@@ -22,4 +23,9 @@ exports.deleteProductById = async (id) => {
 
 exports.getListingByProductId = async (productId) => {
   return await Listing.findOne({ where: { product_id: productId } });
+};
+exports.getAllProducts = async () => {
+  return await Product.findAll({
+    include: [{ model: Category, as: 'category' }]
+  });
 };

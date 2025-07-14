@@ -2,6 +2,7 @@ import styled from "styled-components";
 import * as Yup from 'yup';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import Button from "./Button";
+import CustomInput from "./CustomInput";
 
 interface FormValues {
   email: string;
@@ -66,17 +67,13 @@ const Newsletter = () => {
         {() => (
           <FormikForm>
             <StyledForm>
-                <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Field
-                        id="email-newletter"
-                        name="email"
-                        type="email"
-                        as={Input}
-                        aria-label="Entrez votre email"
-                    />
-                    <ErrorMessage name="email" component={StyledError} />
-                </div>
+                <CustomInput
+                  id="email-newletter"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  ariaLabel="Entrez votre email"
+                />
 
                 <Button
                 text="S’abonner"

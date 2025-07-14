@@ -4,6 +4,9 @@ exports.getAllCategories = async () => {
   return await Category.findAll();
 };
 
+exports.getCategoryByName = async (name) => {
+  return await Category.findOne({ where: { name_category: name } });
+};
 exports.createCategory = async (name) => {
   return await Category.create({ name_category: name });
 };

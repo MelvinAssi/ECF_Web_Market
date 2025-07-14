@@ -30,7 +30,7 @@ const ModalContent = styled.div`
   border-radius: 10px;
   padding: 20px;
   max-width: 90%;
-  min-width: 400px;
+  min-width: 300px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -41,7 +41,6 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.h3`
-  font-family: "Cormorant", serif;
   font-size: 22px;
   color: var(--color5); // #F6F6F6
   margin: 0;

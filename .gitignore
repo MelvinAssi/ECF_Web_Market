@@ -36,7 +36,9 @@ Thumbs.db
 # Firebase emulators / cache (if used)
 .firebase/
 .firebaserc
-
+**/serviceAccountKey.json
+./my-backend-express/config/serviceAccountKey.json
+my-backend-express/config/serviceAccountKey.json
 # Coverage (if you add test tools later)
 coverage/
 

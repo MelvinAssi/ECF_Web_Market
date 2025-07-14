@@ -4,16 +4,17 @@ import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import Button from "../components/Button";
 import Header from "../components/Header";
 import CustomInput from "../components/CustomInput";
+import axios from "../services/axios";
+import { useState } from "react";
 
 
-type Category = 'category1' | 'category2' | 'category3';
+type Category = 'general' | 'order' | 'technical'| 'account' | 'feedback'| 'refund' | 'security';
 interface FormValues {
   category : Category
   email: string;
   phone?: string;
   subject: string;
   description:string
-  attachement? : string
 }
 
 const validationSchema = Yup.object({
@@ -35,7 +36,6 @@ const validationSchema = Yup.object({
     .required('Le description est obligatoire')
     .min(2,'Description trop courte !')
     .max(64, 'Description trop longue !'),
-  aattachement: Yup.mixed().notRequired()
 });
 const PageContainer = styled.main`
     min-height:100vh;
@@ -111,27 +111,22 @@ const StyledError = styled.div`
   margin-top: 4px;
 `;
 
-const HiddenFileInput = styled.input`
-  display: none;
-`;
 
-const FileLabel = styled.label`
-    width:300px;
-  border-radius: 6px;
-  font-size: 16px;
-  padding: 8px;
-  background-color: var(--color5);
-  color: var(--color4);
-  border: none;
-  display: inline-block;
-`;
 
 
 
 
 const ContactPage = () => {
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const handleSubmit = async (values: FormValues) => {
     console.log("Formulaire soumis !", values.email);
+    try {
+        await axios.post("/contact", values); 
+      } catch (err: any) {
+        setError("Une erreur est survenue.");
+    }
   };
     return (      
       <>
@@ -144,7 +139,7 @@ const ContactPage = () => {
                 <p>Remplissez le formulaire pour nous contacter.</p>
                 <Formik              
                   key="informations-step" 
-                  initialValues={{ category: 'category1',email: '',phone: '',subject: '',description: '',attachement: '' }}
+                  initialValues={{ category: 'general',email: '',phone: '',subject: '',description: '' }}
                   validationSchema={validationSchema}
                   onSubmit={handleSubmit}
                 >
@@ -154,9 +149,13 @@ const ContactPage = () => {
                           <div>
                               <Label htmlFor="category">Veuillez sélectionner une catégorie</Label>
                               <Field id="category" name="category" as={Input2} aria-label="Choisissez une catégorie">
-                                <option value="category1">category1</option>
-                                <option value="category2">category2</option>
-                                <option value="category3">category3</option>
+                                <option value="general">Demande générale</option>
+                                <option value="order">Suivi de commande</option>
+                                <option value="technical">Problème technique</option>
+                                <option value="account">Mon compte</option>
+                                <option value="feedback">Retour sur le site</option>
+                                <option value="refund">Remboursement / Réclamation</option>
+                                <option value="security">Signalement de sécurité</option>
                               </Field>
                               <ErrorMessage name="category" component={StyledError} />
                               
@@ -175,32 +174,7 @@ const ContactPage = () => {
                               />
                               <ErrorMessage name="description" component={StyledError} />
 
-                              <Label htmlFor="attachment">Pièces jointes (facultatif)</Label>
-
-                              <Field name="attachment">
-                                {({ form }: any) => (
-                                  <>
-                                    <HiddenFileInput
-                                      id="attachment"
-                                      name="attachment"
-                                      type="file"
-                                      accept=".pdf,.png"
-                                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                        const file = event.currentTarget.files?.[0];
-                                        form.setFieldValue("attachment", file);
-                                      }}
-                                    />
-                                    <FileLabel htmlFor="attachment">Ajouter un fichier</FileLabel>
-                                    {form.values.attachment && (
-                                      <div style={{ color: 'var(--color5)', marginTop: '4px' }}>
-                                        Fichier : {form.values.attachment.name}
-                                      </div>
-                                    )}
-                                  </>
-                                )}
-                              </Field>
-
-                              <ErrorMessage name="attachment" component={StyledError} />                                                                                 
+                                                                                                           
                           </div>
 
                           <Button

@@ -36,5 +36,6 @@ router.put('/:id',  auth,  hasRoles('ADMIN', 'SELLER'),  productControllers.upda
 
 router.delete('/:id',  auth,  hasRoles('ADMIN', 'SELLER'),  productControllers.deleteProduct
 );
+router.get('/', auth, hasRoles('ADMIN'), productControllers.getAllProducts);
 
 module.exports = router;

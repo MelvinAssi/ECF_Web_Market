@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "../services/axios"; 
 
 // --- Styled Components ---
 const ReviewContainer = styled.div`
@@ -17,7 +18,7 @@ const ReviewCard = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 200px;
-  min-width: 200px;
+  width: 200px;
   background-color: var(--color1);
   border-radius: 6px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
@@ -48,63 +49,20 @@ const StarContainer = styled.div`
   color: var(--color3);
 `;
 
-const ReviewList = [
-  {
-    id: 1,
-    user: "Damien C.",
-    text: "Commande reçue en 48h, très bon état, vraiment satisfait !",
-    star: 5,
-  },
-  {
-    id: 2,
-    user: "Léa B.",
-    text: "J’ai pu équiper mon bureau avec du reconditionné à prix mini. Merci !",
-    star: 4,
-  },
-    {
-    id: 3,
-    user: "Damien C.",
-    text: "Commande reçue en 48h, très bon état, vraiment satisfait !",
-    star: 5,
-  },
-  {
-    id: 4,
-    user: "Léa B.",
-    text: "J’ai pu équiper mon bureau avec du reconditionné à prix mini. Merci !",
-    star: 4,
-  },
-    {
-    id: 5,
-    user: "Damien C.",
-    text: "Commande reçue en 48h, très bon état, vraiment satisfait !",
-    star: 5,
-  },
-  {
-    id: 6,
-    user: "Léa B.",
-    text: "J’ai pu équiper mon bureau avec du reconditionné à prix mini. Merci !",
-    star: 4,
-  },
-    {
-    id: 7,
-    user: "Damien C.",
-    text: "Commande reçue en 48h, très bon état, vraiment satisfait !",
-    star: 5,
-  },
-  {
-    id: 8,
-    user: "Léa B.",
-    text: "J’ai pu équiper mon bureau avec du reconditionné à prix mini. Merci !",
-    star: 4,
-  },
-];
-
 interface Review {
-  id: number;
-  user: string;
+  id: string;
+  user: User;
   text: string;
   star: number;
 }
+interface User{
+  name:string;
+  firstname:string
+}
+
+const shuffleAndLimit = <T,>(arr: T[], count: number): T[] => {
+  return [...arr].sort(() => Math.random() - 0.5).slice(0, count);
+};
 
 const Review = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -115,30 +73,37 @@ const Review = () => {
 
   const fetchAllReviews = async () => {
     try {
-      setReviews(ReviewList);
+      const res = await axios.get("/review"); 
+      const allReviews: Review[] = res.data;
+      const randomReviews = shuffleAndLimit(allReviews, 10);
+      setReviews(randomReviews);
     } catch (error) {
       console.error("Erreur lors de la récupération des avis :", error);
     }
   };
+  const formatUserDisplayName=(firstname: string, name: string): string =>{
+    const formattedFirstname = firstname.charAt(0).toUpperCase() + firstname.slice(1).toLowerCase();
+    const firstLetterName = name.charAt(0).toUpperCase();
+    return `${formattedFirstname} ${firstLetterName}.`;
+  }
 
   return (
     <ReviewContainer>
       {reviews.map((review) => (
         <ReviewCard key={review.id}>
           <TitleCard>
-            <strong>{review.user}</strong>
+            <strong>{formatUserDisplayName(review.user.firstname, review.user.name)}</strong>
           </TitleCard>
           <ReviewText>{review.text}</ReviewText>
           <StarContainer>
             {Array.from({ length: 5 }).map((_, i) => (
-
               <FontAwesomeIcon
                 key={i}
                 icon={faStar}
                 style={{
-                    color: i < review.star ? 'var(--color3)' : 'rgba(238, 43, 71, 0.5)',
+                  color: i < review.star ? "var(--color3)" : "rgba(238, 43, 71, 0.5)",
                 }}
-                />
+              />
             ))}
           </StarContainer>
         </ReviewCard>

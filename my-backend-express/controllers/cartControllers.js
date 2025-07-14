@@ -3,8 +3,8 @@ const cartModels = require('../models/cartModels');
 exports.getCart = async (req, res) => {
     try {
         const cart = await cartModels.getOrCreateCartByUserId(req.user.id);
-        const products = await cartModels.getCartWithProducts(cart.id_cart);
-        res.json({ cartId: cart.id_cart, products });
+        const listings = await cartModels.getCartWithListings(cart.id_cart);
+        res.json({ cartId: cart.id_cart, listings });
     } catch (err) {
         res.status(500).json({ error: 'Erreur serveur' });
     }
@@ -12,10 +12,10 @@ exports.getCart = async (req, res) => {
 
 exports.addToCart = async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
+        const { listingId, quantity } = req.body;
         const cart = await cartModels.getOrCreateCartByUserId(req.user.id);
-        const product = await cartModels.addProductToCart(cart.id_cart, productId, quantity);
-        res.status(200).json({ message: 'Produit ajouté', product });
+        const listing = await cartModels.addListingToCart(cart.id_cart, listingId, quantity);
+        res.status(200).json({ message: 'Listing ajouté', listing });
     } catch (err) {
         res.status(500).json({ error: 'Erreur serveur' });
     }
@@ -23,21 +23,20 @@ exports.addToCart = async (req, res) => {
 
 exports.removeFromCart = async (req, res) => {
     try {
-        const { productId } = req.params;
+        const { listingId } = req.params;
         const cart = await cartModels.getOrCreateCartByUserId(req.user.id);
-        await cartModels.removeProductFromCart(cart.id_cart, productId);
-        res.status(200).json({ message: 'Produit supprimé du panier' });
+        await cartModels.removeListingFromCart(cart.id_cart, listingId);
+        res.status(200).json({ message: 'Listing supprimé du panier' });
     } catch (err) {
         res.status(500).json({ error: 'Erreur serveur' });
     }
 };
-
 exports.clearCart = async (req, res) => {
-    try {
-        const cart = await cartModels.getOrCreateCartByUserId(req.user.id);
-        await cartModels.clearCart(cart.id_cart);
-        res.status(200).json({ message: 'Panier vidé' });
-    } catch (err) {
-        res.status(500).json({ error: 'Erreur serveur' });
-    }
+  try {
+    const cart = await cartModels.getOrCreateCartByUserId(req.user.id);
+    await cartModels.clearCart(cart.id_cart);
+    res.status(200).json({ message: 'Panier vidé' });
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors du vidage du panier' });
+  }
 };

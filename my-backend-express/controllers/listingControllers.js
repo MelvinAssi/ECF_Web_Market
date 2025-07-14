@@ -1,4 +1,5 @@
 const listingModels = require('../models/listingModels.js');
+const { isUUID } = require('validator');
 
 exports.getPublicListings = async (req, res) => {
   try {

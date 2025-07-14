@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "../components/Button";
-import Item, { ItemState } from "../components/Item";
+import Button from "../Button";
+import Item, { ItemState } from "../Item";
 
 // Interface
 interface Ad {

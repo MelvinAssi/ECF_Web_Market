@@ -1,12 +1,12 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const CartProduct = sequelize.define('CartProduct', {
+const CartListing = sequelize.define('CartListing', {
   id_cart: {
     type: DataTypes.UUID,
     primaryKey: true,
   },
-  id_product: {
+  id_listing: {
     type: DataTypes.UUID,
     primaryKey: true,
   },
@@ -18,8 +18,8 @@ const CartProduct = sequelize.define('CartProduct', {
     },
   },
 }, {
-  tableName: 'cart_product',
+  tableName: 'cart_listing',
   timestamps: false,
 });
 
-module.exports = CartProduct;
+module.exports = CartListing;

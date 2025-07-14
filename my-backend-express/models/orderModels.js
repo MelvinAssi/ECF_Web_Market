@@ -1,17 +1,25 @@
-const { Order, CartProduct, Cart, OrderProduct, Product, User, Transaction } = require('../entities');
+const { Order, CartListing, Cart, OrderListing, Listing, User, Transaction,Product } = require('../entities');
 const { v4: uuidv4 } = require('uuid');
 const { Sequelize } = require('sequelize');
 
 exports.createOrderFromCart = async (userId) => {
-  const cart = await Cart.findOne({ where: { buyer_id: userId }, include: { model: CartProduct } });
-  if (!cart || cart.CartProducts.length === 0) throw new Error('Cart is empty');
+  const cart = await Cart.findOne({
+    where: { buyer_id: userId },
+    include: { model: CartListing }
+  });
 
-  const products = await Promise.all(
-    cart.CartProducts.map(cp => Product.findByPk(cp.product_id))
+  if (!cart || cart.CartListings.length === 0)
+    throw new Error('Cart is empty');
+
+  // Récupère les listings (pas produits !)
+  const listings = await Promise.all(
+    cart.CartListings.map(cl => Listing.findByPk(cl.id_listing, {
+      include: ['product']
+    }))
   );
 
-  const total = cart.CartProducts.reduce((sum, cp, i) => {
-    return sum + cp.quantity * parseFloat(products[i].price);
+  const total = cart.CartListings.reduce((sum, cl, i) => {
+    return sum + cl.quantity * parseFloat(listings[i].product.price);
   }, 0);
 
   const order = await Order.create({
@@ -22,12 +30,12 @@ exports.createOrderFromCart = async (userId) => {
     order_date: new Date()
   });
 
-  await Promise.all(cart.CartProducts.map((cp, i) => {
-    return OrderProduct.create({
+  await Promise.all(cart.CartListings.map((cl, i) => {
+    return OrderListing.create({
       order_id: order.id_order,
-      product_id: cp.product_id,
-      quantity: cp.quantity,
-      unit_price: products[i].price
+      listing_id: cl.id_listing,
+      quantity: cl.quantity,
+      unit_price: listings[i].product.price
     });
   }));
 
@@ -39,7 +47,7 @@ exports.createOrderFromCart = async (userId) => {
     status: 'PENDING'
   });
 
-  await CartProduct.destroy({ where: { id_cart: cart.id_cart } });
+  await CartListing.destroy({ where: { id_cart: cart.id_cart } });
 
   return order;
 };
@@ -49,8 +57,9 @@ exports.getOrdersByUser = async (userId) => {
     where: { buyer_id: userId },
     include: [
       {
-        model: Product,
-        as: 'products',
+        model: Listing,
+        as: 'listings',
+        include: ['product'],
         through: { attributes: ['quantity', 'unit_price'] }
       }
     ],
@@ -62,8 +71,9 @@ exports.getOrderById = async (id_order) => {
   return await Order.findByPk(id_order, {
     include: [
       {
-        model: Product,
-        as: 'products',
+        model: Listing,
+        as: 'listings',
+        include: ['product'],
         through: { attributes: ['quantity', 'unit_price'] }
       },
       {
@@ -79,8 +89,14 @@ exports.getAllOrders = async () => {
   return await Order.findAll({
     include: [
       {
-        model: Product,
-        as: 'products',
+        model: Listing,
+        as: 'listings',
+        include: [
+          {
+            model: Product,
+            as: 'product',
+          }
+        ],
         through: { attributes: ['quantity', 'unit_price'] }
       },
       {

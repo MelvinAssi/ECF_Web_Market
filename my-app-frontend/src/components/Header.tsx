@@ -2,13 +2,20 @@
 import styled from "styled-components";
 import Logo from "./Logo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import {DropdownMenu} from "./DropdownMenu";
+import axios from "../services/axios";
 
 interface HeaderProps {
   reduce?: boolean;
+}
+interface CategoryProps {
+  id_category:string;
+  name_category:string;
+  text:string;
+  img :string;  
 }
 
 const HeaderContainer = styled.div`
@@ -115,12 +122,42 @@ const IconBackground = styled.div`
 const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
     const [search,setSearch] =useState('')
     const { user, signOut } = useAuthContext();
+    const [categoryList, setCategoryList] = useState<CategoryProps[]>([]);
     const navigate = useNavigate();
     
+    useEffect(()=>{
+        fetchCategory();
+    },[])
 
-    
+    const fetchCategory = async () => {
+        try {
+            const response = await axios.get("/category");
+            setCategoryList(response.data);
+        } catch (error: any) {
+            console.error("fetchCategory error:", error.response?.data?.message || error.message);
+        }
+    };  
 
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') handleSearch();
+    };
 
+    const handleSearch = () => {
+        navigate(`/catalog?search=${search}`);
+    };
+
+    const menuItems = user
+    ? [
+        { label: "Mon compte", onClick: () => navigate("/user/info") },
+        ...(user?.role === 'ADMIN'
+            ? [{ label: "Admin", onClick: () => navigate("/admin") }]
+            : []),
+        { label: "Se deconnecter", onClick: () => signOut() },
+        ]
+    : [
+        { label: "Se connecter", onClick: () => navigate("/signin") },
+        { label: "S'inscrire", onClick: () => navigate("/signup") },
+    ];
 
     return (    
       <HeaderContainer> 
@@ -131,52 +168,24 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
         ):(
             <>
                 <Header1>
-                    <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
-                        <FontAwesomeIcon size="2x" icon="bars" color="#F6F6F6" />
+                    <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px',}}>
+                        <FontAwesomeIcon style={{display:'none'}} size="2x" icon="bars" color="#F6F6F6" />
                         <Logo/>
                     </div>
 
                     <SearchBarContainer>
-                        <SearchBar type="text" value={search} onChange={()=>setSearch}/>
-                        <FontAwesomeIcon size="1x" icon="search" color="#34374C" />
+                        <SearchBar  type="text"  value={search}  onChange={(e) => setSearch(e.target.value)} onKeyDown={handleKeyPress}/>
+                        <FontAwesomeIcon size="1x" icon="search" color="#34374C" cursor="pointer" onClick={handleSearch} />
                     </SearchBarContainer>
                     <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
-                        {user ?(
-                            <>
-                            <DropdownMenu
-                                trigger={
-                                    <IconBackground>
-                                        <FontAwesomeIcon size="1x" icon="user" color="#34374C"  />
-                                    </IconBackground>
-                                }
- 
-                                items={[
-                                    
-                                    { label: "Mon compte", onClick: () => navigate("/account") },
-                                    { label: "Se deconnecter", onClick: () => signOut() },
-                                ]}
-                            />  
-                            </>
-                        ):(
-                            <>
-                                <DropdownMenu
-                                    trigger={
-                                        <IconBackground>
-                                            <FontAwesomeIcon size="1x" icon="user" color="#34374C" />
-                                        </IconBackground>
-                                    }
-    
-                                    items={[
-                                        
-                                        { label: "Se connecter", onClick: () => navigate("/signin") },
-                                        { label: "S'inscrire", onClick: () => navigate("/signup") },
-                                    ]}
-                                />  
-                            </>
-                        
-                        )}
-
-
+                        <DropdownMenu
+                            trigger={
+                                <IconBackground>
+                                <FontAwesomeIcon size="1x" icon="user" color="#34374C" />
+                                </IconBackground>
+                            }
+                            items={menuItems}
+                        />
                         <IconBackground onClick={() => navigate("/cart")}>
                             <FontAwesomeIcon size="1x" icon="shopping-cart" color="#34374C" />
                         </IconBackground>
@@ -186,11 +195,9 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                 <Header2>
                     <ListLink>
                         <LinkStyled onClick={() => navigate("/catalog")}>Catalogue</LinkStyled>
-                        <LinkStyled>Offres</LinkStyled>
-                        <LinkStyled>Ordinateurs de bureau</LinkStyled>
-                        <LinkStyled>PC Portable</LinkStyled>
-                        <LinkStyled>Accessoires</LinkStyled>
-                        <LinkStyled>Composants</LinkStyled>
+                        {categoryList.map((category) => (
+                            <LinkStyled key={category.id_category} onClick={() => navigate(`/catalog?category=${category.id_category}`)}>{category.name_category}</LinkStyled>
+                        ))}
                     </ListLink>
                 </Header2>
                 <Header3>

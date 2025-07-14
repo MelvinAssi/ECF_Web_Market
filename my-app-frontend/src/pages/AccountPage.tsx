@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ProfileInfo from "../components/ProfileInfo";
-import Orders from "../components/Orders";
-import Sales from "../components/Sales";
-import Ads from "../components/Ads";
+import ProfileInfo from "../components/user/ProfileInfo";
+import Orders from "../components/user/Orders";
+import Sales from "../components/user/Sales";
+import Ads from "../components/user/Ads";
 import axios from "../services/axios";
+import UserLayout from "../components/user/UserLayout";
 
 // Interfaces
 interface UserInfo {
@@ -44,55 +44,12 @@ interface Ad {
   image?: string;
 }
 
-// Styled Components
-const PageContainer = styled.main`
-  min-height: calc(100vh - 60px);
-  display: flex;
-  background-color: var(--color2); // #FFFFFF
+
+const PageTitle = styled.h1`
+  color: var(--color1);
+  margin-bottom: 20px;
 `;
 
-const Sidebar = styled.nav`
-  width: 250px;
-  background-color: var(--color1); // #34374C
-  color: var(--color5); // #F6F6F6
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px;
-
-  @media (max-width: 767px) {
-    width: 200px;
-    margin: 16px;
-    padding: 16px;
-  }
-`;
-
-const SidebarList = styled.ul`
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const SidebarLink = styled.li<{ $active: boolean }>`
-  font-family: "Noto Sans", sans-serif;
-  font-size: 16px;
-  color: ${({ $active }) => ($active ? "var(--color3)" : "var(--color5)")}; // #EE2B47 or #F6F6F6
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 6px;
-  transition: all 0.3s;
-
-  &:hover {
-    color: var(--color3); // #EE2B47
-    background-color: var(--color4); // #2C2E3E
-  }
-
-  @media (max-width: 767px) {
-    font-size: 14px;
-    padding: 8px;
-  }
-`;
 
 const ContentContainer = styled.div`
   flex: 1;
@@ -115,7 +72,7 @@ const AccountPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Initialisation des données utilisateur
+  
   const initialValues: UserInfo = {
     email: user?.email || "",
     name: "",
@@ -124,24 +81,19 @@ const AccountPage = () => {
     phone: "",
   };
 
-  // Charger les annonces, commandes et ventes
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user?.role === "SELLER") {
-          const adsResponse = await axios.get("/ads/my-ads", {
-            headers: { Authorization: `Bearer ${user.id_user}` },
-          });
-          setAds(adsResponse.data.ads || []);
-          const salesResponse = await axios.get("/sales/my-sales", {
-            headers: { Authorization: `Bearer ${user.id_user}` },
-          });
+        if (user?.role === "SELLER" || user?.role === "ADMIN") {
+          const adsResponse = await axios.get("/listing/user");
+          setAds(adsResponse.data || []);
+          const salesResponse = await axios.get("/listing/user");
           setSales(salesResponse.data.sales || []);
         }
-        const ordersResponse = await axios.get("/orders/my-orders", {
-          headers: { Authorization: `Bearer ${user.id_user}` },
-          });
-          setOrders(ordersResponse.data.orders || []);
+        const ordersResponse = await axios.get("/orders/me");
+         console.log(ordersResponse.data)
+          setOrders(ordersResponse.data || []);
         } catch (err) {
           setError("Erreur lors du chargement des données");
         }
@@ -149,7 +101,7 @@ const AccountPage = () => {
       fetchData();
     }, [user]);
 
-    // Gestion de la mise à jour des informations
+    
     const handleUpdate = async (values: UserInfo) => {
       try {
         await axios.put("/auth/update-profile", values, {
@@ -161,7 +113,7 @@ const AccountPage = () => {
       }
     };
 
-    // Gestion de la suppression d'une annonce
+
     const handleDeleteAd = async (adId: string) => {
       try {
         await axios.delete(`/ads/${adId}`, {
@@ -176,41 +128,15 @@ const AccountPage = () => {
 
     return (
       <>
-        <Header reduce={true} />
-        <PageContainer>
-          <Sidebar>
-            <SidebarList>
-              <SidebarLink $active={activeSection === "orders"} onClick={() => setActiveSection("orders")}>
-                Mes Commandes
-              </SidebarLink>
-              {user?.role === "SELLER" && (
-                <>
-                  <SidebarLink $active={activeSection === "sales"} onClick={() => setActiveSection("sales")}>
-                    Mes Ventes
-                  </SidebarLink>
-                  <SidebarLink $active={activeSection === "ads"} onClick={() => setActiveSection("ads")}>
-                    Mes Annonces
-                  </SidebarLink>
-                </>
-              )}
-              <SidebarLink $active={activeSection === "profile"} onClick={() => setActiveSection("profile")}>
-                Mes Informations Personnelles
-              </SidebarLink>
-              <SidebarLink $active={false} onClick={async () => {
-                await signOut();
-                navigate("/signin");
-              }}>
-                Déconnexion
-              </SidebarLink>
-            </SidebarList>
-          </Sidebar>
+        <UserLayout>
+          <PageTitle>Catégories</PageTitle>
           <ContentContainer>
-            {activeSection === "profile" && <ProfileInfo initialValues={initialValues} handleUpdate={handleUpdate} error={error} />}
-            {activeSection === "orders" && <Orders orders={orders} />}
-            {activeSection === "sales" && <Sales sales={sales} />}
-            {activeSection === "ads" && <Ads ads={ads} handleDeleteAd={handleDeleteAd} navigate={navigate} />}
+                {activeSection === "profile" && <ProfileInfo initialValues={initialValues} handleUpdate={handleUpdate} error={error} />}
+                {activeSection === "orders" && <Orders orders={orders} />}
+                {activeSection === "sales" && <Sales sales={sales} />}
+                {activeSection === "ads" && <Ads ads={ads} handleDeleteAd={handleDeleteAd} navigate={navigate} />}
           </ContentContainer>
-        </PageContainer>
+        </UserLayout> 
       </>
     );
   };

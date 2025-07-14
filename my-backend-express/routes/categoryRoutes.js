@@ -3,9 +3,15 @@ const router = express.Router();
 const categoryControllers = require('../controllers/categoryControllers');
 const auth = require('../middleware/auth');
 const hasRoles = require('../middleware/hasRoles');
-const { body } = require('express-validator');
+const { body,param } = require('express-validator');
 
-router.get('/', auth, categoryControllers.getCategories); 
+router.get('/', categoryControllers.getCategories); 
+router.get('/:name',  [
+    param('name')
+      .trim()
+      .notEmpty().withMessage('Le nom est requis')
+      .isLength({ min: 2, max: 64 }).withMessage('Le nom doit faire entre 2 et 64 caractères'),
+  ], categoryControllers.getCategory); 
 router.post('/', auth, hasRoles('ADMIN'),
   [
     body('name_category')
