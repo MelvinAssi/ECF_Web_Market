@@ -39,11 +39,16 @@ exports.signInUser =async (req, res) => {
     if(!user){
         return res.status(400).json({ error: 'Email error' });
     }
+    if(!user.is_active){
+        return res.status(400).json({ error: 'Account disable' });
+    }
     
     const isPasswordValid = await argon2.verify(user.password, password);
     if (!isPasswordValid) {
         return res.status(400).json({ error: 'Password error' });
     } 
+
+    await authModels.lastConnexion(email);
 
 
     const token = jwt.sign(

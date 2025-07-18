@@ -13,7 +13,12 @@ const PageTitle = styled.h1`
 `;
   const transactionsFields: Field<Transaction>[] = [
     { key: "id_transaction", label: "ID" },
-    { key: "status", label: "Status" },
+    { key: "status", label: "Status" ,editable:true, type:"select",
+      options: [
+      { label: "PENDING", value: "PENDING" },
+      { label: "VALIDATED", value: "VALIDATED" },
+      { label: "CANCELLED", value: "CANCELLED" }
+    ]},
     { key: "amount", label: "Total" },
     { key: "transaction_date", label: "Date" },
     { key: "buyer_id", label: "Acheteur" },
@@ -24,7 +29,6 @@ const TransactionsPage = () => {
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof Transaction>("status");
-  const navigate =useNavigate();
   useEffect(()=>{
       fetchTransaction();
   },[])
@@ -43,6 +47,10 @@ const TransactionsPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
+  const handleEdit = async(id:string,values) =>{
+      await axios.put(`transaction/${id}`, values);
+      fetchTransaction();
+  }
   useEffect(() => {
     const result = transactions.filter((transaction) => {
       const value = transaction[selectedField];
@@ -65,7 +73,7 @@ const TransactionsPage = () => {
         fields={transactionsFields}
         rowIdKey="id_transaction"
         onDeleteClick={(ids) => handleDelete(ids)}
-        onEditClick={(id) => navigate(`/admin/transaction/${id}`)}   
+        onUpdateClick={(id, values) => handleEdit(id, values)}    
       />
     </AdminLayout>
   );

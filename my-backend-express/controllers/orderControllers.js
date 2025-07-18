@@ -42,3 +42,16 @@ exports.getAllOrdersAdmin = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch orders' });
   }
 };
+exports.updateOrderAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const updatedOrder = await orderModels.updateOrderById(id, status);
+    res.json(updatedOrder);
+  } catch (err) {
+    console.error('updateOrderAdmin error:', err);
+    res.status(500).json({ error: 'Failed to update order' });
+  }
+};
+

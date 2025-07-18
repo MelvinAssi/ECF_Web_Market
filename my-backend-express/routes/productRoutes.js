@@ -30,12 +30,11 @@ router.post(  '/',  auth,  hasRoles('ADMIN', 'SELLER'),
 );
 
 
-router.put('/:id',  auth,  hasRoles('ADMIN', 'SELLER'),  productControllers.updateProduct
-);
+router.put('/:id',  auth,  hasRoles('ADMIN', 'SELLER'),  productControllers.updateProduct);
 
 
 router.delete('/:id',  auth,  hasRoles('ADMIN', 'SELLER'),  productControllers.deleteProduct
 );
 router.get('/', auth, hasRoles('ADMIN'), productControllers.getAllProducts);
-
+router.get('/:id', auth, hasRoles('ADMIN'), productControllers.getProduct);
 module.exports = router;

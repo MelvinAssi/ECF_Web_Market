@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import Header from "../components/Header";  
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import aboutUs from "../assets/img/HomePage/about_us.jpg";
-import { category1, category2, category3, category4 } from '../assets/img/HomePage';
+import aboutUs from "../assets/img/HomePage/about_us.webp";
+import { category1, category2, category3, category4 ,offer1,offer2,offer3} from '../assets/img/HomePage';
 import Review from "../components/Review";
 import CategoryItem from "../components/CategoryItem";
 import Item from "../components/Item";
 import { useEffect, useState } from "react";
 import axios from "../services/axios";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const PageContainer = styled.main`
     min-height:100vh;
@@ -18,18 +19,67 @@ const PageContainer = styled.main`
 `;
 
 const HeroSection = styled.section`
-    min-height: 50vh;
-    width: 100%;
-`;
-const HeroContent = styled.div`
-  height: 100%;
-  width: 100%;
-  background: url('/img/hero.jpg') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 25px 0; /* Espace haut et bas */
+  width: 100%;
+  height: auto;
+  position: relative;
+  background-color: var(--color2); /* ou autre couleur d’arrière-plan */
+`;
+const SlideWrapper = styled.div`
+  width: 90%;
+  max-width: 1298px;
+  aspect-ratio: 1298 / 199;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+
+  @media (max-width: 768px) {
+    aspect-ratio: 2 / 1;
+  }
+`;
+
+const Slide = styled.img<{ active: boolean }>`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease-in-out;
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+
+const Chevron = styled(FontAwesomeIcon)`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
   color: var(--color1);
-  font-size: 2rem;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+
+  &:hover {
+    color: var(--color3);
+  }
+
+  &.left {
+    left: 10px;
+  }
+
+  &.right {
+    right: 10px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    padding: 6px;
+  }
 `;
 const PopularCategorySection = styled.section`
     min-height: 50vh;
@@ -102,24 +152,34 @@ const AboutUsLeft=styled.div`
    justify-content: center;
 `;
 
-type AboutUsLeft_imgProps = {
-  image: string;
-};
 
-const AboutUsLeft_img = styled.div<AboutUsLeft_imgProps>`
-  background-image: url(${props => props.image});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+const StyledImage = styled.img`
   width: 400px;
   height: 300px;
   border-radius: 6px;
+  object-fit: cover;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 
 const HomePage = () => {
-  const [categoryIds, setCategoryIds] = useState<Record<string, string>>({});
 
+  const [categoryIds, setCategoryIds] = useState<Record<string, string>>({});
+  const [itemList, setItemList] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const carouselImages = [offer1, offer2, offer3];
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
+  };
   useEffect(() => {
     const fetchPopularCategories = async () => {
       try {
@@ -140,16 +200,43 @@ const HomePage = () => {
     };
 
     fetchPopularCategories();
+    fetchItems()
   }, []);
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get("/listing");
+      setItemList(response.data);
+    } catch (error: any) {
+      console.error("fetchItems error:", error.response?.data?.message || error.message);
+    }
+  };
 
     
     return (      
       <>
         <Header/>
         <PageContainer>          
-          <HeroSection>
-            <HeroContent>Bienvenue sur TechReuse Market</HeroContent>
-          </HeroSection>
+        <HeroSection>
+          <Chevron icon={faChevronLeft} className="left" onClick={prevSlide} />
+          <SlideWrapper>
+            
+            {carouselImages.map((img, index) => (
+              <Slide
+                key={index}
+                src={img}
+                alt={`Offre ${index + 1}`}
+                active={index === currentSlide}
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
+              />
+            ))}
+            
+          </SlideWrapper>
+          <Chevron icon={faChevronRight} className="right" onClick={nextSlide} />
+        </HeroSection>
+
+
+
           <PopularCategorySection>
             <h2>Catégories populaires</h2>
             <CategoryGrid>
@@ -188,10 +275,22 @@ const HomePage = () => {
           <PopularCategoryItem>
             <h2>Produits populaires</h2>
             <CategoryGrid>
-              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
-              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
-              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
-              <Item id="" name="SSD Samsung 860 EVO" description="1 To \n 550 Mo/s" img={aboutUs} price="79€" condition="Bon état" verification="Occasion" />
+              {[...itemList]
+                .sort(() => 0.5 - Math.random()) 
+                .slice(0, 4)                   
+                .map(item => (
+                  <Item
+                    variant="type2"
+                    key={item.id_listing}
+                    id={item.id_listing}
+                    name={item.product.name}
+                    description={item.product.description}
+                    img={item.product.images?.[0]}
+                    price={item.product.price}
+                    condition={item.product.condition}
+                    verification={item.product.verification_status}
+                  />
+              ))}
             </CategoryGrid>
           </PopularCategoryItem>
           <ReviewSection>
@@ -204,7 +303,12 @@ const HomePage = () => {
             </h2>
             <AboutUsContent>
               <AboutUsLeft>
-                <AboutUsLeft_img image={aboutUs} />
+                <StyledImage
+                  src={aboutUs}
+                  alt="À propos de TechReuse Market"
+                  loading="eager"
+                  fetchPriority="high"
+                />
               </AboutUsLeft>
               <AboutUsText>
                 <p>Chez TechReuse Market, nous croyons que la technologie mérite une seconde chance...</p>

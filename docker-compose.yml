@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./my-backend-express 
+      dockerfile: Dockerfile
+    ports:      
+      - "3000:3000" 
+    volumes:
+      - ./my-backend-express/certs:/app/certs
+    env_file:
+      - ./my-backend-express/.env.docker  
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+  
+  frontend:
+    build:
+      context: ./my-app-frontend 
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./my-frontend-vite/certs:/app/certs
+    env_file:
+      - ./my-frontend-vite/.env   
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:17
+    env_file:
+      - ./postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -84,7 +84,14 @@ exports.getOrderById = async (id_order) => {
     ]
   });
 };
+exports.updateOrderById = async (id_order, status) => {
+  const order = await Order.findByPk(id_order); 
 
+  if (!order) throw new Error('Order not found');
+
+  await order.update({ status }); 
+  return order;
+};
 exports.getAllOrders = async () => {
   return await Order.findAll({
     include: [

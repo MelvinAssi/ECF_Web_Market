@@ -44,10 +44,10 @@ const Logo = () =>{
     return(
         <LogoContainer onClick={()=>(navigate('/'))}>
             <LogoLeft>
-                <LogoText>TechReuse</LogoText>
+                <LogoText style={{color:"var(--color5)"}}>TechReuse</LogoText>
             </LogoLeft>
             <LogoRight>
-                <LogoText>Market</LogoText>
+                <LogoText style={{color:"var(--color3)"}}>Market</LogoText>
             </LogoRight>
         </LogoContainer>
     )

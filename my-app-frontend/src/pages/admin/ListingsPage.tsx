@@ -20,7 +20,6 @@ const ListingsPage = () => {
   const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof Listing>("status");
-  const navigate =useNavigate();
   useEffect(()=>{
       fetchListings();      
   },[])
@@ -39,6 +38,11 @@ const ListingsPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
+
+  const handleEdit = async(id:string,values) =>{
+      await axios.put(`listing/${id}`, values);
+      fetchListings();
+  }
   useEffect(() => {
     const result = listings.filter((listing) => {
       const value = listing[selectedField];
@@ -49,7 +53,12 @@ const ListingsPage = () => {
   
   const listingsFields: Field<Listing>[] = [
     { key: "id_listing", label: "ID" },
-    { key: "status", label: "Statuts" },
+    { key: "status", label: "Statuts" ,editable:true, type:"select",
+      options: [
+      { label: "PENDING", value: "PENDING" },
+      { label: "ONLINE", value: "ONLINE" },
+      { label: "DELETED", value: "DELETED" }
+    ]},
     { key: "product_id", label: "Produits" },
     { key: "publication_date", label: "Date" },
     { key: "seller_id", label: "Vendeur" },
@@ -71,7 +80,7 @@ const ListingsPage = () => {
           fields={listingsFields}
           rowIdKey="id_listing"
           onDeleteClick={(ids) => handleDelete(ids)}
-          onEditClick={(id) => navigate(`/admin/listing/${id}`)}          
+          onUpdateClick={(id, values) => handleEdit(id, values)}          
         />
     </AdminLayout>
   );

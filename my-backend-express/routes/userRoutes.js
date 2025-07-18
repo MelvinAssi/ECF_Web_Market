@@ -8,7 +8,11 @@ const hasRoles = require('../middleware/hasRoles');
 
 router.get('/admin', authMiddleware, hasRoles('ADMIN'), userControllers.getAllUsers);
 
+
 router.get('/', authMiddleware, userControllers.fetchUserData);
+
+router.get('/:id', authMiddleware,hasRoles('ADMIN'), userControllers.getUser);
+router.put('/admin/:id', authMiddleware,hasRoles('ADMIN'), userControllers.updateUser);
 
 router.put('/',authMiddleware,[
     body('password')

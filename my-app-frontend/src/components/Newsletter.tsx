@@ -1,6 +1,6 @@
 import styled from "styled-components"; 
 import * as Yup from 'yup';
-import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
+import { Formik, Form as FormikForm } from 'formik';
 import Button from "./Button";
 import CustomInput from "./CustomInput";
 
@@ -29,26 +29,6 @@ const StyledForm = styled.div`
   padding: 10px ;
 `;
 
-const Input = styled.input`
-    width:300px;
-  border-radius: 6px;
-  font-size: 16px;
-  padding: 8px;
-  background-color: var(--color5);
-  color: var(--color4);
-  border: none;
-`;
-
-const Label = styled.label`
-  color: var(--color5);
-  display: block;
-  margin-bottom: 4px;
-`;
-const StyledError = styled.div`
-  color: var(--color3);
-  font-size: 14px;
-  margin-top: 4px;
-`;
 
 const Newsletter = () => {
   const handleSubmit = async (values: FormValues) => {

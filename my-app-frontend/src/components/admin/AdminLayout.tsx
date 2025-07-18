@@ -21,7 +21,7 @@ const HeaderContainer = styled.header`
 const MainContainer = styled.main`
   grid-area: main;
   background-color: var(--color2);
-  padding: 2em;
+  padding: 1em;
   overflow-y: auto;
 `;
 

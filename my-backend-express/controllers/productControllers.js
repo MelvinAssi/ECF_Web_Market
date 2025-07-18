@@ -100,3 +100,13 @@ exports.getAllProducts = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur', error: error.message });
   }
 };
+
+exports.getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productModels.getProductById(id);
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+};

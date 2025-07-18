@@ -7,6 +7,14 @@ exports.findAllUsers = async () => {
     attributes: { exclude: ['password'] }
   });
 };
+exports.updateUserAdmin = async (id,role, is_active) => {
+    const user = await User.findOne({ where: { id_user: id } });
+
+    if (!user) throw new Error('User not found');
+
+    await user.update({role, is_active});
+    return user;
+};
 
 exports.findUserById = async (id) => {
   const user = await User.findOne({

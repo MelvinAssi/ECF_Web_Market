@@ -10,3 +10,15 @@ exports.getAllTransactionsAdmin = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch orders' });
   }
 };
+
+exports.updateTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await transactionModels.updateTransactionById(id, req.body);
+    res.json(updated);
+  } catch (err) {
+    console.error('updateProduct error:', err);
+    res.status(500).json({ error: 'Server error while updating transaction.' });
+  }
+};

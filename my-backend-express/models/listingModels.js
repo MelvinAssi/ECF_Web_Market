@@ -100,3 +100,10 @@ exports.getListingsForAdmin = async ({ status, seller_id, category_id }) => {
   });
 };
 
+exports.updateListingById = async (id, fields) => {
+  const listing = await Listing.findByPk(id);
+  if (!listing) return null;
+  await listing.update(fields);
+  return listing;
+};
+

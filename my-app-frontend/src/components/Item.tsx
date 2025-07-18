@@ -1,6 +1,7 @@
 
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import LazyImage from "./LazyImage";
 
 export type ConditionState = 'Neuf'|'Bon état'|'Passable';
 export type VerificationState = 'Reconditionné' | 'Occasion';
@@ -19,7 +20,8 @@ interface ItemProps {
 
 const Container = styled.div`
   width: 250px;
-  height: auto;
+  min-width: 250px;
+  height: 350px;
   background-color: var(--color1);
   border-radius: 6px;
   border: 1px solid var(--color4);
@@ -36,14 +38,6 @@ const Container = styled.div`
   }
 `;
 
-const ImgContainer = styled.div<{ $image: string }>`
-  background-image: url(${props => props.$image});
-  background-size:250px 200px;
-  background-position:center;
-  background-repeat: no-repeat;
-  height: 200px;
-  width: 100%;
-`;
 
 const InfoContainer = styled.div`
   padding: 15px;
@@ -116,7 +110,7 @@ const formatCondition = (value: string): ConditionState => {
 
   return (
     <Container onClick={handleClickItem}>
-      <ImgContainer $image={img} />
+      <LazyImage width={"auto"} height={"200px"} src={img} alt={name} />
       <InfoContainer>
         <Title>{name}</Title>
         {variant === 'type1'&&(<Description>{description}</Description>)}        

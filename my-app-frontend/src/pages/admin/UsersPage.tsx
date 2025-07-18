@@ -5,7 +5,6 @@ import axios from "../../services/axios";
 import SearchBar from "../../components/admin/SearchBar";
 import styled from "styled-components";
 import { type User } from "../../types/types";
-import { useNavigate } from "react-router-dom";
 
 const PageTitle = styled.h1`
   color: var(--color1);
@@ -18,7 +17,6 @@ const UsersPage = () => {
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof User>("email");
 
-  const navigate =useNavigate();
   useEffect(()=>{
     fetchUsers();
   },[])
@@ -38,16 +36,28 @@ const UsersPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
+  const handleEdit = async(id:string,values) =>{
+      await axios.put(`user/admin/${id}`, values);
+      fetchUsers();
+  }
   const userFields: Field<User>[] = [
     { key: "id_user", label: "ID" },
     { key: "email", label: "Email" },
-    { key: "role", label: "Rôle" },
+    { key: "role", label: "Rôle",editable: true, type: "select" ,   
+      options: [
+      { label: "BUYER", value: "BUYER" },
+      { label: "SELLER", value: "SELLER" },
+      { label: "ADMIN", value: "ADMIN" }
+    ]},
     { key: "name", label: "Nom" },
     { key: "firstname", label: "Prénom" },
     { key: "adress", label: "Adresse" },
     { key: "phone", label: "Téléphone" },
-  ];
+    { key: "is_active",label:"Actif",editable: true, type:"boolean"},
+    { key: "created_at", label: "Création" },
+    { key: "last_activity", label: "Connexion " },
 
+  ];
   useEffect(() => {
     const result = users.filter((user) => {
       const value = user[selectedField];
@@ -70,10 +80,10 @@ const UsersPage = () => {
         data={filteredUsers}
         fields={userFields}
         rowIdKey="id_user"
-        onDeleteClick={(ids) => handleDelete(ids)}
-        onEditClick={(id) => navigate(`/admin/review/${id}`)}        
+        onDeleteClick={(ids) => handleDelete(ids)}    
+        onUpdateClick={(id, values) => handleEdit(id, values)}  
       />
-    </AdminLayout>
+    </AdminLayout>  
   );
 };
 

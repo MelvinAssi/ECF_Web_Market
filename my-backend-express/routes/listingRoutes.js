@@ -11,5 +11,6 @@ router.get('/user', auth, hasRoles('SELLER'), listingControllers.getMyListings);
 router.get('/admin', auth, hasRoles('ADMIN'), listingControllers.getAllListingsForAdmin);
 
 router.get('/:id', listingControllers.getListingById);
+router.put('/:id',  auth,  hasRoles('ADMIN'),  listingControllers.updateListing);
 
 module.exports = router;

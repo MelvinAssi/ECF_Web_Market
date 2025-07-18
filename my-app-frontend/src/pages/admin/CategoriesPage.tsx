@@ -7,6 +7,7 @@ import AdminTable from "../../components/admin/AdminTable";
 import { type Category } from "../../types/types";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
+import AddModal from "../../components/admin/AddModal";
 
 
 const PageTitle = styled.h1`
@@ -18,7 +19,8 @@ const CategoriesPage = () => {
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof Category>("name_category");
-  const navigate =useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(()=>{
     fetchCategories();
   },[])
@@ -26,18 +28,30 @@ const CategoriesPage = () => {
     axios.get("/category").then((res)=>setCategories(res.data))
   }
   const handleDelete = async (ids: string[]) => {
+    console.log(ids)
     try {
       await Promise.all(ids.map(id =>
-        axios.delete("/category", { data: { id } })
+        axios.delete(`/category/${id}`)
       ));
       fetchCategories();
     } catch (error) {
       console.error("Erreur lors de la suppression", error);
     }
   };
+  const handleAdd = async(values:Category) =>{
+    const name_category = values.name_category;
+    await axios.post("/category",{name_category})
+    fetchCategories();
+  }
+  
+  const handleEdit = async(id:string,values)=>{
+    await axios.put(`/category/${id}`, values);
+    fetchCategories();
+  }
+
   const categoryFields: Field<Category>[] = [
-    { key: "id_category", label: "ID" },
-    { key: "name_category", label: "Nom" },
+    { key: "id_category", label: "ID", editable: false },
+    { key: "name_category", label: "Nom", editable: true, type: "text" },
   ];
   useEffect(() => {
     const result = categories.filter((category) => {
@@ -61,7 +75,18 @@ const CategoriesPage = () => {
         fields={categoryFields}
         rowIdKey="id_category"
         onDeleteClick={(ids) => handleDelete(ids)}
-        onEditClick={(id) => navigate(`/admin/review/${id}`)}
+        onUpdateClick={(id, values) => handleEdit(id, values)}
+        addButton={true}
+        onAddClick={()=>setIsModalOpen(true)}
+      />
+      <AddModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Ajouter une catégorie"
+        onSubmit={(values) => handleAdd(values)}
+        fields={[
+          { name: "name_category", label: "Nom", type: "text", required: true },
+        ]}
       />
     </AdminLayout>
   );

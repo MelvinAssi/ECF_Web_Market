@@ -33,3 +33,10 @@ exports.getAllTransactions = async () => {
     order: [['transaction_date', 'DESC']]
   });
 };
+
+exports.updateTransactionById = async (id, fields) => {
+  const transaction = await Transaction.findByPk(id);
+  if (!transaction) return null;
+  await transaction.update(fields);
+  return transaction;
+};

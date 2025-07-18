@@ -47,3 +47,15 @@ exports.getAllListingsForAdmin = async (req, res) => {
     res.status(500).json({ error: 'Error fetching admin listings' });
   }
 };
+
+exports.updateListing = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await listingModels.updateListingById(id, req.body);
+    res.json(updated);
+  } catch (err) {
+    console.error('updateProduct error:', err);
+    res.status(500).json({ error: 'Server error while updating listing.' });
+  }
+};

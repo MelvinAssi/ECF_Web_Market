@@ -57,6 +57,7 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id)
     const deleted = await categoryModels.deleteCategory(id);
     if (!deleted) return res.status(404).json({ error: 'Catégorie non trouvée' });
     res.json({ message: 'Catégorie supprimée' });

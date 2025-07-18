@@ -13,6 +13,43 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+exports.getUser = async (req, res) => {
+  try {
+    const id = req.params.id
+    if (!id || id === 'null') {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+    const user = await userModels.findUserById(id);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    const safeUser = sanitizeUser(user.dataValues);
+    res.json(safeUser);
+  } catch (error) {
+    console.error('getUser error:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+ exports.updateUser = async(req,res) => {
+    
+    try{
+        const id = req.params.id 
+        const { role,is_active } = req.body;
+        console.log(id,role,is_active)
+        const updatedUser = await userModels.updateUserAdmin(id,role, is_active);
+        const safeUser = sanitizeUser(updatedUser.dataValues);
+
+        res.json({
+            message: 'User updated successfully',
+            user: safeUser,
+          });
+
+    }catch (error){
+        res.status(500).json({ message: 'Erreur serveur ='+error });
+    }
+    
+
+ }
 
 exports.fetchUserData = async (req, res) => {
     try{

@@ -8,9 +8,7 @@ interface CategoryProps {
 }
 
 
-type CategoryImgProps = {
-  image: string;
-};
+
 const CategoryContainer = styled.div`
   width: 300px;
   height: 345px;
@@ -21,12 +19,10 @@ const CategoryContainer = styled.div`
   flex-direction: column;
 `;
 
-const CategoryImg = styled.div<CategoryImgProps>`
-  background-image: url(${props => props.image});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+const CategoryImg = styled.img`
   height: 300px;
+  width: 100%;
+  object-fit: cover;
   border-radius: 6px 6px 0 0;
   cursor: pointer;
 `;
@@ -47,8 +43,17 @@ const CategoryText = styled.p`
 const CategoryItem : React.FC<CategoryProps> = ({ id_category,text, img}) =>{
     const navigate = useNavigate();
     return(
-        <CategoryContainer onClick={() => navigate(`/catalog?category=${id_category}`||`/catalog}`)}>
-            <CategoryImg image={img} />
+        <CategoryContainer
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate(`/catalog?category=${id_category}`)}
+            onKeyDown={(e) => e.key === 'Enter' && navigate(`/catalog?category=${id_category}`)}
+          >
+            <CategoryImg   
+              src={img}
+              alt={text}
+              loading="eager"
+              fetchPriority="high" />
             <CategoryTextContainer>
                 <CategoryText>{text}</CategoryText>
             </CategoryTextContainer>

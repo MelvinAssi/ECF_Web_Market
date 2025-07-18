@@ -18,6 +18,7 @@ const PageContainer = styled.main`
 const CatalogContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-start;
   width: 100%;
   gap:20px;
@@ -35,6 +36,7 @@ const FilterContainer = styled.div`
 `;
 const GridContainer = styled.div`
   display: flex;
+  min-width: 300px;
   flex:1;
   background-color: var(--color5);
   border-radius: 6px;

@@ -4,7 +4,6 @@ import AdminTable, { type Field } from "../../components/admin/AdminTable";
 import axios from "../../services/axios";
 import styled from "styled-components";
 import { type Order } from "../../types/types";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 
 const PageTitle = styled.h1`
@@ -19,7 +18,7 @@ const OrdersPage = () => {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof Order>("total_amount");
-  const navigate =useNavigate();
+
   useEffect(()=>{
       fetchOrders();
   },[])
@@ -38,12 +37,21 @@ const OrdersPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
+  const handleEdit = async(id:string,values) =>{
+      await axios.put(`orders/admin/${id}`, values);
+      fetchOrders();
+  }
 
   const orderFields: Field<Order>[] = [
     { key: "id_order", label: "ID" },
     { key: "order_date", label: "Date" },
     { key: "total_amount", label: "Total" },
-    { key: "status", label: "Statut" },
+    { key: "status", label: "Statut",editable:true, type:"select",
+      options: [
+      { label: "PENDING", value: "PENDING" },
+      { label: "VALIDATED", value: "VALIDATED" },
+      { label: "DELIVERED", value: "DELIVERED" }
+    ]},
     { key: "listings.0.id_listing", label: "Annonce ID" },
     { key: "buyer_id", label: "Acheteur" },
   ];
@@ -69,7 +77,7 @@ const OrdersPage = () => {
         fields={orderFields}
         rowIdKey="id_order"
         onDeleteClick={(ids) => handleDelete(ids)}
-        onEditClick={(id) => navigate(`/admin/orders/${id}`)}  
+        onUpdateClick={(id, values) => handleEdit(id, values)} 
       />
     </AdminLayout>
   );

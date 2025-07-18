@@ -19,7 +19,7 @@ const Transaction = sequelize.define('Transaction', {
     defaultValue: DataTypes.NOW,
   },
   status: {
-    type: DataTypes.ENUM('PENDING', 'COMPLETED', 'FAILED'),
+    type: DataTypes.ENUM('PENDING', 'VALIDATED', 'CANCELLED'),
     allowNull: false,
   },
   order_id: {

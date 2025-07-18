@@ -1,7 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -14,6 +15,34 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
+
+app.use(helmet());
+app.use(helmet.hsts({
+  maxAge: 63072000,
+  includeSubDomains: true,
+  preload: true
+}));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 100,
+});
+
+app.use(limiter)
+
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", 
+    "default-src 'self';" + 
+    "script-src 'self' https://www.google.com;" +
+    "style-src 'self';" +
+    "img-src 'self' data:;" +
+    "font-src 'self';" +
+    "connect-src 'self' https://www.google.com http://localhost:5173;" +
+    "form-action 'self';" +
+    "frame-ancestors 'none';" +
+    "upgrade-insecure-requests;");
+  next();
+});
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -40,5 +69,8 @@ app.use('/orders',orderRoutes);
 app.use('/transaction',transactionRoutes);
 app.use('/review',reviewRoutes);
 app.use('/contact',contactRoutes);
+
+
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
