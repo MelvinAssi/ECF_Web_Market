@@ -46,7 +46,10 @@ const ProductsPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
-x
+  const handleEdit = async(id:string,values) =>{
+      await axios.put(`product/${id}`, values);
+      fetchProducts();
+  }
   const productFields: Field<Product>[] = [
     { key: "id_product", label: "ID" },
     { key: "verification_status", label: "Status" ,editable:true, type:"select",

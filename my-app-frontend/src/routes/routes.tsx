@@ -54,11 +54,12 @@ const AppRoutes = () => {
             <Route path="/user/transactions" element={<PrivateRoute><UserTransactionsPage /></PrivateRoute>} />
             <Route path="/user/reviews" element={<PrivateRoute><UserReviewsPage /></PrivateRoute>} />
 
+             <Route path="/user/products/:id" element={<PrivateRoute><ProductDetailsPage /></PrivateRoute>} />
             {/* Admin */}
             <Route path="/admin/users" element={<AdminRoute><UsersPage /></AdminRoute>} />
             <Route path="/admin/users/:id" element={<AdminRoute><UserDetailsPage /></AdminRoute>} />
             <Route path="/admin/products" element={<AdminRoute><ProductsPage /></AdminRoute>} />
-            <Route path="/admin/products/:id" element={<AdminRoute><ProductDetailsPage /></AdminRoute>} />
+           
             <Route path="/admin/listings" element={<AdminRoute><ListingsPage /></AdminRoute>} />
             <Route path="/admin/categories" element={<AdminRoute><CategoriesPage /></AdminRoute>} />
             <Route path="/admin/orders" element={<AdminRoute><OrdersPage /></AdminRoute>} />

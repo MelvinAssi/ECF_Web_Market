@@ -4,13 +4,13 @@ const router = express.Router();;
 const { body } = require('express-validator');
 const authControllers = require('../controllers/authControllers');
 const authMiddleware = require('../middleware/auth')
-
+const verifyRecaptcha = require('../middleware/verifyRecaptcha')
 
 router.post('/check-email-existence', [
     body('email').isEmail().withMessage('Invalid email'),
 ], authControllers.checkEmailExistence);
 
-router.post('/signin', [
+router.post('/signin',verifyRecaptcha, [
   body('email').isEmail().withMessage('Invalid email'),
   body('password')
     .isLength({ min: 12,max:64 }).withMessage('Password must be at least 12 characters')
@@ -25,7 +25,7 @@ router.post('/check-email-availability', [
   body('email').isEmail().withMessage('Invalid email'),
 ], authControllers.checkEmailAvailability);
 
-router.post('/signup', [
+router.post('/signup',verifyRecaptcha, [
   body('email').isEmail().withMessage('Invalid email'),
   body('password')
     .isLength({ min: 12, max: 64 }).withMessage('Password must be between 12 and 64 characters')

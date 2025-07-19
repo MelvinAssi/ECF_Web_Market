@@ -83,7 +83,7 @@ exports.deleteProduct = async (req, res) => {
     }
 
     await productModels.deleteProductById(id);
-    await listing.destroy(); // optionnel : ou status = 'DELETED'
+    await listing.destroy(); 
 
     res.json({ message: 'Product and listing deleted' });
   } catch (err) {
@@ -91,6 +91,7 @@ exports.deleteProduct = async (req, res) => {
     res.status(500).json({ error: 'Server error while deleting product.' });
   }
 };
+
 
 exports.getAllProducts = async (req, res) => {
   try {

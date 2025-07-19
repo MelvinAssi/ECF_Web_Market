@@ -5,11 +5,11 @@ import Button from "./Button";
 import CustomInput from "./CustomInput";
 
 interface FormValues {
-  email: string;
+  email_newletter: string;
 }
 
 const validationSchema = Yup.object({
-  email: Yup.string()
+  email_newletter: Yup.string()
     .email('Veuillez entrer un email valide')
     .required('Email requis'),
 });
@@ -32,7 +32,7 @@ const StyledForm = styled.div`
 
 const Newsletter = () => {
   const handleSubmit = async (values: FormValues) => {
-    console.log("Formulaire soumis !", values.email);
+    alert("Formulaire soumis !"+ values.email_newletter);
   };
 
   return (
@@ -40,7 +40,7 @@ const Newsletter = () => {
       <p>Promis, pas de spam. </p>
         <p>Désinscription à tout moment.</p>
       <Formik
-        initialValues={{ email: '' }}
+        initialValues={{ email_newletter: '' }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
@@ -48,8 +48,8 @@ const Newsletter = () => {
           <FormikForm>
             <StyledForm>
                 <CustomInput
-                  id="email-newletter"
-                  name="email"
+                  id="email_newletter"
+                  name="email_newletter"
                   label="Email"
                   type="email"
                   ariaLabel="Entrez votre email"
@@ -60,7 +60,6 @@ const Newsletter = () => {
                 variant="type1"
                 width="300px"
                 type="submit" 
-                onClick={() => {}}
                 />
             </StyledForm>
 

@@ -19,6 +19,7 @@ const ReviewCard = styled.div`
   justify-content: space-between;
   height: 200px;
   width: 200px;
+  min-width: 200px;
   background-color: var(--color1);
   border-radius: 6px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { type Category } from "../../types/types";
+import UserLayout from "../../components/user/UserLayout";
 
 const PageContainer = styled.main`
   display: flex;
@@ -70,9 +71,12 @@ const ProductDetailsPage = () => {
   const [categoryId, setCategoryId] = useState("");
 
   useEffect(() => {
+    console.log(id)
+    
     if (id) {
       axios.get(`/product/${id}`).then((res) => {
         const data = res.data;
+        console.log(data)
         setProduct(data);
         setName(data.name);
         setDescription(data.description);
@@ -107,14 +111,14 @@ const ProductDetailsPage = () => {
     }
   };
 
-  if (!product) return <p>Chargement...</p>;
+  //if (!product) return <p>Chargement...</p>;
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <PageContainer>
         <Form onSubmit={handleSubmit}>
           <Label>ID :</Label>
-          <p>{product.id_product}</p>
+          <p>{product?.id_product}</p>
 
           <Label>Nom :</Label>
           <Input value={name} onChange={(e) => setName(e.target.value)} type="text" />
@@ -126,8 +130,8 @@ const ProductDetailsPage = () => {
           <Input value={price} onChange={(e) => setPrice(e.target.value)} type="number" />
 
           <Label>Images :</Label>
-          {product.images?.map((image: string, idx: number) => (
-            <p key={idx}>{image}</p>
+          {product?.images?.map((image: string, idx: number) => (
+            <a style={{textDecoration:"none",color:"var(--color5)"}} key={idx} href={image} target="_blank" rel="noopener noreferrer" aria-label="image">Image {idx}</a>
           ))}
 
           <Label>Catégorie :</Label>
@@ -138,7 +142,7 @@ const ProductDetailsPage = () => {
               </option>
             ))}
           </Select>
-
+            {/* 
           <Label>Statut de vérification :</Label>
           <Select value={verificationStatus} onChange={(e) => setVerificationStatus(e.target.value)}>
             <option value="UNDER_VERIFICATION">UNDER_VERIFICATION</option>
@@ -146,7 +150,7 @@ const ProductDetailsPage = () => {
             <option value="READY_TO_SELL">READY_TO_SELL</option>
             <option value="REJECTED">REJECTED</option>
           </Select>
-
+              */}
           <Label>État :</Label>
           <Select value={condition} onChange={(e) => setCondition(e.target.value)}>
             <option value="NEW">Neuf</option>
@@ -158,7 +162,7 @@ const ProductDetailsPage = () => {
           {message && <p style={{ color: "var(--color3)" }}>{message}</p>}
         </Form>
       </PageContainer>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 

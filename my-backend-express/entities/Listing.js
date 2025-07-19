@@ -12,7 +12,7 @@ const Listing = sequelize.define('Listing', {
     defaultValue: DataTypes.NOW,
   },
   status: {
-    type: DataTypes.ENUM('PENDING', 'ONLINE', 'DELETED'),
+    type: DataTypes.ENUM('PENDING', 'ONLINE', 'DELETED', 'SOLD'),
     allowNull: false,
   },
   seller_id: {

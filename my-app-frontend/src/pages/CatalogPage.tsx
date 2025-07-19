@@ -109,7 +109,10 @@ const CatalogPage = () => {
   const fetchItems = async () => {
     try {
       const response = await axios.get("/listing");
-      setItemList(response.data);
+      const filter1 =response.data.filter((listing)=>(listing.status=='ONLINE'))
+      const filter2 = filter1.filter((listing)=>(listing.product.status =='RECONDITIONED'|| 'READY_TO_SELL'))
+      setItemList(filter2);
+      
     } catch (error: any) {
       console.error("fetchItems error:", error.response?.data?.message || error.message);
     }

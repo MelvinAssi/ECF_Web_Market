@@ -3,6 +3,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -72,5 +75,13 @@ app.use('/contact',contactRoutes);
 
 
 
+const keyPath = path.join(__dirname, 'certs', 'localhost-key.pem');
+const certPath = path.join(__dirname, 'certs', 'localhost.pem');
+const privateKey = fs.readFileSync(keyPath, 'utf8');
+const certificate = fs.readFileSync(certPath, 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+https.createServer(credentials, app).listen(PORT, () => {
+console.log(`✅ Serveur HTTPS démarré sur https://localhost:${PORT}`);
+});

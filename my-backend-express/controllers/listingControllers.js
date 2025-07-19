@@ -3,7 +3,8 @@ const { isUUID } = require('validator');
 
 exports.getPublicListings = async (req, res) => {
   try {
-    const listings = await listingModels.getListingsByStatus('ONLINE');
+    const status = ['ONLINE','SOLD']
+    const listings = await listingModels.getListingsByStatus(status);
     res.json(listings);
   } catch (err) {
     console.error('getPublicListings error:', err);
@@ -16,7 +17,7 @@ exports.getListingById = async (req, res) => {
     console.log(req.params.id)
     if (!isUUID(req.params.id)) return res.status(400).json({ error: 'Invalid ID' });
     const listing = await listingModels.getListingById(req.params.id);
-    if (!listing || listing.status !== 'ONLINE') {
+    if (!listing || listing.status == 'DELETE'|| listing.status =='PENDING') {
       return res.status(404).json({ error: 'Listing not found' });
     }
     res.json(listing);

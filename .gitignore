@@ -20,7 +20,8 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
-
+.postgres.env
+.env.docker
 # IDEs / editors
 .vscode/
 .idea/
@@ -48,3 +49,10 @@ coverage/
 # Docker (if used)
 *.pid
 docker-compose.override.yml
+
+
+
+node_modules
+npm-debug.log
+.env
+certs

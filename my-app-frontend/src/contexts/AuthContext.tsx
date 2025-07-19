@@ -29,8 +29,8 @@ type CheckEmailAvailabilityResponse = {
 type AuthContextType = {
   user: User;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string, firstname: string, adress: string, phone: string) => Promise<void>;
+  signIn: (email: string, password: string, recaptchaToken: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string, firstname: string, adress: string, phone: string, recaptchaToken: string) => Promise<void>;
   signOut: () => Promise<void>;
   checkEmailExistence: (email: string) => Promise<boolean>;
   checkEmailAvailability: (email: string) => Promise<boolean>;
@@ -59,16 +59,17 @@ const AuthProvider = (props: { children: ReactNode }): ReactElement => {
     fetchUser();
   }, []);
 
-  const signIn = async (email: string, password: string): Promise<void> => {
+const signIn = async (email: string, password: string, recaptchaToken: string): Promise<void> => {
     try {
-      const response = await axios.post<SignInResponse>('/auth/signin', {
+      const response = await axios.post<SignInResponse>("/auth/signin", {
         email,
         password,
+        recaptchaToken, 
       });
       setUser(response.data.user);
     } catch (error: any) {
-      console.error('signIn error:', error.response?.data?.message || error.message);
-      throw error;
+      console.error("signIn error:", error.response?.data?.message || error.message);
+      throw error; 
     }
   };
 
@@ -78,7 +79,8 @@ const AuthProvider = (props: { children: ReactNode }): ReactElement => {
     name: string,
     firstname: string,
     adress: string,
-    phone: string
+    phone: string,
+    recaptchaToken: string
   ): Promise<void> => {
     try {
       const response = await axios.post<SignUpResponse>('/auth/signup', {
@@ -88,6 +90,7 @@ const AuthProvider = (props: { children: ReactNode }): ReactElement => {
         firstname,
         adress,
         phone,
+        recaptchaToken,
       });
       setUser(response.data.user);
     } catch (error: any) {

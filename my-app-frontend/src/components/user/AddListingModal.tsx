@@ -5,7 +5,7 @@ import Button from "../Button";
 import CustomInput from "../CustomInput";
 import { useEffect, useState } from "react";
 import axios from "../../services/axios";
-import { uploadToFirebase } from "../../services/firebaseFunctions"; // à créer
+import { convertAndUploadToFirebase } from "../../services/firebaseFunctions"; 
 
 // ---- STYLED ----
 const ModalOverlay = styled.div`
@@ -143,7 +143,7 @@ const AddListingModal = ({ isOpen, onClose, onSuccess }: Props) => {
           onSubmit={async (values, { setSubmitting }) => {
             try {
               const urls = await Promise.all(
-                Array.from(values.images).map((file: File) => uploadToFirebase(file))
+                Array.from(values.images).map((file: File) => convertAndUploadToFirebase(file))
               );
               await axios.post("/product", {
                 name: values.name,
@@ -151,7 +151,7 @@ const AddListingModal = ({ isOpen, onClose, onSuccess }: Props) => {
                 price: values.price,
                 condition: values.condition,
                 images: urls,
-                category_id: values.category_id,
+                category_id: values.category_id,  
               });
 
               onSuccess();
@@ -206,9 +206,11 @@ const AddListingModal = ({ isOpen, onClose, onSuccess }: Props) => {
                       />
                       <FileLabel htmlFor="images">Ajouter des images</FileLabel>
                       {values.images?.length > 0 && (
-                        <div style={{ fontSize: "13px" }}>
-                          {Array.from(values.images).map((file: File) => file.name).join(", ")}
-                        </div>
+                        <ul style={{ fontSize: "13px" }}>
+                            {Array.from(values.images).map((file: File, index: number) => (
+                              <li key={index}>{file.name}</li>
+                            ))}
+                        </ul>
                       )}
                     </>
                   )}

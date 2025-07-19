@@ -1,24 +1,22 @@
-
-
 import styled from "styled-components";
 import UserLayout from "../../components/user/UserLayout";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "../../services/axios";
-import Button from "../../components/Button";
 
 interface Sale {
-  id: string;
-  date: string;
-  total: string;
+  id_listing: string;
+  publication_date: string;
   status: string;
-  buyerId: string;
+  product: {
+    name: string;
+    price: string;
+  };
 }
 
 const PageWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
   padding: 40px 20px;
   min-height: 100vh;
   background-color: var(--color2);
@@ -26,32 +24,64 @@ const PageWrapper = styled.div`
 
 const PageTitle = styled.h1`
   color: var(--color1);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  text-align: center;
 `;
 
 const SalesSection = styled.section`
   width: 100%;
-  max-width: 1200px;
-  padding: 20px;
+  max-width: 1000px;
+  padding: 30px;
   background-color: var(--color5);
-  border-radius: 6px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 `;
 
 const SaleItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
   border-bottom: 1px solid var(--color4);
+  padding: 16px 0;
 
   &:last-child {
     border-bottom: none;
   }
 
-  p {
-    color: var(--color1);
-    margin: 0;
+  @media (max-width: 600px) {
+    padding: 12px 0;
   }
+`;
+
+const SaleDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  p {
+    margin: 0;
+    color: var(--color1);
+    font-size: 1rem;
+
+    @media (max-width: 600px) {
+      flex: 1 1 100%;
+    }
+  }
+`;
+
+const SaleTitle = styled.p`
+  font-weight: bold;
+  color: var(--color3);
+`;
+
+const ErrorMessage = styled.p`
+  color: var(--color3);
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const EmptyMessage = styled.p`
+  color: var(--color1);
+  text-align: center;
 `;
 
 const UserTransactionsPage = () => {
@@ -62,12 +92,14 @@ const UserTransactionsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const salesResponse = await axios.get("/listing/user");
-        setSales(salesResponse.data.sales || []);
+        const response = await axios.get("/listing/user");
+        const sold = response.data.filter((sale) => sale.status === "SOLD");
+        setSales(sold || []);
       } catch (err) {
-        setError("Erreur lors du chargement des données");
+        setError("Erreur lors du chargement des ventes.");
       }
     };
+
     fetchData();
   }, [user]);
 
@@ -75,33 +107,27 @@ const UserTransactionsPage = () => {
     <UserLayout>
       <PageWrapper>
         <SalesSection>
-          <PageTitle>Mes Transactions</PageTitle>
+          <PageTitle>Mes Ventes</PageTitle>
 
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
 
           {sales.length > 0 ? (
             sales.map((sale) => (
-              <SaleItem key={sale.id}>
-                <p>
-                  Vente #{sale.id} –{" "}
-                  {new Date(sale.date).toLocaleDateString("fr-FR", {
+              <SaleItem key={sale.id_listing}>
+                <SaleDetails>
+                  <SaleTitle>{sale.product.name}</SaleTitle>
+                  <p>Prix : {parseFloat(sale.product.price).toFixed(2)} €</p>
+                  <p>Date : {new Date(sale.publication_date).toLocaleDateString("fr-FR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                  })}{" "}
-                  – {parseFloat(sale.total).toFixed(2)} € – {sale.status}
-                </p>
-                <Button
-                  text="Détails"
-                  variant="type3"
-                  width="100px"
-                  type="button"
-                  onClick={() => {}}
-                />
+                  })}</p>
+                  <p>Statut : {sale.status}</p>
+                </SaleDetails>
               </SaleItem>
             ))
           ) : (
-            <p style={{ color: "var(--color1)" }}>Aucune vente disponible.</p>
+            <EmptyMessage>Aucune vente pour le moment.</EmptyMessage>
           )}
         </SalesSection>
       </PageWrapper>

@@ -4,10 +4,10 @@ const contactControllers = require('../controllers/contactControllers');
 const auth = require('../middleware/auth');
 const hasRoles = require('../middleware/hasRoles');
 const { body } = require('express-validator');
-
+const verifyRecaptcha = require('../middleware/verifyRecaptcha')
 
 router.post(
-  '/',
+  '/',verifyRecaptcha,
   [
     body('email').isEmail().withMessage('Email invalide'),
     body('subject').isLength({ min: 2, max: 64 }).withMessage('Sujet invalide'),

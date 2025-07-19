@@ -21,6 +21,7 @@ exports.deleteProductById = async (id) => {
   return true;
 };
 
+
 exports.getListingByProductId = async (productId) => {
   return await Listing.findOne({ where: { product_id: productId } });
 };

@@ -27,6 +27,15 @@ const Spacer = styled.div`
     height: 96px;
   }
 `;
+const Spacer2 = styled.div`
+    display:none;
+    background-color: var(--color1); 
+    width:100%;
+  @media (max-width: 1023px) {
+    display:flex;
+    height: 48px;
+  }
+`;
 const HeaderContainer = styled.div`
     width:100%;
     display:flex;
@@ -35,7 +44,7 @@ const HeaderContainer = styled.div`
 `;
 const Header1 = styled.div`
     height:60px;
-    width:100%;
+    width:100vw;
     padding:0 20px;
     gap:20px;
     display:flex;
@@ -45,6 +54,7 @@ const Header1 = styled.div`
     background-color: var(--color1);  
     @media (max-width: 1023px) {
         position: fixed;
+        top:0;
         height:48px;
         z-index: 1000;
     }
@@ -224,9 +234,13 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
     return (    
       <HeaderContainer> 
         {reduce?(
-            <Header1 style={{justifyContent:'center'}}>
-                <Logo/>       
-            </Header1>      
+            <div style={{width:"100%"}}>
+                <Spacer2 />
+                <Header1 style={{justifyContent:'center'}}>
+                    <Logo/>       
+                </Header1>     
+            </div>           
+ 
         ):(
             <>
                 <Spacer />

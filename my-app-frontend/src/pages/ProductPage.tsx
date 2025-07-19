@@ -149,6 +149,7 @@ const ProductPage = () => {
         try {
             const response = await axios.get(`/listing/${id}`);
             setItem(response.data);
+            console.log(response.data)
             setSelectedImage(response.data.product.images?.[0] || "");
         } catch (error: any) {
             console.error('fetchItem error:', error.response?.data?.message || error.message);
@@ -236,16 +237,18 @@ const ProductPage = () => {
             <BuyContainer>
               <h2>{item.product.price} €</h2>
               <p>Vendu par {item.seller.name} {item.seller.firstname}</p>
-              {user  ?(
+              {item.status=="ONLINE"&&(
                 <>
-                  <Button text="Ajouter au panier" variant="type1" onClick={addToCart} />
-                  <Button text="Acheter cet article" variant="type2" onClick={buyItem} />
-                </>                
-                ):(
-                  <Button text="Se Connecter" variant="type1" onClick={()=>navigate('/cart')} />
-                )}
-              
-              
+                  {user  ?(
+                  <>
+                    <Button text="Ajouter au panier" variant="type1" onClick={addToCart} />
+                    <Button text="Acheter cet article" variant="type2" onClick={buyItem} />
+                  </>                
+                  ):(
+                    <Button text="Se Connecter" variant="type1" onClick={()=>navigate('/cart')} />
+                  )}       
+                </>
+              )}
             </BuyContainer>
           </ProductWrapper>
         )}

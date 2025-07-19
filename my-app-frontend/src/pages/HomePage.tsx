@@ -41,12 +41,12 @@ const SlideWrapper = styled.div`
   }
 `;
 
-const Slide = styled.img<{ active: boolean }>`
+const Slide = styled.img<{ $active: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: opacity 0.5s ease-in-out;
-  opacity: ${(props) => (props.active ? 1 : 0)};
+  opacity: ${(props) => (props.$active ? 1 : 0)};
   position: absolute;
   top: 0;
   left: 0;
@@ -225,7 +225,7 @@ const HomePage = () => {
                 key={index}
                 src={img}
                 alt={`Offre ${index + 1}`}
-                active={index === currentSlide}
+                $active={index === currentSlide}
                 loading={index === 0 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : "auto"}
               />
