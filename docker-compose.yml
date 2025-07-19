@@ -20,10 +20,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
-    volumes:
-      - ./my-frontend-vite/certs:/app/certs
+
     env_file:
-      - ./my-frontend-vite/.env   
+      - ./my-app-frontend/.env   
     networks:
       - app-network
 

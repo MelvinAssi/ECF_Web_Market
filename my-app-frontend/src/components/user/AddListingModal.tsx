@@ -95,9 +95,13 @@ const validationSchema = Yup.object({
   price: Yup.number().required("Prix requis").min(0),
   condition: Yup.string().oneOf(["NEW", "GOOD", "USED"]).required("État requis"),
   category_id: Yup.string().uuid().required("Catégorie requise"),
-  images: Yup.mixed().test("file-required", "Une image est requise", (value) => {
-    return value && value.length > 0;
-  }),
+  images: Yup.mixed().test("file-required", "Une image est requise", (value: unknown) => {
+      if (!value || typeof value !== "object") return false;
+      if (Array.isArray(value)) return value.length > 0;
+      if (value instanceof FileList) return value.length > 0;
+      if (value instanceof File) return true;
+      return false;
+    }),
 });
 
 // ---- PROPS ----

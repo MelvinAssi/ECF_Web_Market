@@ -4,14 +4,13 @@ import AdminTable, { type Field } from "../../components/admin/AdminTable";
 import axios from "../../services/axios";
 import styled from "styled-components";
 import { type Transaction } from "../../types/types";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 
 const PageTitle = styled.h1`
   color: var(--color1);
   margin-bottom: 20px;
 `;
-  const transactionsFields: Field<Transaction>[] = [
+  const transactionsFields: Field[] = [
     { key: "id_transaction", label: "ID" },
     { key: "status", label: "Status" ,editable:true, type:"select",
       options: [
@@ -47,7 +46,7 @@ const TransactionsPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
-  const handleEdit = async(id:string,values) =>{
+  const handleEdit = async(id:string,values:any) =>{
       await axios.put(`transaction/${id}`, values);
       fetchTransaction();
   }

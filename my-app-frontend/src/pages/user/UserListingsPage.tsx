@@ -11,6 +11,7 @@ interface Listing {
   id_listing: string;
   status: string;
   publication_date: string;
+  product_id:string;
   product: {
     id: string;
     name: string;

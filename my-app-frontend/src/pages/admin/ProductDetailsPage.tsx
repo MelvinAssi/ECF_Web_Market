@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "../../services/axios";
 import { useParams } from "react-router-dom";
 import Button from "../../components/Button";
-import AdminLayout from "../../components/admin/AdminLayout";
 import { type Category } from "../../types/types";
 import UserLayout from "../../components/user/UserLayout";
 

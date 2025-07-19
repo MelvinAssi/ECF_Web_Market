@@ -31,6 +31,7 @@ exports.getAllContacts = async (req, res) => {
 };
 
 exports.markAsResolved = async (req, res) => {
+  console.log("test")
   try {
     await contactModels.markAsResolved(req.params.id);
     res.json({ message: 'Demande marquée comme traitée.' });

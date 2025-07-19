@@ -4,7 +4,7 @@
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faAdd, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
 
-  export interface Field<T> {
+  export interface Field {
     key: string;
     label: string;
     editable?: boolean;
@@ -14,7 +14,7 @@
 
   interface AdminTableProps<T> {
     data: T[];
-    fields: Field<T>[];
+    fields: Field[];
     rowIdKey: keyof T;
     onDeleteClick: (ids: string[]) => void;
     onUpdateClick?: (id: string, updatedValues: Partial<T>) => void;

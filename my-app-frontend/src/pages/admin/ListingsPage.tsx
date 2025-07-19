@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import type { Field } from "../../components/admin/AdminTable";
 import AdminTable from "../../components/admin/AdminTable";
 import axios from "../../services/axios";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 
 const PageTitle = styled.h1`
@@ -39,7 +38,7 @@ const ListingsPage = () => {
     }
   };
 
-  const handleEdit = async(id:string,values) =>{
+  const handleEdit = async(id:string,values:any) =>{
       await axios.put(`listing/${id}`, values);
       fetchListings();
   }
@@ -51,7 +50,7 @@ const ListingsPage = () => {
     setFilteredListings(result);
   }, [search, selectedField, listings]);
   
-  const listingsFields: Field<Listing>[] = [
+  const listingsFields: Field[] = [
     { key: "id_listing", label: "ID" },
     { key: "status", label: "Statuts" ,editable:true, type:"select",
       options: [

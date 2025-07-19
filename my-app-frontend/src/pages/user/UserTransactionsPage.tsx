@@ -93,7 +93,7 @@ const UserTransactionsPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/listing/user");
-        const sold = response.data.filter((sale) => sale.status === "SOLD");
+        const sold = response.data.filter((sale:Sale) => sale.status === "SOLD");
         setSales(sold || []);
       } catch (err) {
         setError("Erreur lors du chargement des ventes.");

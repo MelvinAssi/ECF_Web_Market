@@ -4,7 +4,6 @@ import type { Field } from "../../components/admin/AdminTable";
 import AdminTable from "../../components/admin/AdminTable";
 import { useEffect, useState } from "react";
 import axios from "../../services/axios";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 
 interface Review {
@@ -27,14 +26,13 @@ const ReviewsPage = () => {
   const [filteredReviews, setFilteredReviews] = useState<Review[]>([]);
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof Review>("text");
-  const navigate =useNavigate();
   useEffect(()=>{
       fetchReviews();
   },[])
   const fetchReviews = () =>{
       axios.get("/review/").then((res)=>setReviews(res.data))
   }
-  const reviewsFields: Field<Review>[] = [
+  const reviewsFields: Field[] = [
       { key: "id", label: "ID" },
       { key: "text", label: "Text" },
       { key: "star", label: "Note" },
@@ -77,7 +75,6 @@ const ReviewsPage = () => {
         fields={reviewsFields}
         rowIdKey="id"
         onDeleteClick={(ids) => handleDelete(ids)}
-        onEditClick={(id) => navigate(`/admin/review/${id}`)}
       />
     </AdminLayout>
   );

@@ -14,8 +14,8 @@ interface ItemProps {
   description: string;
   img: string;
   price: string;
-  condition: ConditionState;
-  verification : VerificationState;
+  condition: string;
+  verification : string;
 }
 
 const Container = styled.div`

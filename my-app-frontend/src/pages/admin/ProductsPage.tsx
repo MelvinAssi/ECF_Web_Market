@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import AdminLayout from "../../components/admin/AdminLayout";
-import { type Category, type Product, type ProductWithCategory} from "../../types/types";
+import { type Category, type Product} from "../../types/types";
 import type { Field } from "../../components/admin/AdminTable";
 import { useEffect, useState } from "react";
 import axios from "../../services/axios";
 import AdminTable from "../../components/admin/AdminTable";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 
 const PageTitle = styled.h1`
@@ -46,11 +45,11 @@ const ProductsPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
-  const handleEdit = async(id:string,values) =>{
+  const handleEdit = async(id:string,values:any) =>{
       await axios.put(`product/${id}`, values);
       fetchProducts();
   }
-  const productFields: Field<Product>[] = [
+  const productFields: Field[] = [
     { key: "id_product", label: "ID" },
     { key: "verification_status", label: "Status" ,editable:true, type:"select",
       options: [
@@ -84,14 +83,14 @@ const ProductsPage = () => {
   return (
     <AdminLayout>
       <PageTitle>Produit</PageTitle>
-      <SearchBar<ProductWithCategory>
+      <SearchBar<Product>
         search={search}
         onSearchChange={setSearch}
         fields={productFields}
         selectedField={selectedField}
         onFieldChange={setSelectedField}
       />
-      <AdminTable<ProductWithCategory>
+      <AdminTable<Product>
         data={filteredProducts}
         fields={productFields}
         rowIdKey="id_product"

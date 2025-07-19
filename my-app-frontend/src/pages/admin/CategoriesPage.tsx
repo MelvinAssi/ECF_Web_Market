@@ -5,7 +5,6 @@ import axios from "../../services/axios";
 import type { Field } from "../../components/admin/AdminTable";
 import AdminTable from "../../components/admin/AdminTable";
 import { type Category } from "../../types/types";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 import AddModal from "../../components/admin/AddModal";
 
@@ -44,12 +43,12 @@ const CategoriesPage = () => {
     fetchCategories();
   }
   
-  const handleEdit = async(id:string,values)=>{
+  const handleEdit = async(id:string,values:any)=>{
     await axios.put(`/category/${id}`, values);
     fetchCategories();
   }
 
-  const categoryFields: Field<Category>[] = [
+  const categoryFields: Field[] = [
     { key: "id_category", label: "ID", editable: false },
     { key: "name_category", label: "Nom", editable: true, type: "text" },
   ];

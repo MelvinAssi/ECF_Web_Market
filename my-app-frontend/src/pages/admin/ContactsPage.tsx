@@ -4,7 +4,6 @@ import type { Field } from "../../components/admin/AdminTable";
 import AdminTable from "../../components/admin/AdminTable";
 import { useEffect, useState } from "react";
 import axios from "../../services/axios";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/admin/SearchBar";
 
 interface Contact {
@@ -29,27 +28,36 @@ const ContactsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedField, setSelectedField] = useState<keyof Contact>("email");
  
-  const navigate =useNavigate();
+
   useEffect(()=>{
-      axios.get("/contact").then((res)=>setContacts(res.data))
+      fetchContacts()
   },[])
+
+  const fetchContacts = () =>{
+    axios.get("/contact").then((res)=>setContacts(res.data))
+  }
   const handleDelete = async (ids: string[]) => {
     try {
       await Promise.all(ids.map(id => 
         axios.delete( `/contact/${id}`)
       ));
+      fetchContacts()
     } catch (error) {
       console.error("Erreur lors de la suppression", error);
     }
   };
-  const contactsFields: Field<Contact>[] = [
+  const handleEdit = async(id:string,values:any)=>{
+    await axios.patch(`/contact/${id}`, values);
+    fetchContacts()
+  }
+  const contactsFields: Field[] = [
       { key: "id", label: "ID" },
       { key: "email", label: "Email" },
       { key: "category", label: "Categorie" },
       { key: "subject", label: "Sujet" },
       { key: "createdAt", label: "Date" },
       { key: "description", label: "Description" },
-      { key: "isResolved", label: "Traité" },
+      { key: "isResolved", label: "Traité" , editable: true, type: "boolean" },
       { key: "phone", label: "Téléphone" },
       
   ];
@@ -77,7 +85,7 @@ const ContactsPage = () => {
               fields={contactsFields}
               rowIdKey="id"
               onDeleteClick={(ids) => handleDelete(ids)}
-              onEditClick={(id) => navigate(`/admin/review/${id}`)}
+              onUpdateClick={(id, values) => handleEdit(id, values)}
             />
         </>
     </AdminLayout>

@@ -10,6 +10,19 @@ import { useEffect, useState } from "react";
 import axios from "../services/axios";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
+
+
+interface Listing {
+  id_listing: string;
+  product: {
+    name: string;
+    description: string;
+    images: string[];
+    price: number;
+    condition: string;
+    verification_status: string;
+  };
+}
 const PageContainer = styled.main`
     min-height:100vh;
     display:flex;
@@ -169,7 +182,7 @@ const StyledImage = styled.img`
 const HomePage = () => {
 
   const [categoryIds, setCategoryIds] = useState<Record<string, string>>({});
-  const [itemList, setItemList] = useState([]);
+  const [itemList, setItemList] = useState<Listing[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const carouselImages = [offer1, offer2, offer3];
@@ -286,7 +299,7 @@ const HomePage = () => {
                     name={item.product.name}
                     description={item.product.description}
                     img={item.product.images?.[0]}
-                    price={item.product.price}
+                    price={item.product.price.toString()}
                     condition={item.product.condition}
                     verification={item.product.verification_status}
                   />

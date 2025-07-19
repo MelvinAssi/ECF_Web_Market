@@ -10,6 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: ButtonType;
   variant?: ButtonVariant;
+  disabled?:boolean;
 }
 
 interface StyledButtonProps {

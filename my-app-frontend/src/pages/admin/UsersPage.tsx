@@ -36,11 +36,11 @@ const UsersPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
-  const handleEdit = async(id:string,values) =>{
+  const handleEdit = async(id:string,values:any) =>{
       await axios.put(`user/admin/${id}`, values);
       fetchUsers();
   }
-  const userFields: Field<User>[] = [
+  const userFields: Field[] = [
     { key: "id_user", label: "ID" },
     { key: "email", label: "Email" },
     { key: "role", label: "Rôle",editable: true, type: "select" ,   

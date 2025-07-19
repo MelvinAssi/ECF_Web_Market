@@ -37,12 +37,12 @@ const OrdersPage = () => {
       console.error("Erreur lors de la suppression", error);
     }
   };
-  const handleEdit = async(id:string,values) =>{
+  const handleEdit = async(id:string,values:any) =>{
       await axios.put(`orders/admin/${id}`, values);
       fetchOrders();
   }
 
-  const orderFields: Field<Order>[] = [
+  const orderFields: Field[] = [
     { key: "id_order", label: "ID" },
     { key: "order_date", label: "Date" },
     { key: "total_amount", label: "Total" },

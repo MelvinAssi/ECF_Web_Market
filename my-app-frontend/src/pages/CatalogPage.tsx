@@ -6,6 +6,30 @@ import axios from "../services/axios";
 import Item from "../components/Item";
 import DualRangeSlider from "../components/DualRangeSlider";
 
+
+
+interface Product {
+  name: string;
+  description: string;
+  price: number;
+  condition: string;
+  verification_status: string;
+  status: string;
+  images: string[];
+  category_id: string;
+}
+
+interface Listing {
+  id_listing: string;
+  product: Product;
+  status: string;
+}
+
+interface Category {
+  id_category: string;
+  name_category: string;
+}
+
 const PageContainer = styled.main`
   min-height: 100vh;
   display: flex;
@@ -78,9 +102,9 @@ const CatalogPage = () => {
   const categoryParam = searchParams.get("category") || "";
   const searchParam = searchParams.get("search")?.toLowerCase() || "";
 
-  const [itemList, setItemList] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [categoryList, setCategoryList] = useState([]);
+  const [itemList, setItemList] = useState<Listing[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Listing[]>([]);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   const [filters, setFilters] = useState({
     category: categoryParam,
@@ -108,7 +132,7 @@ const CatalogPage = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("/listing");
+      const response = await axios.get<Listing[]>("/listing");
       const filter1 =response.data.filter((listing)=>(listing.status=='ONLINE'))
       const filter2 = filter1.filter((listing)=>(listing.product.status =='RECONDITIONED'|| 'READY_TO_SELL'))
       setItemList(filter2);
@@ -120,7 +144,7 @@ const CatalogPage = () => {
 
   const fetchCategory = async () => {
     try {
-      const response = await axios.get("/category");
+      const response = await axios.get<Category[]>("/category");
       setCategoryList(response.data);
     } catch (error: any) {
       console.error("fetchCategory error:", error.response?.data?.message || error.message);
@@ -128,8 +152,8 @@ const CatalogPage = () => {
   };
 
   const applyFilters = () => {
-    const result = itemList.filter(item => {
-      const price = parseFloat(item.product.price);
+    const result = itemList.filter((item:Listing )=> {
+      const price = parseFloat(item.product.price.toString());
 
       const matchCategory = !filters.category || item.product.category_id === filters.category;
       const matchPrice = price >= filters.minPrice && price <= filters.maxPrice;
@@ -235,7 +259,7 @@ const CatalogPage = () => {
           <GridContainer>
             <Grid>
               {filteredItems.length > 0 ? (
-                filteredItems.map(item => (
+                filteredItems.map((item: Listing) => (
                   <Item
                     variant="type2"
                     key={item.id_listing}
@@ -243,7 +267,7 @@ const CatalogPage = () => {
                     name={item.product.name}
                     description={item.product.description}
                     img={item.product.images[0]}
-                    price={item.product.price}
+                    price={item.product.price.toString()}
                     condition={item.product.condition}
                     verification={item.product.verification_status}
                   />
