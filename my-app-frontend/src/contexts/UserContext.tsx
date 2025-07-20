@@ -23,7 +23,8 @@ type UserContextType = {
     newName?: string,
     newFirstname?: string,
     newAdress?: string,
-    newPhone?: string
+    newPhone?: string,
+    newRole?:boolean,
   ) => Promise<void>;
   deleteUser: (password: string) => Promise<boolean>;
 };
@@ -73,7 +74,8 @@ const UserProvider = (props: { children: ReactNode }): ReactElement => {
     newName?: string,
     newFirstname?: string,
     newAdress?: string,
-    newPhone?: string
+    newPhone?: string,
+    newRole?:boolean,
   ) => {
     try {
       const response = await axios.put('/user', {
@@ -83,6 +85,7 @@ const UserProvider = (props: { children: ReactNode }): ReactElement => {
         newFirstname,
         newAdress,
         newPhone,
+        newRole,
       });
       setUserData(response.data.user);
     } catch (err) {

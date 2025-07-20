@@ -129,64 +129,71 @@ const UserListingsPage = () => {
       month: "long",
       day: "numeric",
     });
+  
+
 
   return (
     <UserLayout>
       <PageWrapper>
         <ListingsSection>
           <PageTitle>Mes Annonces</PageTitle>
+          {user?.role == "BUYER" ? (<p> Devenir vendeur : allez dans vos informations</p>):
+          (<>
+            <Button
+              text="Ajouter une annonce"
+              variant="type3"
+              width="300px"
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+            />
 
-          <Button
-            text="Ajouter une annonce"
-            variant="type3"
-            width="300px"
-            type="button"
-            onClick={() => setIsModalOpen(true)}
-          />
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
-          {error && <ErrorMessage>{error}</ErrorMessage>}
+            {listings.length > 0 ? (
+              listings.map((listing) => (
+                <ListingItem key={listing.id_listing}>
+                  <ListingInfo>
+                    <p
+                      className="name"
+                      onClick={() => navigate(`/product/${listing.id_listing}`)}
+                    >
+                      {listing.product.name}
+                    </p>
+                    <p>Description : {listing.product.description}</p>
+                    <p>Prix : {parseFloat(listing.product.price).toFixed(2)} €</p>
+                    <p>État : {listing.product.condition}</p>
+                    <p>Vérification : {listing.product.verification_status}</p>
+                    <p>Status : {listing.status}</p>
+                    <p>Date : {formatDate(listing.publication_date)}</p>
+                  </ListingInfo>
 
-          {listings.length > 0 ? (
-            listings.map((listing) => (
-              <ListingItem key={listing.id_listing}>
-                <ListingInfo>
-                  <p
-                    className="name"
-                    onClick={() => navigate(`/product/${listing.id_listing}`)}
-                  >
-                    {listing.product.name}
-                  </p>
-                  <p>Description : {listing.product.description}</p>
-                  <p>Prix : {parseFloat(listing.product.price).toFixed(2)} €</p>
-                  <p>État : {listing.product.condition}</p>
-                  <p>Vérification : {listing.product.verification_status}</p>
-                  <p>Status : {listing.status}</p>
-                  <p>Date : {formatDate(listing.publication_date)}</p>
-                </ListingInfo>
-
-                <ListingActions>
-                  <Button
-                    text="Modifier"
-                    variant="type3"
-                    width="120px"
-                    type="button"
-                    onClick={() =>
-                      navigate(`/user/products/${listing.product_id}`)
-                    }
-                  />
-                  <Button
-                    text="Supprimer"
-                    variant="type2"
-                    width="120px"
-                    type="button"
-                    onClick={() => handleDelete(listing.product.id)}
-                  />
-                </ListingActions>
-              </ListingItem>
-            ))
-          ) : (
-            <EmptyMessage>Aucune annonce disponible.</EmptyMessage>
-          )}
+                  <ListingActions>
+                    <Button
+                      text="Modifier"
+                      variant="type3"
+                      width="120px"
+                      type="button"
+                      onClick={() =>
+                        navigate(`/user/products/${listing.product_id}`)
+                      }
+                    />
+                    <Button
+                      text="Supprimer"
+                      variant="type2"
+                      width="120px"
+                      type="button"
+                      onClick={() => handleDelete(listing.product.id)}
+                    />
+                  </ListingActions>
+                </ListingItem>
+              ))
+            ) : (
+              <EmptyMessage>Aucune annonce disponible.</EmptyMessage>
+            )}
+          
+          
+          </>)}
+          
 
           <AddListingModal
             isOpen={isModalOpen}

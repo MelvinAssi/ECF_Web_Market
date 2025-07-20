@@ -23,7 +23,7 @@ exports.createUser = async (email, password, name, firstname, adress, phone) => 
     firstname,
     adress,
     phone,
-    role: 'SELLER',
+    role: 'BUYER',
     last_activity:Date.now(),
   });
   return user;

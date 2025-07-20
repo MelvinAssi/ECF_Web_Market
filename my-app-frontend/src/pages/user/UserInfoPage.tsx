@@ -17,6 +17,7 @@ interface UserInfo {
   adress: string;
   phone: string;
   newPassword?: string;
+  role?:boolean;
 }
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -45,6 +46,7 @@ const validationSchema = Yup.object({
     .matches(/[a-z]/, "Doit contenir au moins une minuscule")
     .matches(/\d/, "Doit contenir au moins un chiffre")
     .matches(/[!@#$%^&*]/, "Doit contenir au moins un caractère spécial"),
+  role: Yup.boolean().optional(),
 });
 
 const PageWrapper = styled.div`
@@ -113,6 +115,7 @@ const UserInfoPage  = () =>{
         adress: userData?.adress || "",
         phone: userData?.phone || "",
         newPassword: "",
+        role:false,
     };
 
    
@@ -128,7 +131,7 @@ const UserInfoPage  = () =>{
         setIsModalOpen(true);
     };
 
-    const handleConfirmPassword = async (password: string) => {
+    const handleConfirmPassword = async (password: string) => {      
         if (formValues) {
         try {
             await updateUserData(
@@ -137,7 +140,8 @@ const UserInfoPage  = () =>{
             formValues.name,
             formValues.firstname,
             formValues.adress,
-            formValues.phone
+            formValues.phone,
+            formValues.role,
             );
             setIsModalOpen(false);
             alert("Profil mis à jour avec succès !");
@@ -181,6 +185,7 @@ const UserInfoPage  = () =>{
                             <CustomInput name="firstname" label="Prénom" type="text" ariaLabel="Entrez votre prénom" />
                             <CustomInput name="adress" label="Adresse" type="text" ariaLabel="Entrez votre adresse" />
                             <CustomInput name="phone" label="Téléphone" type="tel" ariaLabel="Entrez votre numéro" />
+                            {user?.role=='BUYER'&&(<CustomInput name="role"  label="Devenir vendeur"type="checkbox" ariaLabel="Cocher la case" />)}
                             <CustomInput
                                 name="newPassword"
                                 label="Nouveau mot de passe (optionnel)"

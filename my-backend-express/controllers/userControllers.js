@@ -78,7 +78,7 @@ exports.fetchUserData = async (req, res) => {
     
     try{
         const id = req.user.id; 
-        const { password, newPassword,newName,newFirstname,newAdress,newPhone } = req.body;
+        const { password, newPassword,newName,newFirstname,newAdress,newPhone,newRole } = req.body;
         
         const user = await userModels.findUserById(id);
         const isPasswordValid = await argon2.verify(user.password, password);
@@ -89,16 +89,19 @@ exports.fetchUserData = async (req, res) => {
         if(newPassword){
             hashedPassword = await argon2.hash(newPassword);
         }
+        
         const updatedFields = {
             password: hashedPassword|| user.password,
             name: newName  || user.name,
             firstname: newFirstname || user.firstname,
             adress: newAdress|| user.adress,
             phone: newPhone  || user.phone,
+            role: newRole==true?'SELLER':user.role,
         };
+        console.log(updatedFields)
         const updatedUser = await userModels.updateUserByID(id,updatedFields );
         const safeUser = sanitizeUser(updatedUser.dataValues);
-
+        console.log(safeUser)
         res.json({
             message: 'User updated successfully',
             user: safeUser,

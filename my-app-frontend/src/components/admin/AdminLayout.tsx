@@ -16,7 +16,10 @@ const Layout = styled.div`
 const HeaderContainer = styled.header`
   grid-area: header;
 `;
-
+const ScrollWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
 
 const MainContainer = styled.main`
   grid-area: main;
@@ -38,7 +41,11 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
       <SidebarContainer>
         <Sidebar />
       </SidebarContainer>
-      <MainContainer>{children}</MainContainer>
+      <MainContainer>
+          <ScrollWrapper>
+            {children}
+        </ScrollWrapper>
+      </MainContainer>
     </Layout>
   );
 };

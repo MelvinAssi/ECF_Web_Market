@@ -108,8 +108,9 @@ const UserTransactionsPage = () => {
       <PageWrapper>
         <SalesSection>
           <PageTitle>Mes Ventes</PageTitle>
-
-          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {user?.role == "BUYER" ? (<p> Devenir vendeur : allez dans vos informations</p>):
+          (<>
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
           {sales.length > 0 ? (
             sales.map((sale) => (
@@ -129,6 +130,9 @@ const UserTransactionsPage = () => {
           ) : (
             <EmptyMessage>Aucune vente pour le moment.</EmptyMessage>
           )}
+          
+          </>)}
+          
         </SalesSection>
       </PageWrapper>
     </UserLayout>

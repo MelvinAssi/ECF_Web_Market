@@ -40,6 +40,8 @@ router.put('/',authMiddleware,[
     body('newPhone')
         .optional({ checkFalsy: true })
         .matches(/^[0-9]{10}$/).withMessage('Phone must be a valid 10-digit number'),
+    body('newRole')
+        .optional({ checkFalsy: true })
     
 ],userControllers.updateUserData );
 
