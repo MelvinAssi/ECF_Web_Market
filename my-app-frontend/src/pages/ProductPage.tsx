@@ -36,7 +36,7 @@ const ProductContainer = styled.div`
   border-radius: 6px;
   gap: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
   }
 `;
@@ -53,7 +53,7 @@ const MainImageProduct = styled.div<{ image: string }>`
 
   @media (max-width: 768px) {
     width: 100%;
-    height: 300px;
+    height: 400px;
   }
 `;
 

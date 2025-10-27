@@ -2,12 +2,13 @@
 import styled from "styled-components";
 import Logo from "./Logo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import {DropdownMenu} from "./DropdownMenu";
 import axios from "../services/axios";
 import { useCartContext } from "../hooks/useCartContext";
+import gsap from "gsap";
 
 interface HeaderProps {
   reduce?: boolean;
@@ -149,26 +150,55 @@ const SearchBar = styled.input`
 
 
 const IconBackground = styled.div`
-    width:32px;
-    height:32px;
-    border-radius: 50%;
-    background-color:var(--color5);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor: pointer;
-        
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow:visible;
 `;
+
+
+
+const IndicatorWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+  overflow: visible;
+`;
+
 const CartIndicatorStyle = styled.div`
-    position: absolute;   
-    top: 5px;
-    right: 5px;
-    background-color: var(--color3);
-    color: var(--color2);
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
+  position: absolute;
+  top: 5%;
+  right : 5%;
+  transform: translate(50%, -50%);
+  background-color: var(--color3);
+  color: var(--color2);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
 `;
+
+const Pulse = styled.div`
+  position: absolute;
+  top: 5%;
+  right : 5%;
+  transform: translate(50%, -50%); 
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--color3);
+  border: 2px solid var(--color3);
+`;
+
+
 
 const BurgerIcon = styled(FontAwesomeIcon)`
   color: var(--color5);
@@ -207,10 +237,11 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
     const [categoryList, setCategoryList] = useState<CategoryProps[]>([]);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const cartIndicatorRef = useRef<HTMLDivElement>(null);
+    const pulseRef = useRef<HTMLDivElement>(null);
     useEffect(()=>{
         fetchCategory();
     },[])
-
     const fetchCategory = async () => {
         try {
             const response = await axios.get("/category");
@@ -243,6 +274,23 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
 
 
 
+useEffect(() => {
+  if (pulseRef.current) {
+    const pulses = pulseRef.current.querySelectorAll(".pulse");
+    gsap.to(pulses, {
+        scale: 1.6,
+        opacity: 0,
+        duration: 2,
+        repeat: -1,
+        stagger: 0.5,
+        ease: "power1.out",
+        transformOrigin: "50% 50%"
+    });
+  }
+}, [totalQuantity]);
+
+
+
     return (    
       <HeaderContainer> 
         {reduce?(
@@ -267,7 +315,7 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                         <SearchBar  type="text"  value={search}  onChange={(e) => setSearch(e.target.value)} onKeyDown={handleKeyPress} placeholder="Rechercher ..."/>
                         <FontAwesomeIcon size="1x" icon="search" color="#34374C" cursor="pointer" onClick={handleSearch} />
                     </SearchBarContainer>
-                    <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px'}}>
+                    <div style={{display:'flex',justifyContent:'center',alignItems:'center', gap:'20px',overflow:'visible'}}>
                         <DropdownMenu
                             trigger={
                                 <IconBackground>
@@ -276,10 +324,18 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                             }
                             items={menuItems}
                         />
-                        <IconBackground onClick={() => navigate("/cart")}>
-                            <FontAwesomeIcon size="1x" icon="shopping-cart" color='var(--color1)' />
+                        <IconBackground style={{ position: "relative" }} onClick={() => navigate("/cart")}>
+                            <FontAwesomeIcon  size="1x" icon="shopping-cart" color='var(--color1)' />
                             {totalQuantity > 0 && (
-                                <CartIndicatorStyle>{totalQuantity}</CartIndicatorStyle>
+                            <IndicatorWrapper ref={pulseRef}>
+                                <Pulse className="pulse" />
+                                <Pulse className="pulse" />
+                                <Pulse className="pulse" />
+                                <CartIndicatorStyle>
+                                    {totalQuantity}
+                                </CartIndicatorStyle>
+                            </IndicatorWrapper>
+
                             )}
                         </IconBackground>
                                 

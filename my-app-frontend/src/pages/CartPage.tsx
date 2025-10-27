@@ -99,6 +99,7 @@ const CartPage = () => {
   const {isLoading, cart, clearCart, deleteCartItem,fetchCart } = useCartContext();
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
+  
   useEffect(() => {
     fetchCart();
   }, []);
