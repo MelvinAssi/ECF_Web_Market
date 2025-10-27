@@ -20,6 +20,15 @@ exports.addToCart = async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur' });
     }
 };
+exports.getCartQuantity = async (req, res) => {
+  try {
+    const cart = await cartModels.getOrCreateCartByUserId(req.user.id);
+    const cartWithListings = await cartModels.getCartQuantity(cart.id_cart);
+    res.status(200).json({ cart: cartWithListings });
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }             
+};
 
 exports.removeFromCart = async (req, res) => {
     try {

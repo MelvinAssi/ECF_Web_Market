@@ -8,6 +8,8 @@ import Header from "../components/Header";
 import CustomInput from "../components/CustomInput";
 import { useAuthContext } from "../hooks/useAuthContext";
 import ReCAPTCHA from "react-google-recaptcha";
+import GoogleOAuth from "../components/GoogleOAuth";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 interface FormValues1 {
   email: string;
@@ -42,6 +44,7 @@ const PageContainer = styled.main`
   justify-content: center;
   background-color: var(--color2);
   color: var(--color5);
+    padding: 5% 0;
 `;
 
 const FormContainer = styled.div`
@@ -53,7 +56,7 @@ const FormContainer = styled.div`
   background-color: var(--color1);
   color: var(--color5);
   border-radius: 10px;
-  gap: 10px;
+  gap: 5px;
   padding-bottom: 20px;
 
   @media (max-width: 768px) {
@@ -77,8 +80,10 @@ const StyledForm = styled.div`
   flex-direction: column;
   align-items: start;
   height: auto;
-  gap: 20px;
+  gap: 15px;
   padding: 10px;
+  justify-content: center;
+  
 `;
 
 const IndicatorContainer = styled.div`
@@ -103,8 +108,9 @@ const DividerWithText = styled.div`
   align-items: center;
   text-align: center;
   color: var(--color5);
-  width: 300px;
-  margin: 20px 0;
+  width:90%;
+  max-width: 300px;
+  margin: 15px 0;
   &::before,
   &::after {
     content: "";
@@ -128,11 +134,20 @@ const StyledError = styled.div`
 `;
 
 const ReCAPTCHACenterWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
   overflow-x: visible;
   div {
     overflow-x: visible;
   }
 `;
+const OAuthContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 
 const SignInPage = () => {
   const { checkEmailExistence, signIn } = useAuthContext();
@@ -200,7 +215,7 @@ const SignInPage = () => {
         <FormContainer>
           <TitleContainer>
             <h1>Connexion</h1>
-          </TitleContainer>
+          </TitleContainer> 
           {!checkedEmail ? (
             <>
               <p>Saisissez votre e-mail pour vous connecter.</p>
@@ -257,7 +272,7 @@ const SignInPage = () => {
                           ref={recaptchaRef}
                           sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                           onChange={handleRecaptchaChange}
-                          size="normal"
+                          size= {useIsMobile()?"compact":"normal"}
                           aria-label="Valider que vous n'êtes pas un robot"
                         />
                       </ReCAPTCHACenterWrapper>
@@ -281,7 +296,15 @@ const SignInPage = () => {
               />
             </>
           )}
+          <DividerWithText>
+            <h3>Ou connectez-vous avec</h3>
+          </DividerWithText>
+          <OAuthContainer>
+            <GoogleOAuth type="signin" setSucces={() => ("")} />
+          </OAuthContainer>
+
         </FormContainer>
+        
       </PageContainer>
     </>
   );

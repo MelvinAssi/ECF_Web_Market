@@ -7,6 +7,7 @@ const Cart = require('./Cart');
 const CartListing = require('./CartListing');
 const Transaction = require('./Transaction');
 const OrderListing = require('./OrderListing');
+const OAuthAccount = require('./OAuthAccount');
 
 // USER ↔ ORDER
 User.hasMany(Order, { foreignKey: 'buyer_id', onDelete: 'CASCADE', as: 'orders' });
@@ -78,6 +79,9 @@ OrderListing.belongsTo(Order, { foreignKey: 'order_id' });
 Listing.hasMany(OrderListing, { foreignKey: 'listing_id' });
 OrderListing.belongsTo(Listing, { foreignKey: 'listing_id' });
 
+User.hasMany(OAuthAccount, { foreignKey: 'id_user', onDelete: 'CASCADE', as: 'oauthAccounts' });
+OAuthAccount.belongsTo(User, { foreignKey: 'id_user', as: 'user' });
+
 module.exports = {
   User,
   Product,
@@ -88,4 +92,5 @@ module.exports = {
   CartListing,
   Transaction,
   OrderListing,
+  OAuthAccount,
 };

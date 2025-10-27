@@ -39,6 +39,7 @@ router.post('/signup',verifyRecaptcha, [
   body('phone').matches(/^[0-9]{10}$/).withMessage('Phone must be a valid 10-digit number'),
 ], authControllers.signUpUser);
 
+router.post("/google", authControllers.authWithGoogle);
 router.post('/signout', authControllers.signOutUser);
 
 router.get('/me', authMiddleware, (req, res) => {

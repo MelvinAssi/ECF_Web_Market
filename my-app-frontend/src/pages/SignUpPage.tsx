@@ -9,6 +9,8 @@ import Header from "../components/Header";
 import CustomInput from "../components/CustomInput";
 import { useAuthContext } from "../hooks/useAuthContext";
 import ReCAPTCHA from "react-google-recaptcha";
+import GoogleOAuth from "../components/GoogleOAuth";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 interface FormValues1 {
   email: string;
@@ -65,6 +67,7 @@ const PageContainer = styled.main`
   align-items: center;
   justify-content: center;
   background-color: var(--color2);
+  padding: 5% 0;
 `;
 
 const FormContainer = styled.div`
@@ -76,7 +79,7 @@ const FormContainer = styled.div`
   background-color: var(--color1);
   color: var(--color5);
   border-radius: 10px;
-  gap: 10px;
+  gap: 8px;
   padding-bottom: 20px;
 
   @media (max-width: 768px) {
@@ -100,8 +103,8 @@ const StyledForm = styled.div`
   flex-direction: column;
   align-items: start;
   height: auto;
-  gap: 20px;
-  padding: 10px;
+  gap: 15px;
+  padding: 0 10px;
 `;
 
 const IndicatorContainer = styled.div`
@@ -126,8 +129,9 @@ const DividerWithText = styled.div`
   align-items: center;
   text-align: center;
   color: var(--color5);
-  width: 300px;
-  margin: 20px 0;
+  width:90%;
+  max-width: 300px;
+  margin: 15px 0;
   &::before,
   &::after {
     content: "";
@@ -151,10 +155,18 @@ const StyledError = styled.div`
 `;
 
 const ReCAPTCHACenterWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
   overflow-x: visible;
   div {
     overflow-x: visible;
   }
+`;
+const OAuthContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const SignUpPage = () => {
@@ -327,7 +339,7 @@ const SignUpPage = () => {
                           ref={recaptchaRef}
                           sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                           onChange={handleRecaptchaChange}
-                          size="normal"
+                          size= {useIsMobile()?"compact":"normal"}
                           aria-label="Valider que vous n'êtes pas un robot"
                         />
                       </ReCAPTCHACenterWrapper>
@@ -351,6 +363,12 @@ const SignUpPage = () => {
               />
             </>
           )}
+                    <DividerWithText>
+            <h3>Ou connectez-vous avec</h3>
+          </DividerWithText>
+          <OAuthContainer>
+            <GoogleOAuth type="signup" setSucces={() => ("")} />
+          </OAuthContainer>
         </FormContainer>
       </PageContainer>
     </>

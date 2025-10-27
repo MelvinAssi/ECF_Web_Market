@@ -8,7 +8,7 @@ interface DualRangeSliderProps {
 }
 
 const Container = styled.div`
-  width: 300px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;

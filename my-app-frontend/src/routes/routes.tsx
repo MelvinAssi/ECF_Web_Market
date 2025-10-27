@@ -4,7 +4,7 @@ import AdminRoute from './AdminRoute';
 import PrivateRoute from './PrivateRoute';
 import AuthRoute from './AuthRoute';
 
-import HomePage from '../pages/HomePage';
+import HomePage from '../pages/HomePage/HomePage';
 import SignInPage from '../pages/SignInPage';
 import SignUpPage from '../pages/SignUpPage';
 import ContactPage from '../pages/ContactPage';

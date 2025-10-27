@@ -19,6 +19,11 @@ app.use(cors({
     credentials: true,
 }));
 
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
 app.use(helmet());
 app.use(helmet.hsts({
   maxAge: 63072000,
@@ -28,7 +33,7 @@ app.use(helmet.hsts({
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
-  max: 100,
+  max: 1000,
 });
 
 app.use(limiter)
@@ -57,6 +62,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const transactionRoutes =require('./routes/transactionRoutes');
 const reviewRoutes =require('./routes/reviewRoutes');
 const contactRoutes =require('./routes/contactRoutes');
+const sequelize = require('./config/db');
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API Express sécurisée !');
@@ -80,8 +86,18 @@ const certPath = path.join(__dirname, 'certs', 'localhost.pem');
 const privateKey = fs.readFileSync(keyPath, 'utf8');
 const certificate = fs.readFileSync(certPath, 'utf8');
 const credentials = { key: privateKey, cert: certificate };
-
-
-https.createServer(credentials, app).listen(PORT, () => {
-console.log(`✅ Serveur HTTPS démarré sur https://localhost:${PORT}`);
-});
+console.log(Object.keys(sequelize.models));
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log("Base de données synchronisée avec succès.");
+    https.createServer(credentials, app).listen(PORT, ()  => {
+       console.log(`✅ Serveur HTTPS démarré sur https://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error(
+      "Erreur lors de la synchronisation de la base de données :",
+      err
+    );
+  });

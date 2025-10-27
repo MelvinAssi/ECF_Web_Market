@@ -4,6 +4,7 @@ import Footer from './components/Footer.tsx';
 import ScrollToTop from './components/ScrollToTop.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { UserProvider } from './contexts/UserContext.tsx';
+import { CartProvider } from './contexts/CartContext.tsx';
 
 function App() {
 
@@ -11,11 +12,13 @@ function App() {
     <>
       <AuthProvider>
         <UserProvider>
-          <BrowserRouter>
-            <ScrollToTop />   
-            <AppRoutes/>
-            <Footer/>
-          </BrowserRouter>
+          <CartProvider>
+            <BrowserRouter>
+              <ScrollToTop />   
+              <AppRoutes/>
+              <Footer/>
+            </BrowserRouter>
+          </CartProvider>
         </UserProvider>
       </AuthProvider>
     </>

@@ -50,7 +50,6 @@ const CatalogContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  min-width: 340px;
   display: flex;
   flex-direction: column;
   background-color: var(--color5);
@@ -58,18 +57,42 @@ const FilterContainer = styled.div`
   gap: 20px;
   border-radius: 6px;
 `;
+const Switch = styled.div<{ $active: boolean }>`
+  width: 40px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: ${({ $active }) => ($active ? "var(--color3)" : "var(--color4)")};
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: ${({ $active }) => ($active ? "22px" : "2px")};
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.3s;
+  }
+`;
+
 const GridContainer = styled.div`
   display: flex;
   min-width: 300px;
   flex:1;
   background-color: var(--color5);
   border-radius: 6px;
+    align-items: center;
+  justify-content: center;
 `;
 const Grid = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
+
+  gap: 15px;
   padding: 20px;
 `;
 const LabelSelect = styled.label`
@@ -105,7 +128,7 @@ const CatalogPage = () => {
   const [itemList, setItemList] = useState<Listing[]>([]);
   const [filteredItems, setFilteredItems] = useState<Listing[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
-
+  const [shohwFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     category: categoryParam,
     minPrice: 0,
@@ -120,7 +143,7 @@ const CatalogPage = () => {
   useEffect(() => {
     const category = searchParams.get("category") || "";
     const search = searchParams.get("search")?.toLowerCase() || "";
-
+    if(category !== "" || search !== "") setShowFilters(true);
     setFilters(prev => ({
       ...prev,
       category
@@ -198,63 +221,73 @@ const CatalogPage = () => {
       <Header />
       <PageContainer>
         <h1>Catalogue</h1>
-        <CatalogContainer>
+        <CatalogContainer>          
           <FilterContainer>
-            <LabelSelect htmlFor="category">
-              Catégorie :
-              <StyledSelect
-                id="category"
-                value={filters.category}
-                onChange={handleCategoryChange}
-              >
-                <option value=''>Toutes</option>
-                {categoryList.map((category) => (
-                  <option key={category.id_category} value={category.id_category}>
-                    {category.name_category}
-                  </option>
-                ))}
-              </StyledSelect>
-            </LabelSelect>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Switch $active={shohwFilters} onClick={() => setShowFilters(p => !p)} />
+              <h2>Filtres</h2>
+            </div>
+            {shohwFilters &&(
+              <>
+                <LabelSelect htmlFor="category">
+                  Catégorie :
+                  <StyledSelect
+                    id="category"
+                    value={filters.category}
+                    onChange={handleCategoryChange}
+                  >
+                    <option value=''>Toutes</option>
+                    {categoryList.map((category) => (
+                      <option key={category.id_category} value={category.id_category}>
+                        {category.name_category}
+                      </option>
+                    ))}
+                  </StyledSelect>
+                </LabelSelect>
 
-            <DualRangeSlider
-              min={0}
-              max={3000}
-              onChange={(min, max) => {
-                setFilters(prev => ({ ...prev, minPrice: min, maxPrice: max }));
-              }}
-            />
+                <DualRangeSlider
+                  min={0}
+                  max={3000}
+                  onChange={(min, max) => {
+                    setFilters(prev => ({ ...prev, minPrice: min, maxPrice: max }));
+                  }}
+                />
 
-            <RadioButtonContainer>
-              <legend>État cosmétique</legend>
-              {ConditionOptions.map(([value, label]) => (
-                <label key={value}>
-                  <RadioButton
-                    type="radio"
-                    name="condition"
-                    value={value}
-                    checked={filters.condition === value}
-                    onChange={() => setFilters(prev => ({ ...prev, condition: value }))}
-                  />
-                  {label}
-                </label>
-              ))}
-            </RadioButtonContainer>
+                <RadioButtonContainer>
+                  <legend>État cosmétique</legend>
+                  {ConditionOptions.map(([value, label]) => (
+                    <label key={value}>
+                      <RadioButton
+                        type="radio"
+                        name="condition"
+                        value={value}
+                        checked={filters.condition === value}
+                        onChange={() => setFilters(prev => ({ ...prev, condition: value }))}
+                      />
+                      {label}
+                    </label>
+                  ))}
+                </RadioButtonContainer>
 
-            <RadioButtonContainer>
-              <legend>Disponibilité</legend>
-              {VerificationOptions.map(([value, label]) => (
-                <label key={value}>
-                  <RadioButton
-                    type="radio"
-                    name="verification"
-                    value={value}
-                    checked={filters.verification === value}
-                    onChange={() => setFilters(prev => ({ ...prev, verification: value }))}
-                  />
-                  {label}
-                </label>
-              ))}
-            </RadioButtonContainer>
+                <RadioButtonContainer>
+                  <legend>Disponibilité</legend>
+                  {VerificationOptions.map(([value, label]) => (
+                    <label key={value}>
+                      <RadioButton
+                        type="radio"
+                        name="verification"
+                        value={value}
+                        checked={filters.verification === value}
+                        onChange={() => setFilters(prev => ({ ...prev, verification: value }))}
+                      />
+                      {label}
+                    </label>
+                  ))}
+                </RadioButtonContainer>
+              
+              </>
+            )}
+            
           </FilterContainer>
           <GridContainer>
             <Grid>

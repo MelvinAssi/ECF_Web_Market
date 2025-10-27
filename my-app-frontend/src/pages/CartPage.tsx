@@ -2,11 +2,12 @@ import styled from "styled-components";
 import Header from "../components/Header";  
 import { useEffect, useState } from "react";
 import axios from "../services/axios";
-import { useAuthContext } from "../hooks/useAuthContext";
 import Button from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import LazyImage from "../components/LazyImage";
+import { useCartContext } from "../hooks/useCartContext";
+import { useNavigate } from "react-router-dom";
 
 const PageContainer = styled.main`
   min-height: 100vh;
@@ -58,6 +59,7 @@ const CartItem = styled.div`
   padding: 10px;
   margin-bottom: 10px;
   color: var(--color5);
+  cursor: pointer;
 `;
 
 
@@ -94,84 +96,51 @@ const TotalText = styled.p`
 `;
 
 const CartPage = () => {
-  const { isLoading } = useAuthContext();
-  const [itemList, setItemList] = useState<any[]>([]);
+  const {isLoading, cart, clearCart, deleteCartItem,fetchCart } = useCartContext();
   const [total, setTotal] = useState(0);
-
-  const loadCartWithDetails = async () => {
-    try {
-      const response = await axios.get('/cart');
-
-      const productDetails = await Promise.all(
-        response.data.listings.listings.map(async (p: any) => {
-          const res = await axios.get(`/listing/${p.id_listing}`);
-          return {
-            quantity: p.quantity,
-            listing: res.data
-          };
-        })
-      );
-      console.log(productDetails)
-      setItemList(productDetails);
-      const newTotal = productDetails.reduce((acc, curr) => acc +  parseFloat(curr.listing.product.price) , 0);
-      setTotal(newTotal);
-
-    } catch (error: any) {
-      console.error('loadCartWithDetails error:', error.response?.data?.message || error.message);
-    }
-  };
+  const navigate = useNavigate();
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   const handleOrder = async () => {
     try {
       await axios.post('/orders');
-      loadCartWithDetails();
+      fetchCart();
     } catch (error: any) {
       console.error('order error:', error.response?.data?.message || error.message);
     }
   };
-
-  const handleDelete = async (listingId: string) => {
-    try {
-      await axios.delete(`/cart/remove/${listingId}`);
-    } catch (error: any) {
-      console.error('handleDelete error:', error.response?.data?.message || error.message);
-    } finally {
-      loadCartWithDetails();
-    }
-  };
-
-  const handleClear = async () => {
-    try {
-      await axios.delete(`/cart/clear`);
-    } catch (error: any) {
-      console.error('handleDelete error:', error.response?.data?.message || error.message);
-    } finally {
-      loadCartWithDetails();
-    }
-  };
-
   useEffect(() => {
-    if (!isLoading) loadCartWithDetails();
-  }, [isLoading]);
+    if (!isLoading && cart) {
+      const newTotal = cart.listings.reduce((acc, item) => {
+        const price = parseFloat(item?.product?.price ?? "0");
+        const quantity = item?.quantity ?? 1;
+        return acc + price * quantity;
+      }, 0);
+      setTotal(newTotal);
+    }
+  }, [isLoading, cart]);
 
+  
   return (
     <>
       <Header />
       <PageContainer>
         <Title>Mon Panier</Title>
-        <ClearCart onClick={handleClear}>Vider le panier</ClearCart>
+        <ClearCart onClick={clearCart}>Vider le panier</ClearCart>
 
         <CartWrapper>
           <CartContainer>
-            {itemList.length > 0 ? (
-              itemList.map((item, index) => (
-                <CartItem key={index}>
-                  <LazyImage width={"100px"} height={"100px"} src={item.listing.product.images[0]} alt={item.listing.product.name} />
+            {cart && cart.listings && cart.listings.length > 0 ? (
+              cart.listings.map((item, index) => (
+                <CartItem key={index} onClick={()=>navigate(`/product/${item.id_listing}`)}>
+                  <LazyImage width={"100px"} height={"100px"} src={item.product.images?.[0] ?? "/placeholder.png"} alt={item.product.name} />
                   <ItemInfo>
-                    <h3>{item.listing.product.name}</h3>
-                    <p>{item.listing.product.price} €</p>
+                    <h3>{item.product.name}</h3>
+                    <p>{item.product.price} €</p>
                   </ItemInfo>
-                  <DeleteIcon onClick={() => handleDelete(item.listing.id_listing)}>
+                  <DeleteIcon onClick={(e) => {e.stopPropagation();deleteCartItem(item.id_listing)}}>
                     <FontAwesomeIcon icon={faTrash} />
                   </DeleteIcon>
                 </CartItem>

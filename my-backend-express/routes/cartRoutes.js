@@ -5,6 +5,7 @@ const cartControllers = require('../controllers/cartControllers');
 const auth = require('../middleware/auth');
 
 router.get('/', auth, cartControllers.getCart);
+router.get('/quantity', auth, cartControllers.getCartQuantity);
 router.post('/add', auth, cartControllers.addToCart);
 router.delete('/remove/:listingId', auth, cartControllers.removeFromCart);
 router.delete('/clear', auth, cartControllers.clearCart);

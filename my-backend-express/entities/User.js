@@ -18,7 +18,7 @@ const User = sequelize.define('User', {
   },
   password: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
     validate: {
       len: [12, 100],
       is: /[A-Z]/,
@@ -43,14 +43,14 @@ const User = sequelize.define('User', {
   },
   adress: {
     type: DataTypes.STRING(100),
-    allowNull: false,
+    allowNull: true,
     validate: {
       len: [2, 64],
     },
   },
   phone: {
     type: DataTypes.STRING(20),
-    allowNull: false,
+    allowNull: true,
     validate: {
       matches: {
         args: /^[0-9]{10}$/,

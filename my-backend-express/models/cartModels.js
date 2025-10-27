@@ -39,6 +39,18 @@ exports.getCartWithListings = async (cartId) => {
     ]
   });
 };
+exports.getCartQuantity = async (cartId) => {
+  const { count, rows } = await CartListing.findAndCountAll({
+    where: { id_cart: cartId },
+  });
+
+  const totalQuantity = rows.reduce((acc, item) => acc + item.quantity, 0);
+
+  return {
+    count,         
+    totalQuantity,  
+  };
+};
 
 exports.removeListingFromCart = async (cartId, listingId) => {
     await CartListing.destroy({ where: { id_cart: cartId, id_listing: listingId } });

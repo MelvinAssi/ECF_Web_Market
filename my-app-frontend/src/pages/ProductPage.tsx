@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "../services/axios";
 import Button from "../components/Button";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useCartContext } from "../hooks/useCartContext";
 
 // Wrapper principal
 const PageContainer = styled.main`
@@ -19,10 +20,9 @@ const PageContainer = styled.main`
 // Conteneur général du produit
 const ProductWrapper = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 1200px;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -141,6 +141,7 @@ const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const navigate = useNavigate();
   const {user}=useAuthContext();
+  const {checkPresenceInCart,addToCart}=useCartContext();
   useEffect(() => {
     fetchItems();
   }, [id]);
@@ -155,18 +156,18 @@ const ProductPage = () => {
             console.error('fetchItem error:', error.response?.data?.message || error.message);
         }
     };
-
+/*
   const addToCart = async () => {
     try {
-      await axios.post(`/cart/add`, {
+      const response =await axios.post(`/cart/add`, {
         listingId: item.id_listing,
         quantity: 1,
-      });
+      });console.log('addToCart response:', response.data);
     } catch (error: any) {
       console.error('addToCart error:', error.response?.data?.message || error.message);
     }
   };
-
+*/
   const buyItem = async () => {
     try {
       await axios.post(`/cart/add`, {
@@ -241,11 +242,18 @@ const ProductPage = () => {
                 <>
                   {user  ?(
                   <>
-                    <Button text="Ajouter au panier" variant="type1" onClick={addToCart} />
-                    <Button text="Acheter cet article" variant="type2" onClick={buyItem} />
+                    {!checkPresenceInCart(item.id_listing) ? ( 
+                      <>
+                        <Button text="Ajouter au panier" variant="type1"  width="auto" onClick={()=>addToCart(item.id_listing,1)} />
+                        <Button text="Acheter cet article" variant="type2" width="auto" onClick={buyItem} />
+                      </>
+                     ): (
+                      <Button text="Dèja dans le panier" variant="type1" width="auto" onClick={()=>navigate('/cart')} /> 
+                     )}
+
                   </>                
                   ):(
-                    <Button text="Se Connecter" variant="type1" onClick={()=>navigate('/cart')} />
+                    <Button text="Se Connecter" variant="type1" width="auto" onClick={()=>navigate('/cart')} />
                   )}       
                 </>
               )}

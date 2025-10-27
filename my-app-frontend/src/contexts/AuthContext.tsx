@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, type ReactNode, type ReactElement } from 'react';
 import axios from "../services/axios";
 
-
 type User = {
   id_user: string;
   email: string;
@@ -31,6 +30,7 @@ type AuthContextType = {
   isLoading: boolean;
   signIn: (email: string, password: string, recaptchaToken: string) => Promise<void>;
   signUp: (email: string, password: string, name: string, firstname: string, adress: string, phone: string, recaptchaToken: string) => Promise<void>;
+  oauthGoogle: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
   checkEmailExistence: (email: string) => Promise<boolean>;
   checkEmailAvailability: (email: string) => Promise<boolean>;
@@ -45,9 +45,7 @@ const AuthProvider = (props: { children: ReactNode }): ReactElement => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log("test") 
-        const response = await axios.get('/auth/me');
-        
+        const response = await axios.get('/auth/me');        
         setUser(response.data.user);
       } catch (err) {
         setUser(null);
@@ -108,6 +106,16 @@ const signIn = async (email: string, password: string, recaptchaToken: string): 
     }
   };
 
+  const oauthGoogle = async (token:string) =>{
+    try {
+      const response = await axios.post("/auth/google/",{token});
+      setUser(response.data.user);
+    } catch (error: any) {
+      console.error("signIn error:", error.response?.data?.message || error.message);
+      throw error; 
+    }
+  }
+
   const checkEmailExistence = async (email: string): Promise<boolean> => {
     try {
       const response = await axios.post<checkEmailExistenceResponse>('/auth/check-email-existence', { email });      
@@ -117,6 +125,8 @@ const signIn = async (email: string, password: string, recaptchaToken: string): 
       return false;
     }
   };
+
+  
 
   const checkEmailAvailability = async (email: string): Promise<boolean> => {
     try {
@@ -129,6 +139,7 @@ const signIn = async (email: string, password: string, recaptchaToken: string): 
   };
 
   
+  
 
   return (
     <AuthContext.Provider
@@ -138,6 +149,7 @@ const signIn = async (email: string, password: string, recaptchaToken: string): 
         signIn,
         signUp,
         signOut,
+        oauthGoogle,
         checkEmailExistence,
         checkEmailAvailability,
       }}

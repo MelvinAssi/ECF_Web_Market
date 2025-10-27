@@ -7,6 +7,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import {DropdownMenu} from "./DropdownMenu";
 import axios from "../services/axios";
+import { useCartContext } from "../hooks/useCartContext";
 
 interface HeaderProps {
   reduce?: boolean;
@@ -158,6 +159,17 @@ const IconBackground = styled.div`
     cursor: pointer;
         
 `;
+const CartIndicatorStyle = styled.div`
+    position: absolute;   
+    top: 5px;
+    right: 5px;
+    background-color: var(--color3);
+    color: var(--color2);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+`;
+
 const BurgerIcon = styled(FontAwesomeIcon)`
   color: var(--color5);
   font-size: 24px;
@@ -191,10 +203,10 @@ const MobileMenu = styled.div<{ open: boolean }>`
 const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
     const [search,setSearch] =useState('')
     const { user, signOut } = useAuthContext();
+    const {totalQuantity} =useCartContext();
     const [categoryList, setCategoryList] = useState<CategoryProps[]>([]);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    
     useEffect(()=>{
         fetchCategory();
     },[])
@@ -259,13 +271,16 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                         <DropdownMenu
                             trigger={
                                 <IconBackground>
-                                <FontAwesomeIcon size="1x" icon="user" color="#34374C" />
+                                <FontAwesomeIcon size="1x" icon="user" color='var(--color1)' />
                                 </IconBackground>
                             }
                             items={menuItems}
                         />
                         <IconBackground onClick={() => navigate("/cart")}>
-                            <FontAwesomeIcon size="1x" icon="shopping-cart" color="#34374C" />
+                            <FontAwesomeIcon size="1x" icon="shopping-cart" color='var(--color1)' />
+                            {totalQuantity > 0 && (
+                                <CartIndicatorStyle>{totalQuantity}</CartIndicatorStyle>
+                            )}
                         </IconBackground>
                                 
                     </div>            
@@ -273,7 +288,7 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
                 <Header2>
                     <SearchBarContainer $display={false}>
                         <SearchBar  type="text"  value={search}  onChange={(e) => setSearch(e.target.value)} onKeyDown={handleKeyPress} placeholder="Rechercher ..."/>
-                        <FontAwesomeIcon size="1x" icon="search" color="#34374C" cursor="pointer" onClick={handleSearch} />
+                        <FontAwesomeIcon size="1x" icon="search" color='var(--color1)' cursor="pointer" onClick={handleSearch} />
                     </SearchBarContainer>
                     <DesktopLinks>
                         <LinkStyled onClick={() => navigate("/catalog")}>Catalogue</LinkStyled>
