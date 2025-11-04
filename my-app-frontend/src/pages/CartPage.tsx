@@ -106,8 +106,7 @@ const CartPage = () => {
 
   const handleOrder = async () => {
     try {
-      await axios.post('/orders');
-      fetchCart();
+      navigate(`/checkout/`);
     } catch (error: any) {
       console.error('order error:', error.response?.data?.message || error.message);
     }

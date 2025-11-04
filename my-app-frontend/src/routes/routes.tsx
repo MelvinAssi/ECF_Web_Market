@@ -33,6 +33,9 @@ import ContactsPage from '../pages/admin/ContactsPage';
 import StatsPage from '../pages/admin/StatsPage';
 
 import LegalNotice, { PrivacyPolicy, TermsAndConditions } from '../pages/LegalPage';
+import CheckoutPage from '../pages/CheckoutPage';
+import PaymentSuccessPage from '../pages/PaymentSuccessPage';
+import PaymentCancelPage from '../pages/PaymentCancelPage';
 
 const AppRoutes = () => {
     return (
@@ -47,6 +50,10 @@ const AppRoutes = () => {
 
             {/* Authenticated */}
             <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
+            <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
+            <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/payment-cancel" element={<PaymentCancelPage />} />
+
             <Route path="/dashbord" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
             <Route path="/user/info" element={<PrivateRoute><UserInfoPage /></PrivateRoute>} />
             <Route path="/user/listings" element={<PrivateRoute><UserListingsPage /></PrivateRoute>} />

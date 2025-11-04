@@ -14,7 +14,7 @@ require('./entities');
 const PORT =  3000;
 
 app.use(cors({
-    origin: ['http://localhost:5173','https://techreuse-market.netlify.app/'],
+    origin: [`${process.env.FRONT_URL}`,'https://techreuse-market.netlify.app/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
     credentials: true,
 }));
@@ -62,6 +62,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const transactionRoutes =require('./routes/transactionRoutes');
 const reviewRoutes =require('./routes/reviewRoutes');
 const contactRoutes =require('./routes/contactRoutes');
+const paymentsRoutes = require('./routes/paymentsRoutes');
 const sequelize = require('./config/db');
 
 app.get('/', (req, res) => {
@@ -78,6 +79,7 @@ app.use('/orders',orderRoutes);
 app.use('/transaction',transactionRoutes);
 app.use('/review',reviewRoutes);
 app.use('/contact',contactRoutes);
+app.use('/payments', paymentsRoutes);
 
 
 

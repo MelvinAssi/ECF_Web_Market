@@ -237,7 +237,6 @@ const Header :React.FC<HeaderProps>  = ({reduce=false}) => {
     const [categoryList, setCategoryList] = useState<CategoryProps[]>([]);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const cartIndicatorRef = useRef<HTMLDivElement>(null);
     const pulseRef = useRef<HTMLDivElement>(null);
     useEffect(()=>{
         fetchCategory();

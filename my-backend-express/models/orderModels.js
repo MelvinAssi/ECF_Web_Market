@@ -46,12 +46,12 @@ exports.createOrderFromCart = async (userId) => {
     transaction_date: new Date(),
     status: 'PENDING'
   });
-
+  /*
   await CartListing.destroy({ where: { id_cart: cart.id_cart } });
   
   await Promise.all(listings.map(listing =>
     listing.update({ status: 'SOLD' })
-  ));
+  ));*/
   return order;
 };
 

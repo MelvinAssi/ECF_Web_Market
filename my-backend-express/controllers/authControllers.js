@@ -146,7 +146,7 @@ async function handleAuthSuccess(res, user, isNew = false) {
   const token = jwt.sign(
     { id: user.id_user, email: user.email, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: '8h' }
   );
 
   res.cookie('token', token, {

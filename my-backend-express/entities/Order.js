@@ -19,7 +19,7 @@ const Order = sequelize.define('Order', {
     },
   },
   status: {
-    type: DataTypes.ENUM('PENDING', 'VALIDATED', 'DELIVERED'),
+    type: DataTypes.ENUM('PENDING', 'VALIDATED','CANCELLED', 'DELIVERED'),
     allowNull: false,
   },
   buyer_id: {

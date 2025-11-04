@@ -13,12 +13,13 @@
 ### 🔐 Utilisateurs et Sécurité
 1. Un **User** est identifié par un identifiant unique (`id_user`) dans la base de données.
 2. Chaque User possède une adresse e-mail unique, valide et obligatoire dans la table `user`.
-3. Le mot de passe est obligatoire, haché avec bcrypt ou Argon2id, et stocké dans la table `user`.
+3. Le mot de passe est "obligatoire" pour les connections avec email, haché avec Argon2id, et stocké dans la table `user`.
 4. Chaque User doit fournir un nom (name), un prénom (firstname), une adresse (adress), et un numéro de téléphone (phone) obligatoires lors de l’inscription.
 5. La date de création d’un compte est enregistrée automatiquement dans la table `user`.
 6. Les comptes peuvent être désactivés par un Admin via le champ `is_active` dans la table `user`.
 7. Les sessions sont gérées avec un champ `last_activity` pour suivre l’inactivité (expiration après 30 minutes).
 8. Le rôle d’un User est défini comme `BUYER`, `SELLER` ou `ADMIN` dans la table `user`.
+9. Un **User** peut se connecter avec un compte exterieur et sera lié a la table table `user`.
 
 ### 🛒 Gestion des Produits et Annonces
 8. Un **Product** est identifié par un identifiant unique (`id_product`) et lié à une **Category**.
@@ -55,7 +56,7 @@
 |--------------|------|-------------|-------------|
 | id_user | UUID / SERIAL | PK, unique, non nul | Identifiant unique de l’utilisateur |
 | email | VARCHAR(100) | unique, non nul, format email | Adresse e-mail de l’utilisateur |
-| password | TEXT | non nul, haché (bcrypt/Argon2id) | Mot de passe haché |
+| password | TEXT |  haché (bcrypt/Argon2id) | Mot de passe haché |
 | name | VARCHAR(100) | non nul | Nom de l’utilisateur |
 | firstname | VARCHAR(100) | non nul | Prénom de l’utilisateur |
 | adress | VARCHAR(100) | non nul | Adresse de l’utilisateur |
@@ -165,8 +166,20 @@
 | period | DATE | non nul | Période concernée |
 | category_id | FOREIGN KEY | vers Category(id_category), optionnel | Catégorie concernée (optionnel) |
 
+### 12 OAuthAccount
+| Champ            | Type          | Contraintes      | Description                                      |
+| ---------------- | ------------- | --------------------| ----------------------------------------------- |
+| id_oauth         | UUID / SERIAL | PK, unique, non nul             | Identifiant du compte OAuth                      |
+| provider         | ENUM          | valeurs : 'GOOGLE', 'GITHUB', 'FACEBOOK'... | Fournisseur OAuth                                |
+| provider_user_id | VARCHAR(255)  | unique par provider                  | Identifiant de l’utilisateur chez le fournisseur |
+| access_token     | TEXT          | optionnel                                   | Jeton d’accès temporaire                         |
+| refresh_token    | TEXT          | optionnel                                   | Jeton de rafraîchissement                        |
+| created_at       | TIMESTAMP     | auto-généré                                 | Date de création du lien                         |
+| user_id          | FOREIGN KEY   | vers User(id_user), non nul                 | Utilisateur associé                              |
+
+
 ## MCD (Modèle Conceptuel de Données)
-Le MCD représente les entités et leurs relations avec les cardinalités. Voici une description textuelle (une image réelle nécessiterait un outil comme Mocodo ou Draw.io) :
+Le MCD représente les entités et leurs relations avec les cardinalités. Voici une description textuelle 
 
 ### Entités et Relations
 - **User** (id_user, email, password, name, firstname, adress, phone, role, created_at, is_active, last_activity)
@@ -175,7 +188,7 @@ Le MCD représente les entités et leurs relations avec les cardinalités. Voici
   - **Owns** (0,N) -> **Cart** (1,1): Un Buyer peut posséder un Cart, un Cart appartient à un seul Buyer.
   - **Leaves** (0,N) -> **Review** (1,1): Un Buyer peut laisser plusieurs Reviews, un Review est laissé par un seul Buyer.
   - **Handles** (0,N) -> **Contact** (0,1): Un Admin peut traiter plusieurs messages, un message est traité par au plus un Admin.
-
+  - **log** User (1,N) —> (1,1) **OAuthAccount**: Un user peut se connecter avec un compte exterieur
 - **Product** (id_product, name, description, price, condition, verification_status, images, category_id)
   - **Belongs to** (1,1) -> **Category** (0,N): Un Product appartient à une seule Category, une Category peut contenir plusieurs Products.
   - **Concerned by** (1,1) -> **Listing** (1,1): Une Listing concerne un seul Product, un Product est lié à une seule Listing.
@@ -200,7 +213,7 @@ Le MCD représente les entités et leurs relations avec les cardinalités. Voici
   - **Represents** (1,N) -> **Order** (1,1): Une Order contient plusieurs listings, chaque ligne d’Order_Listing est liée à une seule commande.
   - **Concerns** (1,N) -> **Listing** (1,1): Un Listing peut apparaître dans plusieurs commandes, chaque ligne de Order_Listing référence un seul Listing.
 
-**Note** : Pour visualiser le MCD, un outil comme Mocodo peut être utilisé pour générer un diagramme graphique basé sur cette description.
+![MCD](MCD.jpg)
 
 ## MLD (Modèle Logique de Données)
 Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et les relations.
@@ -219,6 +232,10 @@ Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et
 12. **Order_Listing** (order_id: UUID FK → Order, listing_id: UUID FK → Product,
     quantity: INTEGER NOT NULL CHECK (quantity > 0),unit_price: DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),PK(order_id, listing_id)
 )
+13. OAuthAccount
+(id_oauth: UUID PK, provider: ENUM('GOOGLE', 'GITHUB', 'FACEBOOK'), provider_user_id: VARCHAR(255), access_token: TEXT NULL, refresh_token: TEXT NULL, created_at: TIMESTAMP, user_id: UUID FK → User)
+
+![MLD](MLD.jpg)
 ## MPD (Modèle Physique de Données)
 Le MPD est une implémentation spécifique pour PostgreSQL, incluant les types de données, contraintes et index.
 
@@ -237,15 +254,15 @@ CREATE TYPE role_type AS ENUM ('BUYER', 'SELLER', 'ADMIN');
 CREATE TYPE condition_type AS ENUM ('NEW', 'GOOD', 'USED');
 CREATE TYPE verification_status_type AS ENUM ('UNDER_VERIFICATION', 'RECONDITIONED', 'READY_TO_SELL', 'REJECTED');
 CREATE TYPE listing_status_type AS ENUM ('PENDING', 'ONLINE', 'DELETED');
-CREATE TYPE order_status_type AS ENUM ('PENDING', 'VALIDATED', 'DELIVERED');
+CREATE TYPE order_status_type AS ENUM ('PENDING','CANCELED', 'VALIDATED', 'DELIVERED');
 CREATE TYPE transaction_status_type AS ENUM ('PENDING', 'VALIDATED', 'CANCELLED');
 CREATE TYPE contact_status_type AS ENUM ('PENDING', 'READ', 'RESPONDED');
-
+CREATE TYPE oauth_provider_type AS ENUM ('GOOGLE', 'GITHUB', 'FACEBOOK');
 -- Table Users
 CREATE TABLE users (
     id_user UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(100) NOT NULL UNIQUE,
-    password TEXT NOT NULL,
+    password TEXT ,
     name VARCHAR(100) NOT NULL,
     firstname VARCHAR(100) NOT NULL,
     adress VARCHAR(100) NOT NULL,
@@ -362,6 +379,19 @@ CREATE TABLE contact (
     status contact_status_type NOT NULL,
     admin_id UUID,
     FOREIGN KEY (admin_id) REFERENCES users(id_user) ON DELETE SET NULL
+);
+
+-- Table OAuthAccount
+CREATE TABLE oauth_account (
+    id_oauth UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider oauth_provider_type NOT NULL,
+    provider_user_id VARCHAR(255) NOT NULL,
+    access_token TEXT,
+    refresh_token TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    user_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE,
+    UNIQUE (provider, provider_user_id) 
 );
 
 -- Table Statistic
