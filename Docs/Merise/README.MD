@@ -233,12 +233,14 @@ Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et
     quantity: INTEGER NOT NULL CHECK (quantity > 0),unit_price: DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),PK(order_id, listing_id)
 )
 13. OAuthAccount
-(id_oauth: UUID PK, provider: ENUM('GOOGLE', 'GITHUB', 'FACEBOOK'), provider_user_id: VARCHAR(255), access_token: TEXT NULL, refresh_token: TEXT NULL, created_at: TIMESTAMP, user_id: UUID FK → User)
+(id_oauth: UUID PK, provider: ENUM('GOOGLE', 'GITHUB', 'FACEBOOK'), provider_id: VARCHAR(255), access_token: TEXT NULL, refresh_token: TEXT NULL, created_at: TIMESTAMP, user_id: UUID FK → User)
 
 ![MLD](MLD.jpg)
+
 ## MPD (Modèle Physique de Données)
 Le MPD est une implémentation spécifique pour PostgreSQL, incluant les types de données, contraintes et index.
 
+![MPD](MPD.jpg)
 ### Tables et Contraintes
 - Les clés primaires utilisent `UUID` généré par `gen_random_uuid()` pour une meilleure sécurité.
 - Les clés étrangères incluent des contraintes `ON DELETE` et `ON UPDATE` (RESTRICT ou CASCADE selon le cas).
