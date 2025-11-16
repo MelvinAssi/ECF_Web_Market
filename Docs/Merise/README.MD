@@ -52,19 +52,21 @@
 ## Dictionnaire de Données
 
 ### 1. User
-| Nom du champ | Type | Contraintes | Description |
-|--------------|------|-------------|-------------|
-| id_user | UUID / SERIAL | PK, unique, non nul | Identifiant unique de l’utilisateur |
-| email | VARCHAR(100) | unique, non nul, format email | Adresse e-mail de l’utilisateur |
-| password | TEXT |  haché (bcrypt/Argon2id) | Mot de passe haché |
-| name | VARCHAR(100) | non nul | Nom de l’utilisateur |
-| firstname | VARCHAR(100) | non nul | Prénom de l’utilisateur |
-| adress | VARCHAR(100) | non nul | Adresse de l’utilisateur |
-| phone | VARCHAR(20) | non nul format téléphone (10 chiffres)| Numéro de téléphone de l’utilisateur |
-| role | ENUM | valeurs : 'BUYER', 'SELLER', 'ADMIN' | Rôle de l’utilisateur |
-| created_at | TIMESTAMP | auto-généré | Date de création du compte |
-| is_active | BOOLEAN | défaut true | Statut actif ou désactivé |
-| last_activity | TIMESTAMP | optionnel | Dernière activité pour gestion des sessions |
+| Nom du champ          | Type          | Contraintes                          | Description                         |
+| --------------------- | ------------- | ------------------------------------ | ----------------------------------- |
+| id_user               | UUID / SERIAL | PK, unique, non nul                  | Identifiant unique de l’utilisateur |
+| email                 | VARCHAR(100)  | unique, non nul, format email        | Adresse e-mail                      |
+| password              | TEXT          | haché, obligatoire si pas OAuth      | Mot de passe Hashé                  |
+| name                  | VARCHAR(100)  | non nul                              | Nom                                 |
+| firstname             | VARCHAR(100)  | non nul                              | Prénom                              |
+| adress                | VARCHAR(100)  | optionnel                            | Adresse                             |
+| phone                 | VARCHAR(20)   | optionnel, format 10 chiffres        | Numéro de téléphone                 |
+| stripe_account_id| VARCHAR(100)  | unique, optionnel                    | ID Stripe du compte vendeur         |
+| role                  | ENUM          | valeurs : 'BUYER', 'SELLER', 'ADMIN' | Rôle de l’utilisateur               |
+| created_at            | TIMESTAMP     | auto-généré                          | Date de création                    |
+| is_active             | BOOLEAN       | défaut TRUE                          | Statut du compte                    |
+| last_activity         | TIMESTAMP     | optionnel                            | Dernière activité                   |
+
 
 ### 2. Product
 | Nom du champ | Type | Contraintes | Description |
@@ -232,7 +234,7 @@ Le MLD traduit le MCD en tables relationnelles, en respectant les contraintes et
 12. **Order_Listing** (order_id: UUID FK → Order, listing_id: UUID FK → Product,
     quantity: INTEGER NOT NULL CHECK (quantity > 0),unit_price: DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),PK(order_id, listing_id)
 )
-13. OAuthAccount
+13. **OAuthAccount**
 (id_oauth: UUID PK, provider: ENUM('GOOGLE', 'GITHUB', 'FACEBOOK'), provider_id: VARCHAR(255), access_token: TEXT NULL, refresh_token: TEXT NULL, created_at: TIMESTAMP, user_id: UUID FK → User)
 
 ![MLD](MLD.jpg)
@@ -269,6 +271,7 @@ CREATE TABLE users (
     firstname VARCHAR(100) NOT NULL,
     adress VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL CHECK (phone ~ '^[0-9]{10}$'),
+    stripe_account_id VARCHAR(100) UNIQUE,
     role role_type NOT NULL DEFAULT 'BUYER',
     created_at TIMESTAMP DEFAULT NOW(),
     is_active BOOLEAN DEFAULT TRUE,

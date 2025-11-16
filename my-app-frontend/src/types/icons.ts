@@ -16,6 +16,8 @@ import {
   faLeaf,
   faShield,
   faEuroSign,
+  faStore,
+  
   
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -49,5 +51,6 @@ library.add(
   faCaretUp,
   faLeaf,
   faShield,
-  faEuroSign
+  faEuroSign,
+  faStore
 );

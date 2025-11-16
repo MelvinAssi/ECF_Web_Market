@@ -29,7 +29,7 @@ const UsersPage = () => {
   const handleDelete = async (ids: string[]) => {
     try {
       await Promise.all(ids.map(id =>
-        axios.delete("/user/admin", { data: { id } })
+        axios.delete(`user/admin/${id}`)
       ));
       fetchUsers();
     } catch (error) {

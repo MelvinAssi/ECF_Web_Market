@@ -63,6 +63,10 @@ const User = sequelize.define('User', {
     allowNull: false,
     defaultValue: 'BUYER',
   },
+  stripe_account_id: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,

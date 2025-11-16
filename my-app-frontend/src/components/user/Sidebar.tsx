@@ -11,6 +11,7 @@ import {
   faExchangeAlt,
   faCommentDots,
   faPowerOff,
+  faStore
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useSidebarState } from "../../hooks/useSidebarState";
@@ -117,6 +118,9 @@ const Sidebar = () => {
     { label: "Mes Commandes", icon: faShoppingCart, path: "/user/orders" },
     { label: "Mes Ventes", icon: faExchangeAlt, path: "/user/transactions" },
     { label: "Mon Avis", icon: faCommentDots, path: "/user/reviews" },
+    { label: "Devenir vendeur", icon: faStore, path: "/user/become-seller" }
+    
+    
   ];
 
   return (

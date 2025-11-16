@@ -139,6 +139,19 @@ exports.deleteUser = async(req,res) =>{
     }
 }
 
+exports.deleteUserByAdmin = async(req,res) =>{
+    try{
+        const id = req.params.id    
+        await userModels.deleteUserByID(id);
+        res.json({
+            message: 'User deleted with succes by admin',
+        });
+    }
+    catch (error){
+        res.status(500).json({ message: 'Erreur serveur ='+error });
+    }
+}
+
 function sanitizeUser(userData) {
     const {password,...safeUser} = userData;
     return safeUser ;

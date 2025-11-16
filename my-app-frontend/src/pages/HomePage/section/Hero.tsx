@@ -64,7 +64,7 @@ const Hero = () => {
     <Chevron icon={faChevronLeft} className="left" onClick={prevSlide} />
     <SlideWrapper>
       {carouselImages.map((img, index) => (
-        <Slide key={index} src={img} $active={index === currentSlide} />
+        <Slide key={index} src={img} $active={index === currentSlide} alt={img+' index'}/>
       ))}
     </SlideWrapper>
     <Chevron icon={faChevronRight} className="right" onClick={nextSlide} />

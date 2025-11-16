@@ -1,27 +1,67 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "../services/axios";
-import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Button from "../components/Button";
+import styled from "styled-components";
 
+const PageContainer = styled.main`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color2);
+  gap: 20px;
+`;
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
-/*
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState<any>(null);
+
+  const orderId = searchParams.get("order");
+
   useEffect(() => {
-    const finalizeOrder = async () => {
+    if (!orderId) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = () => {
+      window.history.go(1);
+    };
+    
+    const fetchOrder = async () => {
       try {
-        await axios.post("/orders");
-        navigate("/user/orders");
+        const res = await axios.get(`/orders/${orderId}`);
+        setOrder(res.data);
       } catch (err) {
-        console.error("Erreur lors de la création de la commande:", err);
+        console.error("Order not found", err);
+        navigate("/", { replace: true });
+      } finally {
+        setLoading(false);
       }
     };
-    finalizeOrder();
-  }, []);*/
+
+    fetchOrder();
+  }, [orderId, navigate]);
+
+  if (loading) return <p>Chargement...</p>;
 
   return (
-    <main style={{ padding: "2rem", textAlign: "center" }}>
-      <h1>Paiement réussi 🎉</h1>
-      <p>Votre commande a été enregistrée avec succès !</p>
-    </main>
+    <>
+      <Header reduce={true} />
+      <PageContainer >
+        <h1>Paiement réussi </h1>
+        <p>Merci pour votre commande #{order?.id_order}</p>
+        <p>Montant total : {order?.total_amount} €</p>
+        <Button text="Accueil" onClick={() => navigate("/")}></Button>
+      </PageContainer>
+    </>
+
   );
 };
 

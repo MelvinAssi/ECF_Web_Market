@@ -87,6 +87,13 @@ const Select = styled.select`
   border-radius: 6px;
   font-size: 16px;
 `;
+const STRIPE_FIXED_FEE = 0.25;
+const TECHREUSE_FEE_RATE = 0.10;
+
+const calculateNetSellerAmount = (price: number) => {
+  const net = (price - STRIPE_FIXED_FEE) *(1-TECHREUSE_FEE_RATE);
+  return Math.round(net * 100) / 100;
+};
 
 // ---- VALIDATION ----
 const validationSchema = Yup.object({
@@ -172,9 +179,14 @@ const AddListingModal = ({ isOpen, onClose, onSuccess }: Props) => {
             <FormikForm>
               <StyledForm>
                 <CustomInput name="name" label="Nom" type="text" />
-                <CustomInput name="price" label="Prix (€)" type="number" />
+                <CustomInput name="price" label={"Prix (€) TTC" } type="number" />
+                {values.price && (
+                  <div style={{ fontSize: "14px", color: "var(--color5)" }}>
+                    <strong>Vous toucherez environ :</strong> {calculateNetSellerAmount(parseFloat(values.price))} €
+                  </div>
+                )}
                 <CustomInput name="description" label="Description"as={TextArea}  placeholder="Description..." />
-                
+
 
                 <Field as={Select} name="condition">
                   <option value="">État du produit</option>

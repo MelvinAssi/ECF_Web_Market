@@ -7,9 +7,25 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const app = express();
+require('./entities');
+
+const paymentsControllers = require('./controllers/paymentsControllers');
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+app.post('/payments/webhook',
+  express.raw({ type: 'application/json' }),
+  paymentsControllers.handleStripeWebhook
+);
+
+
+
 app.use(express.json());
 app.use(cookieParser());
-require('./entities');
+
 
 const PORT =  3000;
 
@@ -19,11 +35,9 @@ app.use(cors({
     credentials: true,
 }));
 
+const paymentsRoutes = require('./routes/paymentsRoutes');
+app.use('/payments', paymentsRoutes);
 
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
-  next();
-});
 app.use(helmet());
 app.use(helmet.hsts({
   maxAge: 63072000,
@@ -62,7 +76,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const transactionRoutes =require('./routes/transactionRoutes');
 const reviewRoutes =require('./routes/reviewRoutes');
 const contactRoutes =require('./routes/contactRoutes');
-const paymentsRoutes = require('./routes/paymentsRoutes');
+//const paymentsRoutes = require('./routes/paymentsRoutes');
 const sequelize = require('./config/db');
 
 app.get('/', (req, res) => {
@@ -79,7 +93,7 @@ app.use('/orders',orderRoutes);
 app.use('/transaction',transactionRoutes);
 app.use('/review',reviewRoutes);
 app.use('/contact',contactRoutes);
-app.use('/payments', paymentsRoutes);
+//app.use('/payments', paymentsRoutes);
 
 
 

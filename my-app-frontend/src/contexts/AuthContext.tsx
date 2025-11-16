@@ -34,6 +34,7 @@ type AuthContextType = {
   signOut: () => Promise<void>;
   checkEmailExistence: (email: string) => Promise<boolean>;
   checkEmailAvailability: (email: string) => Promise<boolean>;
+  refreshToken: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -138,7 +139,15 @@ const signIn = async (email: string, password: string, recaptchaToken: string): 
     }
   };
 
-  
+  const refreshToken = async () => {
+    try {
+      const response = await axios.post<SignInResponse>('/auth/refresh-token'); 
+      setUser(response.data.user);
+    } catch (err) {
+      console.error('refreshToken failed', err);
+      setUser(null);
+    }
+  };
   
 
   return (
@@ -152,6 +161,7 @@ const signIn = async (email: string, password: string, recaptchaToken: string): 
         oauthGoogle,
         checkEmailExistence,
         checkEmailAvailability,
+        refreshToken
       }}
     >
       {props.children}

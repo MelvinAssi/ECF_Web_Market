@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Header from "../components/Header";  
 import { useEffect, useState } from "react";
-import axios from "../services/axios";
 import Button from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";

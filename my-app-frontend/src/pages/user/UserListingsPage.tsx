@@ -38,6 +38,9 @@ const ListingsSection = styled.section`
   background-color: var(--color5);
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;   
+  align-items: center;
 `;
 
 const PageTitle = styled.h1`
@@ -49,7 +52,9 @@ const PageTitle = styled.h1`
 const ListingItem = styled.div`
   border-bottom: 1px solid var(--color4);
   padding: 16px 0;
-
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   &:last-child {
     border-bottom: none;
   }
@@ -77,10 +82,12 @@ const ListingInfo = styled.div`
 `;
 
 const ListingActions = styled.div`
-  margin-top: 10px;
   display: flex;
   gap: 10px;
+  padding: 10px;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ErrorMessage = styled.p`
@@ -162,29 +169,31 @@ const UserListingsPage = () => {
                     <p>Description : {listing.product.description}</p>
                     <p>Prix : {parseFloat(listing.product.price).toFixed(2)} €</p>
                     <p>État : {listing.product.condition}</p>
-                    <p>Vérification : {listing.product.verification_status}</p>
                     <p>Status : {listing.status}</p>
                     <p>Date : {formatDate(listing.publication_date)}</p>
                   </ListingInfo>
 
-                  <ListingActions>
-                    <Button
-                      text="Modifier"
-                      variant="type3"
-                      width="120px"
-                      type="button"
-                      onClick={() =>
-                        navigate(`/user/products/${listing.product_id}`)
-                      }
-                    />
-                    <Button
-                      text="Supprimer"
-                      variant="type2"
-                      width="120px"
-                      type="button"
-                      onClick={() => handleDelete(listing.product.id)}
-                    />
-                  </ListingActions>
+                  {listing.status !== "SOLD" && (
+                    <ListingActions>
+                      <Button
+                        text="Modifier"
+                        variant="type3"
+                        width="120px"
+                        type="button"
+                        onClick={() =>
+                          navigate(`/user/products/${listing.product_id}`)
+                        }
+                      />
+                      <Button
+                        text="Supprimer"
+                        variant="type2"
+                        width="120px"
+                        type="button"
+                        onClick={() => handleDelete(listing.product.id)}
+                      />
+                    </ListingActions>
+                  )}
+
                 </ListingItem>
               ))
             ) : (

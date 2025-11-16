@@ -134,6 +134,22 @@ exports.signOutUser = async (req, res) => {
   }
 };
 
+// Rafraîchir le token JWT
+exports.refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ error: 'No token provided' }); 
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await authModels.findUserByEmail(decoded.email);
+    if (!user) return res.status(401).json({ error: 'User not found' });
+    return handleAuthSuccess(res, user);
+  } catch (err) {
+    console.error('Erreur dans refreshToken :', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+}
+
 // Fonctions utilitaires
 function sanitizeUser(userData) {
   const { id_user, email, role, name, firstname } = userData;

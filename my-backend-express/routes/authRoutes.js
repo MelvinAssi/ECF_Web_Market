@@ -48,4 +48,6 @@ router.get('/me', authMiddleware, (req, res) => {
   }
   res.status(200).json({ user: req.user });
 });
+
+router.post('/refresh-token', authControllers.refreshToken);
 module.exports = router;
