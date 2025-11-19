@@ -25,7 +25,7 @@ Charte graphique complète du projet **TechReuse Market**, pensée pour une iden
 ### Couleurs principales
 | Couleur              | Aperçu                              | HEX       | RGB            | CMYK              | Usage principal                  |
 |----------------------|-------------------------------------|-----------|----------------|-------------------|----------------------------------|
-| Blanc                | <span style="background:#FFFFFF; padding:0 8px; border:1px solid #ccc;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#FFFFFF` | 255 255 255    | 0 0 0 0           | Arrière-plans principaux        |
+| Blanc                | ![Couleur](https://img.shields.io/badge/FFFFFF-red?style=flat&color=FFFFFF)| `#FFFFFF` | 255 255 255    | 0 0 0 0           | Arrière-plans principaux        |
 | Bleu-gris foncé      | <span style="background:#34374C; color:#fff; padding:0 8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#34374C` | 52 55 76       | 90 80 40 50       | Navigation, textes               |
 | Rouge vif            | <span style="background:#EE2B47; color:#fff; padding:0 8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#EE2B47` | 238 43 71      | 0 95 70 0         | Boutons, accents                 |
 
