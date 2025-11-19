@@ -62,10 +62,10 @@ Charte graphique complète du projet **TechReuse Market**, pensée pour une iden
 
 | Type                  | Aperçu du fond                     | Fond       | Texte      | Hover / Click                                      |
 |-----------------------|------------------------------------|------------|------------|----------------------------------------------------|
-| Principal             | <span style="background:#EE2B47; color:#fff; padding:0 10px;">Principal</span> | `#EE2B47`  | `#FFFFFF`  | scale(1.05) → click texte rouge / fond blanc      |
-| Secondaire            | <span style="background:#2C2E3E; color:#f6f6f6; padding:0 10px;">Secondaire</span> | `#2C2E3E`  | `#F6F6F6`  | scale(1.05)                                        |
-| Tertiaire (clair)     | <span style="border:2px solid #EE2B47; color:#EE2B47; padding:0 10px;">Tertiaire</span> | transparent| `#EE2B47`  | fond `#F6F6F6` au hover                            |
-| Tertiaire (sombre)    | <span style="border:2px solid #fff; color:#fff; padding:0 10px;">Tertiaire</span> | transparent| `#FFFFFF`  | fond `#2C2E3E` au hover                            |
+| Principal             | <span style="background:#EE2B47;color:#FFF;padding:6px 14px;border-radius:6px;font-family:'Noto Sans',sans-serif;font-size:14px;font-weight:bold;display:inline-block;">Bouton</span>  | `#EE2B47`  | `#FFFFFF`  | scale(1.05) → click texte rouge / fond blanc      |
+| Secondaire            | <span style="background:#2C2E3E;color:#F6F6F6;padding:6px 14px;border-radius:6px;font-family:'Noto Sans',sans-serif;font-size:14px;display:inline-block;">Bouton</span> | `#2C2E3E`  | `#F6F6F6`  | scale(1.05)                                        |
+| Tertiaire (clair)     | <span style="border:2px solid #EE2B47;color:#EE2B47;padding:4px 12px;border-radius:6px;font-family:'Noto Sans',sans-serif;font-size:14px;display:inline-block;">Bouton</span> | transparent| `#EE2B47`  | fond `#F6F6F6` au hover                            |
+| Tertiaire (sombre)    | <span style="border:2px solid #FFF;color:#FFF;padding:4px 12px;border-radius:6px;background:#2C2E3E;font-family:'Noto Sans',sans-serif;font-size:14px;display:inline-block;">Bouton</span> | transparent| `#FFFFFF`  | fond `#2C2E3E` au hover                            |
 
 ---
 
