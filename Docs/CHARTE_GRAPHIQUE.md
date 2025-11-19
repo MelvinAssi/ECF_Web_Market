@@ -25,15 +25,15 @@ Charte graphique complète du projet **TechReuse Market**, pensée pour une iden
 ### Couleurs principales
 | Couleur              | Aperçu                              | HEX       | RGB            | CMYK              | Usage principal                  |
 |----------------------|-------------------------------------|-----------|----------------|-------------------|----------------------------------|
-| Blanc                | ![Couleur](https://img.shields.io/badge/FFFFFF-red?style=flat&color=FFFFFF)| `#FFFFFF` | 255 255 255    | 0 0 0 0           | Arrière-plans principaux        |
-| Bleu-gris foncé      | <span style="background:#34374C; color:#fff; padding:0 8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#34374C` | 52 55 76       | 90 80 40 50       | Navigation, textes               |
-| Rouge vif            | <span style="background:#EE2B47; color:#fff; padding:0 8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#EE2B47` | 238 43 71      | 0 95 70 0         | Boutons, accents                 |
+| Blanc                | ![Couleur](https://img.shields.io/badge/FFFFFF-white?style=flat&color=FFFFFF)| `#FFFFFF` | 255 255 255    | 0 0 0 0           | Arrière-plans principaux        |
+| Bleu-gris foncé      |![Couleur](https://img.shields.io/badge/34374C-white?style=flat&color=34374C) | `#34374C` | 52 55 76       | 90 80 40 50       | Navigation, textes               |
+| Rouge vif            |![Couleur](https://img.shields.io/badge/EE2B47-red?style=flat&color=EE2B47)| `#EE2B47` | 238 43 71      | 0 95 70 0         | Boutons, accents                 |
 
 ### Couleurs secondaires
 | Couleur                  | Aperçu                              | HEX       | RGB           | CMYK              | Usage                          |
 |--------------------------|-------------------------------------|-----------|---------------|-------------------|--------------------------------|
-| Gris très clair          | <span style="background:#F6F6F6; padding:0 8px; border:1px solid #ccc;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#F6F6F6` | 246 246 246   | 0 0 0 4           | Fonds secondaires, cartes      |
-| Bleu-gris très foncé     | <span style="background:#2C2E3E; color:#fff; padding:0 8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span> | `#2C2E3E` | 44 46 62      | 95 90 70 60       | Ombres, bordures, fonds sombres|
+| Gris très clair          | ![Couleur](https://img.shields.io/badge/F6F6F6-white?style=flat&color=F6F6F6)| `#F6F6F6` | 246 246 246   | 0 0 0 4           | Fonds secondaires, cartes      |
+| Bleu-gris très foncé     |![Couleur](https://img.shields.io/badge/2C2E3E-white?style=flat&color=2C2E3E) | `#2C2E3E` | 44 46 62      | 95 90 70 60       | Ombres, bordures, fonds sombres|
 
 ---
 
