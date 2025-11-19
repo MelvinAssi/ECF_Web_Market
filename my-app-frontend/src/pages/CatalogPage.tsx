@@ -108,14 +108,14 @@ const StyledSelect = styled.select`
   background-color: var(--color2);
   color: var(--color4);
 `;
-const RadioButtonContainer =styled.fieldset`
+const RadioButtonContainer = styled.fieldset`
   display:flex;
   flex-direction: column;
   padding: 10px;
   color : var(--color4);
 `;
 
-const RadioButton =styled.input`
+const RadioButton = styled.input`
   accent-color:var(--color3);
 
 `;
@@ -137,13 +137,13 @@ const CatalogPage = () => {
     verification: 'ALL'
   });
 
-  
+
   const [searchQuery, setSearchQuery] = useState(searchParam);
 
   useEffect(() => {
     const category = searchParams.get("category") || "";
     const search = searchParams.get("search")?.toLowerCase() || "";
-    if(category !== "" || search !== "") setShowFilters(true);
+    if (category !== "" || search !== "") setShowFilters(true);
     setFilters(prev => ({
       ...prev,
       category
@@ -156,10 +156,10 @@ const CatalogPage = () => {
   const fetchItems = async () => {
     try {
       const response = await axios.get<Listing[]>("/listing");
-      const filter1 =response.data.filter((listing)=>(listing.status=='ONLINE'))
-      const filter2 = filter1.filter((listing)=>(listing.product.status =='RECONDITIONED'|| 'READY_TO_SELL'))
+      const filter1 = response.data.filter((listing) => (listing.status == 'ONLINE'))
+      const filter2 = filter1.filter((listing) => (listing.product.status == 'RECONDITIONED' || 'READY_TO_SELL'))
       setItemList(filter2);
-      
+
     } catch (error: any) {
       console.error("fetchItems error:", error.response?.data?.message || error.message);
     }
@@ -175,7 +175,7 @@ const CatalogPage = () => {
   };
 
   const applyFilters = () => {
-    const result = itemList.filter((item:Listing )=> {
+    const result = itemList.filter((item: Listing) => {
       const price = parseFloat(item.product.price.toString());
 
       const matchCategory = !filters.category || item.product.category_id === filters.category;
@@ -221,13 +221,13 @@ const CatalogPage = () => {
       <Header />
       <PageContainer>
         <h1>Catalogue</h1>
-        <CatalogContainer>          
+        <CatalogContainer>
           <FilterContainer>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <Switch $active={shohwFilters} onClick={() => setShowFilters(p => !p)} />
               <h2>Filtres</h2>
             </div>
-            {shohwFilters &&(
+            {shohwFilters && (
               <>
                 <LabelSelect htmlFor="category">
                   Catégorie :
@@ -284,10 +284,10 @@ const CatalogPage = () => {
                     </label>
                   ))}
                 </RadioButtonContainer>
-              
+
               </>
             )}
-            
+
           </FilterContainer>
           <GridContainer>
             <Grid>

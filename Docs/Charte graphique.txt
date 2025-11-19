@@ -1,4 +1,4 @@
-Carte Trello : Charte Graphique
+Charte Graphique
 Description : Définir la charte graphique complète, incluant la palette de couleurs (#FFFFFF, #34374C, #EE2B47 principales ; #F6F6F6, #2C2E3E secondaires), les polices (Merriweather, Noto Sans principales ; Cormorant secondaire), les styles de boutons, les breakpoints (768px, 1024px), les icônes Font Awesome (Solid), les styles d’images (carrées, radius 6px), la grille (12 colonnes), les marges/paddings (10px/8px), les styles de formulaires, le menu, les animations (grossissement hover), et le logo (textuel, divisé, #EE2B47/#F6F6F6).
 Checklist :
 
