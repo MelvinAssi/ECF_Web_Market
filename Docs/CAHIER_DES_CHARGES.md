@@ -126,12 +126,11 @@
 | Couche         | Technologie                         |
 |----------------|-------------------------------------|
 | Front-end      | React.js + Vite + React Router      |
-| UI / Style     | Tailwind CSS ou SCSS + charte dédiée|
+| UI / Style     |  CSS  + charte dédiée|
 | Back-end       | Node.js + Express                   |
-| Auth           | Passport.js + JWT                   |
-| Base de données| PostgreSQL (Sequelize) + Firestore (optionnel) |
+| Auth           | Coookies+ JWT                   |
+| Base de données| PostgreSQL (Sequelize) + Firestore  |
 | Hébergement    | VPS / Render / Vercel + Railway     |
-| Emails         | Nodemailer ou Resend                |
 
 ---
 

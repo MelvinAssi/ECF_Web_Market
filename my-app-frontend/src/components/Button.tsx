@@ -87,7 +87,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     cursor: not-allowed;
   }
     @media (max-width: 767px) {
-     width:250px;
+     width: ${({ width }) => width || '250px'};
   }
 `;
 

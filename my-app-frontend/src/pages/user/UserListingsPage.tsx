@@ -58,13 +58,18 @@ const ListingItem = styled.div`
   &:last-child {
     border-bottom: none;
   }
+
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const ListingInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
-
+  flex: 1;
   p {
     margin: 0;
     color: var(--color1);
@@ -88,6 +93,7 @@ const ListingActions = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 
 const ErrorMessage = styled.p`
