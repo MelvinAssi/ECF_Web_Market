@@ -96,24 +96,50 @@ app.use('/contact',contactRoutes);
 //app.use('/payments', paymentsRoutes);
 
 
+const IS_RENDER = !!process.env.RENDER;
 
-const keyPath = path.join(__dirname, 'certs', 'localhost-key.pem');
-const certPath = path.join(__dirname, 'certs', 'localhost.pem');
-const privateKey = fs.readFileSync(keyPath, 'utf8');
-const certificate = fs.readFileSync(certPath, 'utf8');
-const credentials = { key: privateKey, cert: certificate };
-console.log(Object.keys(sequelize.models));
-sequelize
-  .sync({ alter: true })
-  .then(() => {
-    console.log("Base de données synchronisée avec succès.");
-    https.createServer(credentials, app).listen(PORT, ()  => {
-       console.log(`✅ Serveur HTTPS démarré sur https://localhost:${PORT}`);
+const startServer = () => {
+  if (!IS_RENDER) {
+    try {
+      const keyPath = path.join(__dirname, "certs", "localhost-key.pem");
+      const certPath = path.join(__dirname, "certs", "localhost.pem");
+
+      const privateKey = fs.readFileSync(keyPath, "utf8");
+      const certificate = fs.readFileSync(certPath, "utf8");
+
+      const credentials = { key: privateKey, cert: certificate };
+
+      https.createServer(credentials, app).listen(PORT, () => {
+        console.log(`HTTPS local → https://localhost:${PORT}`);
+      });
+
+    } catch (err) {
+      console.error("Impossible de charger les certificats HTTPS :", err);
+      console.log("➡️ Démarrage en HTTP simple…");
+      app.listen(PORT, () =>
+        console.log(`HTTP local → http://localhost:${PORT}`)
+      );
+    }
+
+  } else {
+    app.listen(PORT, () => {
+      console.log(`Backend Render → HTTP on port ${PORT}`);
+      console.log(`Render appliquera automatiquement le HTTPS`);
     });
+  }
+};
+
+console.log(Object.keys(sequelize.models));
+// Sync DB then start server
+sequelize
+  .sync()
+  .then(() => {
+    console.log("📦 Base de données synchronisée.");
+    startServer();
   })
   .catch((err) => {
-    console.error(
-      "Erreur lors de la synchronisation de la base de données :",
-      err
-    );
+    console.error("Erreur sync DB :", err);
   });
+
+
+
