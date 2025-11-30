@@ -12,7 +12,7 @@ require('./entities');
 const paymentsControllers = require('./controllers/paymentsControllers');
 
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} from ${req.hostname}`);
   next();
 });
 
