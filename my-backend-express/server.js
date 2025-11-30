@@ -12,7 +12,7 @@ require('./entities');
 const paymentsControllers = require('./controllers/paymentsControllers');
 
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} from ${req.hostname}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} from  hostname ${req.hostname} ip ${req.ip} ports ${req.socket.remotePort}`);
   next();
 });
 
@@ -29,11 +29,7 @@ app.use(cookieParser());
 
 const PORT =  3000;
 
-app.use(cors({
-    origin: [`${process.env.FRONT_URL}`,'https://techreuse-market.netlify.app/'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
-    credentials: true,
-}));
+
 console.log("CORS configured for:", [`${process.env.FRONT_URL}`]);
 const paymentsRoutes = require('./routes/paymentsRoutes');
 app.use('/payments', paymentsRoutes);
@@ -52,19 +48,7 @@ const limiter = rateLimit({
 
 app.use(limiter)
 
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", 
-    "default-src 'self';" + 
-    "script-src 'self' https://www.google.com;" +
-    "style-src 'self';" +
-    "img-src 'self' data:;" +
-    "font-src 'self';" +
-    `connect-src 'self' https://www.google.com ${process.env.FRONT_URL};`+
-    "form-action 'self';" +
-    "frame-ancestors 'none';" +
-    "upgrade-insecure-requests;");
-  next();
-});
+
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
