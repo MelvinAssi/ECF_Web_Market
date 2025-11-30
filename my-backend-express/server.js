@@ -59,7 +59,7 @@ app.use((req, res, next) => {
     "style-src 'self';" +
     "img-src 'self' data:;" +
     "font-src 'self';" +
-    "connect-src 'self' https://www.google.com http://localhost:5173;" +
+    `connect-src 'self' https://www.google.com ${process.env.FRONT_URL};`+
     "form-action 'self';" +
     "frame-ancestors 'none';" +
     "upgrade-insecure-requests;");
