@@ -30,6 +30,7 @@ app.use(cookieParser());
 const PORT =  3000;
 
 app.use((req, res, next) => {
+  console.log("header previous", res.getHeaders());
   res.removeHeader("Cross-Origin-Resource-Policy");
   res.removeHeader("Cross-Origin-Opener-Policy");
   res.removeHeader("Cross-Origin-Embedder-Policy");
@@ -40,9 +41,10 @@ app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
   res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
   res.setHeader("X-Frame-Options", "ALLOWALL");
-
+  console.log("header adjusted", res.getHeaders());
   next();
 });
+
 console.log("CORS configured for:", [`${process.env.FRONT_URL}`]);
 const paymentsRoutes = require('./routes/paymentsRoutes');
 app.use('/payments', paymentsRoutes);
