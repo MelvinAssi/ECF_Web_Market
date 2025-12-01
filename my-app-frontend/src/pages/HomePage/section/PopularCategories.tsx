@@ -47,7 +47,9 @@ useEffect(() => {
       const { data } = await axios.get("/category"); 
       const popularNames = ["Ordinateurs portables", "Smartphones", "Accessoires", "Composants PC"]; 
       if(!data || !Array.isArray(data)) {
-        throw new Error("Invalid data format");
+        // Handle unexpected data format
+        console.error("Unexpected data format:", data);
+        return;
       }
       const popularCategories = data.filter((cat: any) => popularNames.includes(cat.name_category));
       const mapped: Record<string, string> = {};
