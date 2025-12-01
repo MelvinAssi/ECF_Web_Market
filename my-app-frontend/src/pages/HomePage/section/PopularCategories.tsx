@@ -48,7 +48,8 @@ useEffect(() => {
       const popularNames = ["Ordinateurs portables", "Smartphones", "Accessoires", "Composants PC"]; 
       if(!data || !Array.isArray(data)) {
         // Handle unexpected data format
-        console.error("Unexpected data format:", data);
+        console.log("axios response :", await axios.get("/category"));
+        console.log("Unexpected data format:", data);
         return;
       }
       const popularCategories = data.filter((cat: any) => popularNames.includes(cat.name_category));
