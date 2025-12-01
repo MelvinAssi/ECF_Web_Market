@@ -279,7 +279,6 @@ const SignUpPage = () => {
                       <Button
                         text="Continuer"
                         variant="type1"
-                        width="300px"
                         type="submit"
                       />
                       <StyledError>{error}</StyledError>
@@ -346,7 +345,6 @@ const SignUpPage = () => {
                       <Button
                         text="Créer le compte"
                         variant="type1"
-                        width="300px"
                         type="submit"
                       />
                       <StyledError>{error}</StyledError>
@@ -357,7 +355,6 @@ const SignUpPage = () => {
               <Button
                 text="Modifier les informations"
                 variant="type2"
-                width="300px"
                 type="button"
                 onClick={handleBackToEmail}
               />

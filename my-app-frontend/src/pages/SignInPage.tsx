@@ -234,7 +234,7 @@ const SignInPage = () => {
                         type="email"
                         ariaLabel="Entrez votre email"
                       />
-                      <Button text="Continuer" variant="type1" width="300px" type="submit" />
+                      <Button text="Continuer" variant="type1"  type="submit" />
                       <StyledError>{error}</StyledError>
                     </StyledForm>
                   </FormikForm>
@@ -279,7 +279,6 @@ const SignInPage = () => {
                       <Button
                         text="Se connecter"
                         variant="type1"
-                        width="250px"
                         type="submit"
                       />
                       <StyledError>{error}</StyledError>
@@ -290,7 +289,6 @@ const SignInPage = () => {
               <Button
                 text="Modifier l’email"
                 variant="type2"
-                width="250px"
                 type="button"
                 onClick={handleBackToEmail}
               />
